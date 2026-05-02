@@ -5,47 +5,57 @@
 		{
 			id: 'strategisches-management',
 			title: 'Strategisches Management',
-			module: 'Modul',
-			description: 'Karten zu Diversifikation, Wettbewerbsvorteilen und Unternehmensstrategie.',
-			cardCount: 18
+			semester: 'FS 26',
+			cardCount: 112
+		},
+		{
+			id: 'prototyping',
+			title: 'Prototyping',
+			semester: 'FS 26',
+			cardCount: 221
+		},
+		{
+			id: 'data-management',
+			title: 'Data Management',
+			semester: 'FS 26',
+			cardCount: 188
+		},
+		{
+			id: 'it-project-management',
+			title: 'IT Project Management',
+			semester: 'FS 26',
+			cardCount: 112
 		},
 		{
 			id: 'statistik',
 			title: 'Statistik',
-			module: 'Modul',
-			description: 'Grundlagen zu Verteilungen, Hypothesentests und Kennzahlen.',
-			cardCount: 12
+			semester: 'HS 25',
+			cardCount: 290
 		},
 		{
-			id: 'mathematik',
-			title: 'Mathematik',
-			module: 'Modul',
-			description: 'Wichtige Begriffe, Formeln und Rechenschritte aus den Vorlesungen.',
-			cardCount: 9
+			id: 'financial-management',
+			title: 'Financial Management',
+			semester: 'HS 25',
+			cardCount: 248
 		}
 	];
 </script>
 
-<section class="container">
-	<div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+<section class="container stack-overview">
+	<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-5">
 		<div>
-			<span class="badge text-bg-primary mb-3">Dashboard</span>
-			<h1 class="display-6 fw-bold mb-2">Meine Stapel</h1>
-			<p class="text-light-emphasis mb-0">
-				Wähle einen Lernstapel und arbeite mit Karteikarten, die ihren Vorlesungskontext
-				behalten.
-			</p>
+			<h1 class="display-6 fw-bold page-title mb-0">// Meine Stapel</h1>
 		</div>
 
-		<div class="d-flex flex-wrap align-items-start gap-2">
-			<button class="btn btn-outline-light" type="button">Neuer Stapel</button>
-			<button class="btn btn-secondary" type="button">CSV importieren</button>
+		<div class="d-flex flex-wrap align-items-start gap-3">
+			<button class="btn app-action-button fw-semibold" type="button">Neuer Stapel</button>
+			<button class="btn app-action-button fw-semibold" type="button">CSV Import</button>
 		</div>
 	</div>
 
-	<div class="row g-4">
+	<div class="row g-4 g-xl-5">
 		{#each decks as deck (deck.id)}
-			<div class="col-md-6 col-xl-4">
+			<div class="col-md-6 col-lg-4">
 				<DeckCard {deck} />
 			</div>
 		{/each}

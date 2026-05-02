@@ -1,3 +1,7 @@
+<script>
+	import { page } from '$app/state';
+</script>
+
 <nav class="navbar navbar-expand-md navbar-dark bg-dark border-bottom border-secondary">
 	<div class="container">
 		<a class="navbar-brand fw-semibold" href="/">PT Karteikarten</a>
@@ -16,13 +20,15 @@
 		<div class="collapse navbar-collapse" id="mainNavigation">
 			<ul class="navbar-nav ms-auto mb-2 mb-md-0">
 				<li class="nav-item">
-					<a class="nav-link" href="/">Home</a>
+					<a class={page.url.pathname === '/' ? 'nav-link active-link' : 'nav-link'} href="/">Home</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="/stapel">Dashboard</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/stapel">Stapel</a>
+					<a class={page.url.pathname === '/stapel' ? 'nav-link active-link' : 'nav-link'} href="/stapel"
+						>Stapel</a
+					>
 				</li>
 			</ul>
 		</div>

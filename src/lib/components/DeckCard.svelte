@@ -2,17 +2,15 @@
 	let { deck } = $props();
 </script>
 
-<article class="card h-100 bg-light text-dark border-0 shadow-sm">
-	<div class="card-body d-flex flex-column gap-3">
-		<div>
-			<span class="badge text-bg-secondary mb-3">{deck.module}</span>
-			<h2 class="h4 card-title mb-2">{deck.title}</h2>
-			<p class="card-text text-body-secondary mb-0">{deck.description}</p>
+<article class="card deck-card h-100 bg-light text-dark shadow-sm">
+	<div class="card-body d-flex flex-column">
+		<h2 class="h4 card-title fw-bold mb-0">{deck.title}</h2>
+
+		<div class="mt-auto mb-4">
+			<p class="fw-semibold text-secondary mb-1">{deck.semester}</p>
+			<p class="text-body-tertiary mb-0">{deck.cardCount} Karten</p>
 		</div>
 
-		<div class="d-flex justify-content-between align-items-center mt-auto">
-			<span class="badge text-bg-primary">{deck.cardCount} Karten</span>
-			<a class="btn btn-primary" href={`/stapel/${deck.id}`}>Öffnen</a>
-		</div>
+		<a class="btn btn-dark w-100 deck-open-button" href={`/stapel/${deck.id}`}>⚡ Öffnen</a>
 	</div>
 </article>
