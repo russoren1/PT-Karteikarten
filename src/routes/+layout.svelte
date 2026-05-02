@@ -1,4 +1,5 @@
 <script>
+	import Navbar from '$lib/components/Navbar.svelte';
 	import favicon from '$lib/assets/favicon.svg';
 
 	let { children } = $props();
@@ -7,6 +8,8 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
+
+<Navbar />
 
 <main class="app-shell py-5">
 	{@render children()}
