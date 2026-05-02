@@ -1,0 +1,67 @@
+body {
+	min-height: 100vh;
+	margin: 0;
+	background: #10131a;
+	color: #f8f9fa;
+}
+
+a {
+	color: inherit;
+}
+
+.svelte-root {
+	display: contents;
+}
+
+.app-shell {
+	min-height: 100vh;
+}
+
+.min-vh-75 {
+	min-height: 75vh;
+}
+
+.page-title {
+	letter-spacing: 0;
+}
+
+.app-action-button {
+	min-width: 136px;
+	background: #dcff9c;
+	border-color: #dcff9c;
+	color: #050505;
+}
+
+.app-action-button:hover,
+.app-action-button:focus {
+	background: #ccf284;
+	border-color: #ccf284;
+	color: #050505;
+}
+
+.nav-link.active-link {
+	background: #f8f9fa;
+	border-radius: 0.55rem;
+	color: #050505 !important;
+	font-weight: 700;
+	padding-inline: 0.85rem !important;
+}
+
+.stack-overview {
+	max-width: 1120px;
+}
+
+.deck-card {
+	min-height: 200px;
+	border-color: #d9d9d9;
+	border-radius: 0.45rem;
+}
+
+.deck-card .card-body {
+	padding: 1.35rem;
+}
+
+.deck-open-button {
+	border-radius: 0.45rem;
+	padding-block: 0.2rem;
+}

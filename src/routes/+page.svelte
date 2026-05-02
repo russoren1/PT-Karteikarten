@@ -22,9 +22,3 @@
 		</div>
 	</div>
 </section>
-
-<style>
-	.min-vh-75 {
-		min-height: 75vh;
-	}
-</style>
