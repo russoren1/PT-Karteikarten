@@ -12,7 +12,7 @@
 
 		<div class="d-flex justify-content-between align-items-center mt-auto">
 			<span class="badge text-bg-primary">{deck.cardCount} Karten</span>
-			<a class="btn btn-primary" href={`/stapel/${deck.id}`}>Oeffnen</a>
+			<a class="btn btn-primary" href={`/stapel/${deck.id}`}>Öffnen</a>
 		</div>
 	</div>
 </article>

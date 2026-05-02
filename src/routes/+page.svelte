@@ -6,7 +6,7 @@
 				<h1 class="display-5 fw-bold mb-3">Karteikarten mit Vorlesungskontext</h1>
 				<p class="lead text-light-emphasis mb-4">
 					Lerne fokussiert und finde bei Unsicherheiten direkt zur passenden Semesterwoche,
-					Folie oder Seite zurueck.
+					Folie oder Seite zurück.
 				</p>
 			</div>
 

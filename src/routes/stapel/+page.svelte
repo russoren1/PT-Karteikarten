@@ -32,7 +32,7 @@
 			<span class="badge text-bg-primary mb-3">Dashboard</span>
 			<h1 class="display-6 fw-bold mb-2">Meine Stapel</h1>
 			<p class="text-light-emphasis mb-0">
-				Waehle einen Lernstapel und arbeite mit Karteikarten, die ihren Vorlesungskontext
+				Wähle einen Lernstapel und arbeite mit Karteikarten, die ihren Vorlesungskontext
 				behalten.
 			</p>
 		</div>
