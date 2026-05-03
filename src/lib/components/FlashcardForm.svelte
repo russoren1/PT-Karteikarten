@@ -56,6 +56,17 @@
 		</div>
 
 		<div class="mb-4">
+			<label class="form-label fw-semibold" for="sourceName">Datei oder Skript</label>
+			<input
+				class="form-control"
+				id="sourceName"
+				name="sourceName"
+				placeholder="Vorlesung 10.pdf"
+				value={values.sourceName ?? ''}
+			/>
+		</div>
+
+		<div class="mb-4">
 			<label class="form-label fw-semibold" for="slide">Folien-Nr. oder Seiten-Nr.</label>
 			<input
 				class="form-control"
