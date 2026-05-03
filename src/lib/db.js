@@ -7,6 +7,15 @@ await client.connect();
 const db = client.db('Karteikarten');
 const collection = db.collection('Karteikarten');
 const newDocumentThreshold = 2 * 24 * 60 * 60 * 1000;
+const minLeitnerBox = 1;
+const maxLeitnerBox = 5;
+const leitnerIntervalsByBox = {
+	1: 0,
+	2: 1,
+	3: 3,
+	4: 7,
+	5: 14
+};
 
 // Stapel-Dokument:
 // {
@@ -16,7 +25,8 @@ const newDocumentThreshold = 2 * 24 * 60 * 60 * 1000;
 // Karteikarten-Dokument:
 // {
 //   type, question, answer, deckSlug, deckTitle, semester,
-//   week, slide, status, createdAt, updatedAt
+//   week, slide, status, sourceName, leitnerBox, repeatCount,
+//   knownCount, lastReviewedAt, nextReviewAt, createdAt, updatedAt
 // }
 
 function createDeckSlug(title) {
@@ -44,6 +54,52 @@ function isNewDocument(createdAt) {
 	const age = Date.now() - createdAtDate.getTime();
 
 	return !Number.isNaN(age) && age >= 0 && age <= newDocumentThreshold;
+}
+
+function addDays(date, days) {
+	const nextDate = new Date(date);
+	nextDate.setDate(nextDate.getDate() + days);
+	return nextDate;
+}
+
+function getLeitnerBox(card) {
+	const leitnerBox = Number(card.leitnerBox ?? minLeitnerBox);
+
+	if (!Number.isInteger(leitnerBox)) {
+		return minLeitnerBox;
+	}
+
+	return Math.min(Math.max(leitnerBox, minLeitnerBox), maxLeitnerBox);
+}
+
+function getReviewCount(value) {
+	const count = Number(value ?? 0);
+
+	if (!Number.isInteger(count) || count < 0) {
+		return 0;
+	}
+
+	return count;
+}
+
+function getNextReviewAt(leitnerBox, status, reviewedAt) {
+	if (status === 'repeat') {
+		return reviewedAt;
+	}
+
+	return addDays(reviewedAt, leitnerIntervalsByBox[leitnerBox] ?? 1);
+}
+
+function normalizeCard(card) {
+	card._id = card._id.toString();
+	card.isNew = isNewDocument(card.createdAt);
+	card.leitnerBox = getLeitnerBox(card);
+	card.repeatCount = getReviewCount(card.repeatCount);
+	card.knownCount = getReviewCount(card.knownCount);
+	card.lastReviewedAt = card.lastReviewedAt ?? null;
+	card.nextReviewAt = card.nextReviewAt ?? null;
+
+	return card;
 }
 
 function getCardSort(sort) {
@@ -157,10 +213,7 @@ async function getCardsByDeckSlug(deckSlug, filters = {}) {
 
 	try {
 		cards = await collection.find(query).sort(getCardSort(filters.sort)).toArray();
-		cards.forEach((card) => {
-			card._id = card._id.toString();
-			card.isNew = isNewDocument(card.createdAt);
-		});
+		cards = cards.map((card) => normalizeCard(card));
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -207,8 +260,7 @@ async function getCard(id) {
 		card = await collection.findOne({ _id: new ObjectId(id), type: 'card' });
 
 		if (card) {
-			card._id = card._id.toString();
-			card.isNew = isNewDocument(card.createdAt);
+			card = normalizeCard(card);
 		}
 	} catch (error) {
 		console.log(error.message);
@@ -218,10 +270,17 @@ async function getCard(id) {
 }
 
 async function createCard(card) {
+	const now = new Date();
+
 	card.type = 'card';
 	card.status = card.status ?? 'new';
-	card.createdAt = card.createdAt ?? new Date();
-	card.updatedAt = new Date();
+	card.leitnerBox = card.leitnerBox ?? minLeitnerBox;
+	card.repeatCount = card.repeatCount ?? 0;
+	card.knownCount = card.knownCount ?? 0;
+	card.lastReviewedAt = card.lastReviewedAt ?? null;
+	card.nextReviewAt = card.nextReviewAt ?? now;
+	card.createdAt = card.createdAt ?? now;
+	card.updatedAt = now;
 
 	try {
 		const result = await collection.insertOne(card);
@@ -373,6 +432,22 @@ async function updateCardStatus(id, status) {
 	}
 
 	try {
+		const card = await collection.findOne({
+			_id: new ObjectId(id),
+			type: 'card'
+		});
+
+		if (!card) {
+			return null;
+		}
+
+		const reviewedAt = new Date();
+		const currentLeitnerBox = getLeitnerBox(card);
+		const nextLeitnerBox =
+			status === 'known'
+				? Math.min(currentLeitnerBox + 1, maxLeitnerBox)
+				: minLeitnerBox;
+
 		const result = await collection.updateOne(
 			{
 				_id: new ObjectId(id),
@@ -381,7 +456,14 @@ async function updateCardStatus(id, status) {
 			{
 				$set: {
 					status,
-					updatedAt: new Date()
+					leitnerBox: nextLeitnerBox,
+					lastReviewedAt: reviewedAt,
+					nextReviewAt: getNextReviewAt(nextLeitnerBox, status, reviewedAt),
+					updatedAt: reviewedAt
+				},
+				$inc: {
+					knownCount: status === 'known' ? 1 : 0,
+					repeatCount: status === 'repeat' ? 1 : 0
 				}
 			}
 		);
