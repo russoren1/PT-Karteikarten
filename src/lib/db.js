@@ -58,6 +58,35 @@ async function getDecks() {
 	return decks;
 }
 
+async function getDeckBySlug(deckSlug) {
+	let deck = null;
+
+	try {
+		const deckDocument = await collection.findOne({
+			type: 'deck',
+			deckSlug
+		});
+
+		if (deckDocument) {
+			const cardCount = await collection.countDocuments({
+				type: 'card',
+				deckSlug
+			});
+
+			deck = {
+				slug: deckDocument.deckSlug,
+				title: deckDocument.deckTitle,
+				semester: deckDocument.semester,
+				cardCount
+			};
+		}
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	return deck;
+}
+
 async function getCardsByDeckSlug(deckSlug) {
 	let cards = [];
 
@@ -170,6 +199,7 @@ async function deleteCard(id) {
 
 export default {
 	getDecks,
+	getDeckBySlug,
 	getCardsByDeckSlug,
 	getCard,
 	createDeck,
