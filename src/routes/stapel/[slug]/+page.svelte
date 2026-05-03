@@ -85,16 +85,13 @@
 					</div>
 
 					<div class="col-sm-6 col-lg-2">
-						<label class="form-label" for="slide">Folie/Seite</label>
+						<label class="form-label" for="sourceName">Datei oder Skript</label>
 						<input
 							class="form-control"
-							id="slide"
-							name="slide"
-							type="number"
-							min="1"
-							step="1"
-							placeholder="74"
-							value={data.filters.slide}
+							id="sourceName"
+							name="sourceName"
+							placeholder="Vorlesung 10.pdf"
+							value={data.filters.sourceName}
 						/>
 					</div>
 

@@ -3,19 +3,19 @@ import db from '$lib/db.js';
 function readFilters(url) {
 	const q = url.searchParams.get('q')?.trim() ?? '';
 	const week = url.searchParams.get('week')?.trim() ?? '';
-	const slide = url.searchParams.get('slide')?.trim() ?? '';
+	const sourceName = url.searchParams.get('sourceName')?.trim() ?? '';
 	const status = url.searchParams.get('status')?.trim() ?? '';
 
 	return {
 		q,
 		week: Number.isInteger(Number(week)) && Number(week) > 0 ? week : '',
-		slide: Number.isInteger(Number(slide)) && Number(slide) > 0 ? slide : '',
+		sourceName,
 		status: ['new', 'known', 'repeat'].includes(status) ? status : ''
 	};
 }
 
 function hasActiveFilters(filters) {
-	return Boolean(filters.q || filters.week || filters.slide || filters.status);
+	return Boolean(filters.q || filters.week || filters.sourceName || filters.status);
 }
 
 export async function load({ params, url }) {

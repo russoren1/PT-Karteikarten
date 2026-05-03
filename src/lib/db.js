@@ -107,8 +107,8 @@ async function getCardsByDeckSlug(deckSlug, filters = {}) {
 		query.week = Number(filters.week);
 	}
 
-	if (filters.slide) {
-		query.slide = Number(filters.slide);
+	if (filters.sourceName) {
+		query.sourceName = new RegExp(escapeRegex(filters.sourceName), 'i');
 	}
 
 	if (['new', 'known', 'repeat'].includes(filters.status)) {
