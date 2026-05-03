@@ -1,4 +1,5 @@
 <script>
+	import { goto } from '$app/navigation';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data } = $props();
@@ -23,7 +24,11 @@
 	}
 
 	function submitFilters() {
-		filterForm?.requestSubmit();
+		const params = new URLSearchParams(new FormData(filterForm));
+		for (const [key, value] of [...params]) {
+			if (!value) params.delete(key);
+		}
+		goto(`?${params.toString()}`, { replaceState: true, noScroll: true, keepFocus: true });
 	}
 
 	function submitFiltersDebounced() {

@@ -3,7 +3,36 @@
 
 	let { data, form } = $props();
 	let showAnswer = $state(false);
+	let knownForm = $state();
+	let repeatForm = $state();
+
+	function isInteractiveTarget(target) {
+		return target instanceof HTMLElement && target.closest('input, textarea, select, button, a');
+	}
+
+	function handleLearningShortcut(event) {
+		if (!data.card || isInteractiveTarget(event.target)) {
+			return;
+		}
+
+		if (event.key === ' ') {
+			event.preventDefault();
+			showAnswer = true;
+		}
+
+		if (showAnswer && event.key === '1') {
+			event.preventDefault();
+			knownForm?.requestSubmit();
+		}
+
+		if (showAnswer && event.key === '2') {
+			event.preventDefault();
+			repeatForm?.requestSubmit();
+		}
+	}
 </script>
+
+<svelte:window onkeydown={handleLearningShortcut} />
 
 <svelte:head>
 	<title>{data.deck ? `Lernmodus | ${data.deck.title}` : 'Lernmodus | PT Karteikarten'}</title>
@@ -114,7 +143,7 @@
 
 					<div class="row g-3 justify-content-center mb-4">
 						<div class="col-md-5">
-							<form method="POST" action="?/rateCard">
+							<form method="POST" action="?/rateCard" bind:this={knownForm}>
 								<input type="hidden" name="cardId" value={data.card._id} />
 								<input type="hidden" name="status" value="known" />
 								<input type="hidden" name="nextIndex" value={data.index + 1} />
@@ -122,7 +151,7 @@
 							</form>
 						</div>
 						<div class="col-md-5">
-							<form method="POST" action="?/rateCard">
+							<form method="POST" action="?/rateCard" bind:this={repeatForm}>
 								<input type="hidden" name="cardId" value={data.card._id} />
 								<input type="hidden" name="status" value="repeat" />
 								<input type="hidden" name="nextIndex" value={data.index + 1} />

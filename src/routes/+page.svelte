@@ -18,6 +18,34 @@
 					<a class="btn btn-dark w-100" href="/stapel">Anmelden</a>
 				</div>
 			</div>
+
+			<div class="card bg-light text-dark border-0 shadow-sm mt-4">
+				<div class="card-body p-4">
+					<h2 class="h4 card-title mb-3">Tastaturkürzel</h2>
+					<div class="table-responsive">
+						<table class="table table-sm align-middle mb-0">
+							<tbody>
+								<tr>
+									<th scope="row">Leertaste</th>
+									<td>Antwort im Lernmodus anzeigen.</td>
+								</tr>
+								<tr>
+									<th scope="row">1</th>
+									<td>Karte im Lernmodus als gewusst speichern.</td>
+								</tr>
+								<tr>
+									<th scope="row">2</th>
+									<td>Karte im Lernmodus zum Repetieren markieren.</td>
+								</tr>
+								<tr>
+									<th scope="row">Enter</th>
+									<td>Einzeilige Formularfelder über den Browser-Standard speichern.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
