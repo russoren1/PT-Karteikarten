@@ -2,6 +2,23 @@
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data } = $props();
+
+	function openCard(event, href) {
+		if (event.target instanceof HTMLElement && event.target.closest('a, button')) {
+			return;
+		}
+
+		window.location.href = href;
+	}
+
+	function openCardWithKeyboard(event, href) {
+		if (event.key !== 'Enter' && event.key !== ' ') {
+			return;
+		}
+
+		event.preventDefault();
+		openCard(event, href);
+	}
 </script>
 
 <svelte:head>
@@ -98,9 +115,7 @@
 					</div>
 
 					<div class="col-sm-6 col-lg-2">
-						<label class="form-label" for="sourceName">
-							Dateiname bzw. Vorlesungs-Skript (optional)
-						</label>
+						<label class="form-label" for="sourceName">Dateiname</label>
 						<input
 							class="form-control"
 							id="sourceName"
@@ -158,22 +173,28 @@
 					</thead>
 					<tbody>
 						{#each data.cards as card (card._id)}
-							<tr>
+							<tr
+								tabindex="0"
+								role="link"
+								onclick={(event) => openCard(event, `/stapel/${data.deck.slug}/karten/${card._id}`)}
+								onkeydown={(event) =>
+									openCardWithKeyboard(event, `/stapel/${data.deck.slug}/karten/${card._id}`)}
+							>
 								<td>
-									<div class="d-flex flex-wrap align-items-center gap-2">
+									<a
+										class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover d-flex flex-wrap align-items-center gap-2"
+										href={`/stapel/${data.deck.slug}/karten/${card._id}`}
+									>
 										<span>{card.question || 'Ohne Frage'}</span>
 										{#if card.isNew}
 											<span class="badge rounded-pill text-bg-success">Neu</span>
 										{/if}
-									</div>
+									</a>
 								</td>
 								<td class="text-center">{card.week ?? '-'}</td>
 								<td class="text-center">{card.slide ?? '-'}</td>
 								<td>
 									<div class="d-flex flex-column flex-lg-row justify-content-center gap-2">
-										<a class="btn btn-sm btn-dark" href={`/stapel/${data.deck.slug}/karten/${card._id}`}>
-											Öffnen
-										</a>
 										<a
 											class="btn btn-sm btn-outline-dark"
 											href={`/stapel/${data.deck.slug}/karten/${card._id}/bearbeiten`}
