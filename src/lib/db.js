@@ -6,6 +6,7 @@ const client = new MongoClient(DB_URI);
 await client.connect();
 const db = client.db('Karteikarten');
 const collection = db.collection('Karteikarten');
+const newDocumentThreshold = 2 * 24 * 60 * 60 * 1000;
 
 // Stapel-Dokument:
 // {
@@ -34,6 +35,17 @@ function escapeRegex(value) {
 	return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+function isNewDocument(createdAt) {
+	if (!createdAt) {
+		return false;
+	}
+
+	const createdAtDate = createdAt instanceof Date ? createdAt : new Date(createdAt);
+	const age = Date.now() - createdAtDate.getTime();
+
+	return !Number.isNaN(age) && age >= 0 && age <= newDocumentThreshold;
+}
+
 async function getDecks() {
 	let decks = [];
 
@@ -51,7 +63,8 @@ async function getDecks() {
 					slug: deck.deckSlug,
 					title: deck.deckTitle,
 					semester: deck.semester,
-					cardCount
+					cardCount,
+					isNew: isNewDocument(deck.createdAt)
 				};
 			})
 		);
@@ -81,7 +94,8 @@ async function getDeckBySlug(deckSlug) {
 				slug: deckDocument.deckSlug,
 				title: deckDocument.deckTitle,
 				semester: deckDocument.semester,
-				cardCount
+				cardCount,
+				isNew: isNewDocument(deckDocument.createdAt)
 			};
 		}
 	} catch (error) {
@@ -119,6 +133,7 @@ async function getCardsByDeckSlug(deckSlug, filters = {}) {
 		cards = await collection.find(query).sort({ week: 1, slide: 1 }).toArray();
 		cards.forEach((card) => {
 			card._id = card._id.toString();
+			card.isNew = isNewDocument(card.createdAt);
 		});
 	} catch (error) {
 		console.log(error.message);
@@ -167,6 +182,7 @@ async function getCard(id) {
 
 		if (card) {
 			card._id = card._id.toString();
+			card.isNew = isNewDocument(card.createdAt);
 		}
 	} catch (error) {
 		console.log(error.message);

@@ -24,6 +24,9 @@
 				<div class="d-flex flex-wrap gap-2">
 					<span class="badge text-bg-light">{data.deck.semester}</span>
 					<span class="badge text-bg-light">{data.deck.cardCount} Karten</span>
+					{#if data.deck.isNew}
+						<span class="badge rounded-pill text-bg-success">Neu</span>
+					{/if}
 				</div>
 			</div>
 
@@ -144,7 +147,14 @@
 					<tbody>
 						{#each data.cards as card (card._id)}
 							<tr>
-								<td>{card.question || 'Ohne Frage'}</td>
+								<td>
+									<div class="d-flex flex-wrap align-items-center gap-2">
+										<span>{card.question || 'Ohne Frage'}</span>
+										{#if card.isNew}
+											<span class="badge rounded-pill text-bg-success">Neu</span>
+										{/if}
+									</div>
+								</td>
 								<td class="text-center">{card.week ?? '-'}</td>
 								<td class="text-center">{card.slide ?? '-'}</td>
 								<td>

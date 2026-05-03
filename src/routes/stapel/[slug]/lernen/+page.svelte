@@ -51,6 +51,9 @@
 					<span class="badge rounded-pill text-bg-dark px-4 py-2">
 						Woche {data.card.week}{#if data.card.sourceName} · {data.card.sourceName}{/if} · Folie {data.card.slide}
 					</span>
+					{#if data.card.isNew}
+						<span class="badge rounded-pill text-bg-success ms-2">Neu</span>
+					{/if}
 				</div>
 
 				<h2 class="h4 fw-bold mb-4">{data.card.question}</h2>

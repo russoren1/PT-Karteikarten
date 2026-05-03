@@ -4,7 +4,12 @@
 
 <div class="card deck-card h-100 bg-light text-dark shadow-sm m-4">
 	<div class="card-body d-flex flex-column">
-		<h2 class="h4 card-title fw-bold mb-0">{deck.title}</h2>
+		<div class="d-flex align-items-start justify-content-between gap-2 mb-0">
+			<h2 class="h4 card-title fw-bold mb-0">{deck.title}</h2>
+			{#if deck.isNew}
+				<span class="badge rounded-pill text-bg-success">Neu</span>
+			{/if}
+		</div>
 
 		<div class="mt-auto mb-4">
 			<p class="fw-semibold text-secondary mb-1">{deck.semester}</p>

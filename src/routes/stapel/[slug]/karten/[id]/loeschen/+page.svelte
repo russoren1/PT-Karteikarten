@@ -25,6 +25,9 @@
 					<span class="badge text-bg-light">{data.card.sourceName}</span>
 				{/if}
 				<span class="badge text-bg-light">Folie {data.card.slide}</span>
+				{#if data.card.isNew}
+					<span class="badge rounded-pill text-bg-success">Neu</span>
+				{/if}
 			</div>
 		</div>
 
