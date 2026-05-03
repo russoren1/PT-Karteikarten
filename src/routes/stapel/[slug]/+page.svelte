@@ -2,6 +2,8 @@
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data } = $props();
+	let filterForm = $state();
+	let filterSubmitTimeout;
 
 	function openCard(event, href) {
 		if (event.target instanceof HTMLElement && event.target.closest('a, button')) {
@@ -18,6 +20,15 @@
 
 		event.preventDefault();
 		openCard(event, href);
+	}
+
+	function submitFilters() {
+		filterForm?.requestSubmit();
+	}
+
+	function submitFiltersDebounced() {
+		clearTimeout(filterSubmitTimeout);
+		filterSubmitTimeout = setTimeout(submitFilters, 450);
 	}
 </script>
 
@@ -84,7 +95,7 @@
 			<div class="alert alert-success" role="alert">Stapel wurde gespeichert.</div>
 		{/if}
 
-		<form class="card bg-light text-dark shadow-sm mb-4" method="GET">
+		<form class="card bg-light text-dark shadow-sm mb-4" method="GET" bind:this={filterForm}>
 			<div class="card-body">
 				<h2 class="h5 fw-bold mb-3">Karten filtern</h2>
 
@@ -97,6 +108,7 @@
 							name="q"
 							placeholder="z.B. Diversifikation"
 							value={data.filters.q}
+							oninput={submitFiltersDebounced}
 						/>
 					</div>
 
@@ -111,6 +123,7 @@
 							step="1"
 							placeholder="10"
 							value={data.filters.week}
+							onchange={submitFilters}
 						/>
 					</div>
 
@@ -122,12 +135,19 @@
 							name="sourceName"
 							placeholder="z.B. Vorlesung 10.pdf"
 							value={data.filters.sourceName}
+							oninput={submitFiltersDebounced}
 						/>
 					</div>
 
 					<div class="col-sm-6 col-lg-2">
 						<label class="form-label" for="status">Status</label>
-						<select class="form-select" id="status" name="status" value={data.filters.status}>
+						<select
+							class="form-select"
+							id="status"
+							name="status"
+							value={data.filters.status}
+							onchange={submitFilters}
+						>
 							<option value="">Alle</option>
 							<option value="new">Neu</option>
 							<option value="known">Gewusst</option>
@@ -137,7 +157,13 @@
 
 					<div class="col-sm-6 col-lg-2">
 						<label class="form-label" for="sort">Sortieren</label>
-						<select class="form-select" id="sort" name="sort" value={data.filters.sort}>
+						<select
+							class="form-select"
+							id="sort"
+							name="sort"
+							value={data.filters.sort}
+							onchange={submitFilters}
+						>
 							<option value="week-asc">Woche aufsteigend</option>
 							<option value="week-desc">Woche absteigend</option>
 							<option value="sourceName">Dateiname</option>
@@ -148,7 +174,6 @@
 				</div>
 
 				<div class="d-flex flex-column flex-md-row gap-2 mt-4">
-					<button class="btn btn-dark fw-semibold" type="submit">Filtern</button>
 					<a class="btn btn-outline-secondary" href={`/stapel/${data.deck.slug}`}>Zurücksetzen</a>
 				</div>
 			</div>
