@@ -90,6 +90,38 @@ function getNextReviewAt(leitnerBox, status, reviewedAt) {
 	return addDays(reviewedAt, leitnerIntervalsByBox[leitnerBox] ?? 1);
 }
 
+function getLearningWeight(card) {
+	const leitnerPriority = maxLeitnerBox - getLeitnerBox(card) + 1;
+	const repeatPriority = Math.min(getReviewCount(card.repeatCount), 4);
+	const statusPriority = card.status === 'repeat' ? 3 : 0;
+
+	return Math.min(Math.max(leitnerPriority + repeatPriority + statusPriority, 1), 8);
+}
+
+function shuffleValues(values) {
+	return values
+		.map((value) => ({
+			value,
+			sort: Math.random()
+		}))
+		.sort((a, b) => a.sort - b.sort)
+		.map((item) => item.value);
+}
+
+function createLearningQueue(cards) {
+	const queue = [];
+
+	cards.forEach((card) => {
+		const weight = getLearningWeight(card);
+
+		for (let index = 0; index < weight; index += 1) {
+			queue.push(card._id);
+		}
+	});
+
+	return shuffleValues(queue);
+}
+
 function normalizeCard(card) {
 	card._id = card._id.toString();
 	card.isNew = isNewDocument(card.createdAt);
@@ -219,6 +251,30 @@ async function getCardsByDeckSlug(deckSlug, filters = {}) {
 	}
 
 	return cards;
+}
+
+async function getLearningQueueByDeckSlug(deckSlug) {
+	let cards = [];
+	const now = new Date();
+
+	try {
+		cards = await collection
+			.find({
+				type: 'card',
+				deckSlug,
+				$or: [
+					{ nextReviewAt: { $exists: false } },
+					{ nextReviewAt: null },
+					{ nextReviewAt: { $lte: now } }
+				]
+			})
+			.toArray();
+		cards = cards.map((card) => normalizeCard(card));
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	return createLearningQueue(cards);
 }
 
 async function getSourceNamesByDeckSlug(deckSlug) {
@@ -496,6 +552,7 @@ export default {
 	getDecks,
 	getDeckBySlug,
 	getCardsByDeckSlug,
+	getLearningQueueByDeckSlug,
 	getSourceNamesByDeckSlug,
 	getCard,
 	createDeck,

@@ -49,32 +49,7 @@
 			</p>
 			<a class="btn btn-dark" href="/stapel">Zurück zur Stapelübersicht</a>
 		</div>
-	{:else if data.done}
-		<Breadcrumbs
-			items={[
-				{ label: 'Home', href: '/' },
-				{ label: 'Stapel', href: '/stapel' },
-				{ label: data.deck.title, href: `/stapel/${data.deck.slug}` },
-				{ label: 'Lernmodus' }
-			]}
-		/>
-		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
-
-		<div class="card bg-light text-dark shadow-sm">
-			<div class="card-body p-4 p-lg-5 text-center">
-				<h2 class="h3 fw-bold mb-3">Du hast alle Karten in diesem Stapel durchgearbeitet.</h2>
-				<p class="text-secondary mb-4">{data.deck.title}</p>
-				<div class="d-flex flex-column flex-md-row justify-content-center gap-2">
-					<a class="btn btn-dark fw-semibold" href={`/stapel/${data.deck.slug}/lernen`}>
-						Erneut lernen
-					</a>
-					<a class="btn btn-outline-secondary" href={`/stapel/${data.deck.slug}`}>
-						Zurück zum Stapel
-					</a>
-				</div>
-			</div>
-		</div>
-	{:else if data.cards.length === 0}
+	{:else if !data.hasCards}
 		<Breadcrumbs
 			items={[
 				{ label: 'Home', href: '/' },
@@ -90,6 +65,33 @@
 			<a class="btn btn-dark" href={`/stapel/${data.deck.slug}/karten/neu`}>
 				Erste Karte erstellen
 			</a>
+		</div>
+	{:else if data.done}
+		<Breadcrumbs
+			items={[
+				{ label: 'Home', href: '/' },
+				{ label: 'Stapel', href: '/stapel' },
+				{ label: data.deck.title, href: `/stapel/${data.deck.slug}` },
+				{ label: 'Lernmodus' }
+			]}
+		/>
+		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
+
+		<div class="card bg-light text-dark shadow-sm">
+			<div class="card-body p-4 p-lg-5 text-center">
+				<h2 class="h3 fw-bold mb-3">Aktuell sind keine Karten zur Wiederholung fällig.</h2>
+				<p class="text-secondary mb-4">
+					Neue oder wiederholte Karten erscheinen hier automatisch nach ihrem Leitner-Rhythmus.
+				</p>
+				<div class="d-flex flex-column flex-md-row justify-content-center gap-2">
+					<a class="btn btn-dark fw-semibold" href={`/stapel/${data.deck.slug}/lernen`}>
+						Erneut prüfen
+					</a>
+					<a class="btn btn-outline-secondary" href={`/stapel/${data.deck.slug}`}>
+						Zurück zum Stapel
+					</a>
+				</div>
+			</div>
 		</div>
 	{:else if data.card}
 		<Breadcrumbs
@@ -146,7 +148,8 @@
 							<form method="POST" action="?/rateCard" bind:this={knownForm}>
 								<input type="hidden" name="cardId" value={data.card._id} />
 								<input type="hidden" name="status" value="known" />
-								<input type="hidden" name="nextIndex" value={data.index + 1} />
+								<input type="hidden" name="queue" value={data.queue.join(',')} />
+								<input type="hidden" name="total" value={data.progressTotal} />
 								<button class="btn btn-success fw-semibold w-100" type="submit">Gewusst</button>
 							</form>
 						</div>
@@ -154,7 +157,8 @@
 							<form method="POST" action="?/rateCard" bind:this={repeatForm}>
 								<input type="hidden" name="cardId" value={data.card._id} />
 								<input type="hidden" name="status" value="repeat" />
-								<input type="hidden" name="nextIndex" value={data.index + 1} />
+								<input type="hidden" name="queue" value={data.queue.join(',')} />
+								<input type="hidden" name="total" value={data.progressTotal} />
 								<button class="btn btn-danger fw-semibold w-100" type="submit">Repetieren</button>
 							</form>
 						</div>
@@ -168,7 +172,7 @@
 				{/if}
 
 				<p class="fw-semibold text-center mb-4">
-					Frage {data.index + 1} / {data.cards.length}
+					Frage {data.progressCurrent} / {data.progressTotal}
 				</p>
 
 				<div class="text-center">

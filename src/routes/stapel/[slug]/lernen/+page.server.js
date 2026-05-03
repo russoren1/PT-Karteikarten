@@ -1,18 +1,34 @@
 import db from '$lib/db.js';
 import { fail, redirect } from '@sveltejs/kit';
 
-function getLearningIndex(url, cardCount) {
-	const index = Number(url.searchParams.get('index') ?? 0);
+function getLearningQueue(url) {
+	const queue = url.searchParams
+		.get('queue')
+		?.split(',')
+		.map((id) => id.trim())
+		.filter(Boolean);
 
-	if (!Number.isInteger(index) || index < 0) {
-		return 0;
+	return queue?.length ? queue : null;
+}
+
+function getLearningTotal(url, queue) {
+	const total = Number(url.searchParams.get('total'));
+
+	if (!Number.isInteger(total) || total < queue.length) {
+		return queue.length;
 	}
 
-	if (cardCount === 0) {
-		return 0;
+	return total;
+}
+
+function removeCurrentCardFromQueue(queue, cardId, status) {
+	const remainingQueue = queue.slice(1);
+
+	if (status === 'known') {
+		return remainingQueue.filter((queuedCardId) => queuedCardId !== cardId);
 	}
 
-	return Math.min(index, cardCount - 1);
+	return remainingQueue;
 }
 
 export async function load({ params, url }) {
@@ -21,24 +37,30 @@ export async function load({ params, url }) {
 	if (!deck) {
 		return {
 			deck: null,
-			cards: [],
 			card: null,
-			index: 0,
+			hasCards: false,
+			queue: [],
+			progressCurrent: 0,
+			progressTotal: 0,
 			done: false,
 			slug: params.slug
 		};
 	}
 
-	const cards = await db.getCardsByDeckSlug(params.slug);
 	const done = url.searchParams.get('done') === '1';
-	const index = getLearningIndex(url, cards.length);
+	const queue = done ? [] : getLearningQueue(url) ?? (await db.getLearningQueueByDeckSlug(params.slug));
+	const total = getLearningTotal(url, queue);
+	const card = queue[0] ? await db.getCard(queue[0]) : null;
+	const activeCard = card && card.deckSlug === params.slug ? card : null;
 
 	return {
 		deck,
-		cards,
-		card: done ? null : cards[index],
-		index,
-		done,
+		card: activeCard,
+		hasCards: deck.cardCount > 0,
+		queue,
+		progressCurrent: total - queue.length + 1,
+		progressTotal: total,
+		done: done || queue.length === 0 || !activeCard,
 		slug: params.slug
 	};
 }
@@ -48,7 +70,13 @@ export const actions = {
 		const formData = await request.formData();
 		const cardId = formData.get('cardId')?.toString();
 		const status = formData.get('status')?.toString();
-		const nextIndex = Number(formData.get('nextIndex')?.toString());
+		const queue = formData
+			.get('queue')
+			?.toString()
+			.split(',')
+			.map((id) => id.trim())
+			.filter(Boolean);
+		const total = Number(formData.get('total')?.toString());
 		const card = cardId ? await db.getCard(cardId) : null;
 
 		if (!card || card.deckSlug !== params.slug) {
@@ -65,12 +93,17 @@ export const actions = {
 			});
 		}
 
-		const cards = await db.getCardsByDeckSlug(params.slug);
+		const remainingQueue = removeCurrentCardFromQueue(queue ?? [cardId], cardId, status);
 
-		if (!Number.isInteger(nextIndex) || nextIndex >= cards.length) {
+		if (remainingQueue.length === 0) {
 			redirect(303, `/stapel/${params.slug}/lernen?done=1`);
 		}
 
-		redirect(303, `/stapel/${params.slug}/lernen?index=${nextIndex}`);
+		const learningTotal = Number.isInteger(total) && total >= remainingQueue.length ? total : remainingQueue.length;
+
+		redirect(
+			303,
+			`/stapel/${params.slug}/lernen?queue=${remainingQueue.join(',')}&total=${learningTotal}`
+		);
 	}
 };
