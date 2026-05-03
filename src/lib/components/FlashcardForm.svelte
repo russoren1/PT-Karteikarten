@@ -5,7 +5,8 @@
 		submitLabel = 'Karte erstellen',
 		formAction = '?/createCard',
 		cancelHref = '',
-		cancelLabel = 'Zurück zum Stapel'
+		cancelLabel = 'Zurück zum Stapel',
+		sourceNames = []
 	} = $props();
 </script>
 
@@ -56,17 +57,6 @@
 		</div>
 
 		<div class="mb-4">
-			<label class="form-label fw-semibold" for="sourceName">Datei oder Skript</label>
-			<input
-				class="form-control"
-				id="sourceName"
-				name="sourceName"
-				placeholder="Vorlesung 10.pdf"
-				value={values.sourceName ?? ''}
-			/>
-		</div>
-
-		<div class="mb-4">
 			<label class="form-label fw-semibold" for="slide">Folien-Nr. oder Seiten-Nr.</label>
 			<input
 				class="form-control"
@@ -79,6 +69,25 @@
 				value={values.slide ?? ''}
 				required
 			/>
+		</div>
+
+		<div class="mb-4">
+			<label class="form-label fw-semibold" for="sourceName">Datei oder Skript</label>
+			<input
+				class="form-control"
+				id="sourceName"
+				name="sourceName"
+				list="sourceNameOptions"
+				placeholder="Vorlesung 10.pdf"
+				value={values.sourceName ?? ''}
+			/>
+			{#if sourceNames.length}
+				<datalist id="sourceNameOptions">
+					{#each sourceNames as sourceName}
+						<option value={sourceName}></option>
+					{/each}
+				</datalist>
+			{/if}
 		</div>
 
 		<div class="d-flex flex-column flex-md-row gap-2">

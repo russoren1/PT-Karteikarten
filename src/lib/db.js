@@ -127,6 +127,38 @@ async function getCardsByDeckSlug(deckSlug, filters = {}) {
 	return cards;
 }
 
+async function getSourceNamesByDeckSlug(deckSlug) {
+	let sourceNames = [];
+
+	try {
+		const cards = await collection
+			.find(
+				{
+					type: 'card',
+					deckSlug,
+					sourceName: {
+						$type: 'string',
+						$ne: ''
+					}
+				},
+				{
+					projection: {
+						sourceName: 1
+					}
+				}
+			)
+			.toArray();
+
+		sourceNames = [
+			...new Set(cards.map((card) => card.sourceName.trim()).filter(Boolean))
+		].sort((a, b) => a.localeCompare(b));
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	return sourceNames;
+}
+
 async function getCard(id) {
 	let card = null;
 
@@ -340,6 +372,7 @@ export default {
 	getDecks,
 	getDeckBySlug,
 	getCardsByDeckSlug,
+	getSourceNamesByDeckSlug,
 	getCard,
 	createDeck,
 	updateDeck,

@@ -5,6 +5,7 @@ function readCardForm(formData) {
 	const question = formData.get('question')?.toString().trim();
 	const answer = formData.get('answer')?.toString().trim();
 	const weekValue = formData.get('week')?.toString().trim();
+	const sourceName = formData.get('sourceName')?.toString().trim();
 	const slideValue = formData.get('slide')?.toString().trim();
 	const week = Number(weekValue);
 	const slide = Number(slideValue);
@@ -13,6 +14,7 @@ function readCardForm(formData) {
 		question,
 		answer,
 		weekValue,
+		sourceName,
 		slideValue,
 		week,
 		slide
@@ -40,6 +42,7 @@ function formValues(cardForm) {
 		question: cardForm.question,
 		answer: cardForm.answer,
 		week: cardForm.weekValue,
+		sourceName: cardForm.sourceName,
 		slide: cardForm.slideValue
 	};
 }
@@ -48,12 +51,14 @@ export async function load({ params }) {
 	const deck = await db.getDeckBySlug(params.slug);
 	const card = await db.getCard(params.id);
 	const belongsToDeck = card?.deckSlug === params.slug;
+	const sourceNames = deck ? await db.getSourceNamesByDeckSlug(params.slug) : [];
 
 	return {
 		deck,
 		card: belongsToDeck ? card : null,
 		slug: params.slug,
-		id: params.id
+		id: params.id,
+		sourceNames
 	};
 }
 
@@ -83,6 +88,7 @@ export const actions = {
 			question: cardForm.question,
 			answer: cardForm.answer,
 			week: cardForm.week,
+			sourceName: cardForm.sourceName,
 			slide: cardForm.slide
 		});
 

@@ -32,6 +32,7 @@
 			submitLabel="Karte erstellen"
 			formAction="?/createCard"
 			cancelHref={`/stapel/${data.deck.slug}`}
+			sourceNames={data.sourceNames}
 		/>
 	{/if}
 </div>
