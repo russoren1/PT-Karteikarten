@@ -7,6 +7,12 @@ await client.connect();
 const db = client.db('Karteikarten');
 const collection = db.collection('Karteikarten');
 
+// Karteikarten-Dokument:
+// {
+//   question, answer, deckSlug, deckTitle, semester,
+//   week, slide, status, createdAt, updatedAt
+// }
+
 async function getDecks() {
 	let decks = [];
 
