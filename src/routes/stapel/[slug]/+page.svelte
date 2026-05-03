@@ -125,13 +125,24 @@
 						/>
 					</div>
 
-					<div class="col-lg-4">
+					<div class="col-sm-6 col-lg-2">
 						<label class="form-label" for="status">Status</label>
 						<select class="form-select" id="status" name="status" value={data.filters.status}>
 							<option value="">Alle</option>
 							<option value="new">Neu</option>
 							<option value="known">Gewusst</option>
 							<option value="repeat">Repetieren</option>
+						</select>
+					</div>
+
+					<div class="col-sm-6 col-lg-2">
+						<label class="form-label" for="sort">Sortieren</label>
+						<select class="form-select" id="sort" name="sort" value={data.filters.sort}>
+							<option value="week-asc">Woche aufsteigend</option>
+							<option value="week-desc">Woche absteigend</option>
+							<option value="sourceName">Dateiname</option>
+							<option value="slide">Folie/Seite</option>
+							<option value="status">Status</option>
 						</select>
 					</div>
 				</div>

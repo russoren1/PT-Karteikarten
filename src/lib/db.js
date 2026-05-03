@@ -46,6 +46,21 @@ function isNewDocument(createdAt) {
 	return !Number.isNaN(age) && age >= 0 && age <= newDocumentThreshold;
 }
 
+function getCardSort(sort) {
+	switch (sort) {
+		case 'week-desc':
+			return { week: -1, slide: 1 };
+		case 'sourceName':
+			return { sourceName: 1, week: 1, slide: 1 };
+		case 'slide':
+			return { slide: 1, week: 1 };
+		case 'status':
+			return { status: 1, week: 1, slide: 1 };
+		default:
+			return { week: 1, slide: 1 };
+	}
+}
+
 async function getDecks() {
 	let decks = [];
 
@@ -111,10 +126,13 @@ async function getCardsByDeckSlug(deckSlug, filters = {}) {
 		type: 'card',
 		deckSlug
 	};
+	const conditions = [];
 
 	if (filters.q) {
 		const searchRegex = new RegExp(escapeRegex(filters.q), 'i');
-		query.$or = [{ question: searchRegex }, { answer: searchRegex }];
+		conditions.push({
+			$or: [{ question: searchRegex }, { answer: searchRegex }]
+		});
 	}
 
 	if (filters.week) {
@@ -125,12 +143,20 @@ async function getCardsByDeckSlug(deckSlug, filters = {}) {
 		query.sourceName = new RegExp(escapeRegex(filters.sourceName), 'i');
 	}
 
-	if (['new', 'known', 'repeat'].includes(filters.status)) {
+	if (filters.status === 'new') {
+		conditions.push({
+			$or: [{ status: 'new' }, { status: { $exists: false } }, { status: null }]
+		});
+	} else if (['known', 'repeat'].includes(filters.status)) {
 		query.status = filters.status;
 	}
 
+	if (conditions.length) {
+		query.$and = conditions;
+	}
+
 	try {
-		cards = await collection.find(query).sort({ week: 1, slide: 1 }).toArray();
+		cards = await collection.find(query).sort(getCardSort(filters.sort)).toArray();
 		cards.forEach((card) => {
 			card._id = card._id.toString();
 			card.isNew = isNewDocument(card.createdAt);

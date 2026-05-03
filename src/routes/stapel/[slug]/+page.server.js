@@ -5,12 +5,16 @@ function readFilters(url) {
 	const week = url.searchParams.get('week')?.trim() ?? '';
 	const sourceName = url.searchParams.get('sourceName')?.trim() ?? '';
 	const status = url.searchParams.get('status')?.trim() ?? '';
+	const sort = url.searchParams.get('sort')?.trim() ?? '';
 
 	return {
 		q,
 		week: Number.isInteger(Number(week)) && Number(week) > 0 ? week : '',
 		sourceName,
-		status: ['new', 'known', 'repeat'].includes(status) ? status : ''
+		status: ['new', 'known', 'repeat'].includes(status) ? status : '',
+		sort: ['week-asc', 'week-desc', 'sourceName', 'slide', 'status'].includes(sort)
+			? sort
+			: 'week-asc'
 	};
 }
 
