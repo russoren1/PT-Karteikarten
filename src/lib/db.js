@@ -30,6 +30,10 @@ function createDeckSlug(title) {
 		.replace(/^-+|-+$/g, '');
 }
 
+function escapeRegex(value) {
+	return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 async function getDecks() {
 	let decks = [];
 
@@ -87,11 +91,32 @@ async function getDeckBySlug(deckSlug) {
 	return deck;
 }
 
-async function getCardsByDeckSlug(deckSlug) {
+async function getCardsByDeckSlug(deckSlug, filters = {}) {
 	let cards = [];
+	const query = {
+		type: 'card',
+		deckSlug
+	};
+
+	if (filters.q) {
+		const searchRegex = new RegExp(escapeRegex(filters.q), 'i');
+		query.$or = [{ question: searchRegex }, { answer: searchRegex }];
+	}
+
+	if (filters.week) {
+		query.week = Number(filters.week);
+	}
+
+	if (filters.slide) {
+		query.slide = Number(filters.slide);
+	}
+
+	if (['new', 'known', 'repeat'].includes(filters.status)) {
+		query.status = filters.status;
+	}
 
 	try {
-		cards = await collection.find({ type: 'card', deckSlug }).sort({ week: 1, slide: 1 }).toArray();
+		cards = await collection.find(query).sort({ week: 1, slide: 1 }).toArray();
 		cards.forEach((card) => {
 			card._id = card._id.toString();
 		});
