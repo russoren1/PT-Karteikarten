@@ -17,6 +17,11 @@ a {
 	min-height: 100vh;
 }
 
+.navbar-logo {
+	height: 40px;
+	width: auto;
+}
+
 .min-vh-75 {
 	min-height: 75vh;
 }
