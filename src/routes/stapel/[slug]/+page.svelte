@@ -128,7 +128,7 @@
 							step="1"
 							placeholder="10"
 							value={data.filters.week}
-							onchange={submitFilters}
+							oninput={submitFiltersDebounced}
 						/>
 					</div>
 
