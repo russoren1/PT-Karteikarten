@@ -21,6 +21,9 @@
 			<div class="d-flex flex-wrap gap-2">
 				<span class="badge text-bg-light">{data.card.deckTitle}</span>
 				<span class="badge text-bg-light">Woche {data.card.week}</span>
+				{#if data.card.sourceName}
+					<span class="badge text-bg-light">{data.card.sourceName}</span>
+				{/if}
 				<span class="badge text-bg-light">Folie {data.card.slide}</span>
 			</div>
 		</div>

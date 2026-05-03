@@ -49,7 +49,7 @@
 
 				<div class="mb-4">
 					<span class="badge rounded-pill text-bg-dark px-4 py-2">
-						Woche {data.card.week} · Folie {data.card.slide}
+						Woche {data.card.week}{#if data.card.sourceName} · {data.card.sourceName}{/if} · Folie {data.card.slide}
 					</span>
 				</div>
 
