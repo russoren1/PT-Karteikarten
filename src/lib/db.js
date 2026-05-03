@@ -62,7 +62,7 @@ async function getCardsByDeckSlug(deckSlug) {
 	let cards = [];
 
 	try {
-		cards = await collection.find({ deckSlug }).sort({ week: 1, slide: 1 }).toArray();
+		cards = await collection.find({ type: 'card', deckSlug }).sort({ week: 1, slide: 1 }).toArray();
 		cards.forEach((card) => {
 			card._id = card._id.toString();
 		});
@@ -77,7 +77,7 @@ async function getCard(id) {
 	let card = null;
 
 	try {
-		card = await collection.findOne({ _id: new ObjectId(id) });
+		card = await collection.findOne({ _id: new ObjectId(id), type: 'card' });
 
 		if (card) {
 			card._id = card._id.toString();
@@ -142,7 +142,7 @@ async function updateCard(card) {
 		delete card._id;
 		card.updatedAt = new Date();
 
-		const result = await collection.updateOne({ _id: new ObjectId(id) }, { $set: card });
+		const result = await collection.updateOne({ _id: new ObjectId(id), type: 'card' }, { $set: card });
 
 		if (result.matchedCount === 1) {
 			return id;
@@ -156,7 +156,7 @@ async function updateCard(card) {
 
 async function deleteCard(id) {
 	try {
-		const result = await collection.deleteOne({ _id: new ObjectId(id) });
+		const result = await collection.deleteOne({ _id: new ObjectId(id), type: 'card' });
 
 		if (result.deletedCount === 1) {
 			return id;
