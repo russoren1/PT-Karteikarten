@@ -1,5 +1,5 @@
 <script>
-	import '../app.css';
+	import '../style.css';
 
 	let { children } = $props();
 </script>
@@ -18,7 +18,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/">Home</a>
+        <a class="nav-link" href="/">Home</a>
         <a class="nav-link" href="/stapel">Stapel</a>
         <a class="nav-link" href="/dashboard">Dashboard</a>
       </div>
@@ -27,6 +27,6 @@
 </nav>
 
 
-<main class="app-shell py-5">
+<div>
 	{@render children()}
-</main>
+</div>

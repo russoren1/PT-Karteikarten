@@ -1,0 +1,24 @@
+.navbar-logo {
+	height: 40px;
+	width: auto;
+}
+
+body {
+	min-height: 100vh;
+	margin: 0;
+	background: #000000;
+	color: #f8f9fa;
+}
+
+
+
+.deck-card {
+	min-height: 200px;
+	border-color: #d9d9d9;
+	border-radius: 0.45rem;
+}
+
+.deck-card .card-body {
+	padding: 1.35rem;
+}
+

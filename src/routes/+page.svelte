@@ -1,8 +1,8 @@
 <div class="container">
-	<div class="row align-items-center justify-content-center min-vh-75">
+	<div class="row align-items-center justify-content-center">
 		<div class="col-lg-8">
 			<div class="mb-4">
-				<h1 class="display-5 fw-bold page-title mb-3">// Karteikarten mit Vorlesungskontext</h1>
+				<h1 class="display-5 fw-bold mb-3">// Karteikarten mit Vorlesungskontext</h1>
 				<p class="lead text-light-emphasis mb-4">
 					Lerne fokussiert und finde bei Unsicherheiten direkt zur passenden Semesterwoche,
 					Folie oder Seite zurück.
@@ -15,7 +15,7 @@
 					<p class="card-text mb-4">
 						Dieser Prototyp nutzt einen einfachen Anmelde-Einstieg ohne echte Authentifizierung.
 					</p>
-					<a class="btn btn-dark w-100 deck-open-button" href="/stapel">Anmelden</a>
+					<a class="btn btn-dark w-100" href="/stapel">Anmelden</a>
 				</div>
 			</div>
 		</div>

@@ -11,7 +11,7 @@
 			<p class="text-body-tertiary mb-0">{deck.cardCount} Karten</p>
 		</div>
 
-		<a class="btn btn-dark w-100 deck-open-button" href={`/stapel/${deck.id}`}>⚡ Öffnen</a>
+		<a class="btn btn-dark w-100" href={`/stapel/${deck.id}`}>⚡ Öffnen</a>
 	</div>
 </div>
 
