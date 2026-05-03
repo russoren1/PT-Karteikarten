@@ -277,6 +277,75 @@ async function getLearningQueueByDeckSlug(deckSlug) {
 	return createLearningQueue(cards);
 }
 
+function isDueCard(card, now) {
+	if (!card.nextReviewAt) {
+		return true;
+	}
+
+	const nextReviewAt = card.nextReviewAt instanceof Date ? card.nextReviewAt : new Date(card.nextReviewAt);
+
+	return !Number.isNaN(nextReviewAt.getTime()) && nextReviewAt <= now;
+}
+
+function getAverageLeitnerBox(cards) {
+	if (!cards.length) {
+		return 0;
+	}
+
+	const total = cards.reduce((sum, card) => sum + card.leitnerBox, 0);
+
+	return Math.round((total / cards.length) * 10) / 10;
+}
+
+async function getDashboardStats() {
+	const now = new Date();
+	const decks = await getDecks();
+	let cards = [];
+
+	try {
+		cards = await collection.find({ type: 'card' }).toArray();
+		cards = cards.map((card) => normalizeCard(card));
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	const dueCards = cards
+		.filter((card) => isDueCard(card, now))
+		.sort((a, b) => {
+			const firstDate = a.nextReviewAt ? new Date(a.nextReviewAt).getTime() : 0;
+			const secondDate = b.nextReviewAt ? new Date(b.nextReviewAt).getTime() : 0;
+			return firstDate - secondDate;
+		});
+	const repeatedCards = [...cards]
+		.filter((card) => card.repeatCount > 0)
+		.sort((a, b) => b.repeatCount - a.repeatCount || a.leitnerBox - b.leitnerBox);
+	const lowLeitnerCards = [...cards]
+		.filter((card) => card.leitnerBox <= 2)
+		.sort((a, b) => a.leitnerBox - b.leitnerBox || b.repeatCount - a.repeatCount);
+	const deckStats = decks.map((deck) => {
+		const deckCards = cards.filter((card) => card.deckSlug === deck.slug);
+
+		return {
+			...deck,
+			dueCount: deckCards.filter((card) => isDueCard(card, now)).length,
+			repeatCount: deckCards.filter((card) => card.status === 'repeat').length,
+			knownCount: deckCards.filter((card) => card.status === 'known').length,
+			averageLeitnerBox: getAverageLeitnerBox(deckCards)
+		};
+	});
+
+	return {
+		totalDecks: decks.length,
+		totalCards: cards.length,
+		dueCount: dueCards.length,
+		repeatCount: cards.filter((card) => card.status === 'repeat').length,
+		decks: deckStats,
+		dueCards: dueCards.slice(0, 8),
+		repeatedCards: repeatedCards.slice(0, 8),
+		lowLeitnerCards: lowLeitnerCards.slice(0, 8)
+	};
+}
+
 async function getSourceNamesByDeckSlug(deckSlug) {
 	let sourceNames = [];
 
@@ -553,6 +622,7 @@ export default {
 	getDeckBySlug,
 	getCardsByDeckSlug,
 	getLearningQueueByDeckSlug,
+	getDashboardStats,
 	getSourceNamesByDeckSlug,
 	getCard,
 	createDeck,
