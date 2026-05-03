@@ -47,13 +47,26 @@
 					<div class="alert alert-danger" role="alert">{form.error}</div>
 				{/if}
 
-				<div class="mb-4">
-					<span class="badge rounded-pill text-bg-dark px-4 py-2">
-						Woche {data.card.week}{#if data.card.sourceName} · {data.card.sourceName}{/if} · Folie {data.card.slide}
-					</span>
-					{#if data.card.isNew}
-						<span class="badge rounded-pill text-bg-success ms-2">Neu</span>
-					{/if}
+				<div class="alert alert-secondary mb-4" role="status">
+					<div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+						<div>
+							<p class="text-uppercase fw-semibold small mb-2">Vorlesungskontext</p>
+							<div class="d-flex flex-wrap gap-2">
+								<span class="badge rounded-pill text-bg-dark px-3 py-2">Woche {data.card.week}</span>
+								{#if data.card.sourceName}
+									<span class="badge rounded-pill text-bg-dark px-3 py-2">
+										{data.card.sourceName}
+									</span>
+								{/if}
+								<span class="badge rounded-pill text-bg-dark px-3 py-2">
+									Folie/Seite {data.card.slide}
+								</span>
+							</div>
+						</div>
+						{#if data.card.isNew}
+							<span class="badge rounded-pill text-bg-success align-self-start align-self-lg-center">Neu</span>
+						{/if}
+					</div>
 				</div>
 
 				<h2 class="h4 fw-bold mb-4">{data.card.question}</h2>
