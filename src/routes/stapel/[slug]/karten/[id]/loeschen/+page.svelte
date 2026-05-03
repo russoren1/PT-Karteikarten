@@ -1,5 +1,5 @@
 <script>
-	let { data } = $props();
+	let { data, form } = $props();
 </script>
 
 <svelte:head>
@@ -27,6 +27,10 @@
 
 		<div class="card bg-light text-dark shadow-sm">
 			<div class="card-body p-4">
+				{#if form?.error}
+					<div class="alert alert-danger" role="alert">{form.error}</div>
+				{/if}
+
 				<div class="alert alert-danger" role="alert">
 					Diese Karte wird dauerhaft aus MongoDB gelöscht.
 				</div>
