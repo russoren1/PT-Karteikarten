@@ -7,38 +7,50 @@ await client.connect();
 const db = client.db('Karteikarten');
 const collection = db.collection('Karteikarten');
 
+// Stapel-Dokument:
+// {
+//   type, deckSlug, deckTitle, semester, createdAt, updatedAt
+// }
+//
 // Karteikarten-Dokument:
 // {
-//   question, answer, deckSlug, deckTitle, semester,
+//   type, question, answer, deckSlug, deckTitle, semester,
 //   week, slide, status, createdAt, updatedAt
 // }
+
+function createDeckSlug(title) {
+	return title
+		.toLowerCase()
+		.trim()
+		.replaceAll('ä', 'ae')
+		.replaceAll('ö', 'oe')
+		.replaceAll('ü', 'ue')
+		.replaceAll('ß', 'ss')
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '');
+}
 
 async function getDecks() {
 	let decks = [];
 
 	try {
-		decks = await collection
-			.aggregate([
-				{
-					$group: {
-						_id: '$deckSlug',
-						title: { $first: '$deckTitle' },
-						semester: { $first: '$semester' },
-						cardCount: { $sum: 1 }
-					}
-				},
-				{
-					$project: {
-						_id: 0,
-						slug: '$_id',
-						title: 1,
-						semester: 1,
-						cardCount: 1
-					}
-				},
-				{ $sort: { title: 1 } }
-			])
-			.toArray();
+		const deckDocuments = await collection.find({ type: 'deck' }).sort({ deckTitle: 1 }).toArray();
+
+		decks = await Promise.all(
+			deckDocuments.map(async (deck) => {
+				const cardCount = await collection.countDocuments({
+					type: 'card',
+					deckSlug: deck.deckSlug
+				});
+
+				return {
+					slug: deck.deckSlug,
+					title: deck.deckTitle,
+					semester: deck.semester,
+					cardCount
+				};
+			})
+		);
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -78,6 +90,7 @@ async function getCard(id) {
 }
 
 async function createCard(card) {
+	card.type = 'card';
 	card.status = card.status ?? 'new';
 	card.createdAt = card.createdAt ?? new Date();
 	card.updatedAt = new Date();
@@ -85,6 +98,37 @@ async function createCard(card) {
 	try {
 		const result = await collection.insertOne(card);
 		return result.insertedId.toString();
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	return null;
+}
+
+async function createDeck(deck) {
+	const deckSlug = createDeckSlug(deck.deckTitle);
+
+	try {
+		const existingDeck = await collection.findOne({
+			type: 'deck',
+			deckSlug
+		});
+
+		if (existingDeck) {
+			return existingDeck.deckSlug;
+		}
+
+		const newDeck = {
+			type: 'deck',
+			deckSlug,
+			deckTitle: deck.deckTitle,
+			semester: deck.semester,
+			createdAt: new Date(),
+			updatedAt: new Date()
+		};
+
+		await collection.insertOne(newDeck);
+		return deckSlug;
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -128,6 +172,7 @@ export default {
 	getDecks,
 	getCardsByDeckSlug,
 	getCard,
+	createDeck,
 	createCard,
 	updateCard,
 	deleteCard
