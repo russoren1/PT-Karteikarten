@@ -54,13 +54,79 @@
 			<div class="alert alert-success" role="alert">Stapel wurde gespeichert.</div>
 		{/if}
 
-		{#if data.cards.length === 0}
-			<div class="alert alert-light" role="alert">
-				<p class="mb-3">Dieser Stapel enthält noch keine Karten.</p>
-				<a class="btn btn-dark" href={`/stapel/${data.deck.slug}/karten/neu`}>
-					Erste Karte erstellen
-				</a>
+		<form class="card bg-light text-dark shadow-sm mb-4" method="GET">
+			<div class="card-body">
+				<h2 class="h5 fw-bold mb-3">Karten filtern</h2>
+
+				<div class="row g-3">
+					<div class="col-lg-4">
+						<label class="form-label" for="q">Frage oder Antwort suchen</label>
+						<input
+							class="form-control"
+							id="q"
+							name="q"
+							placeholder="Suchbegriff"
+							value={data.filters.q}
+						/>
+					</div>
+
+					<div class="col-sm-6 col-lg-2">
+						<label class="form-label" for="week">Woche</label>
+						<input
+							class="form-control"
+							id="week"
+							name="week"
+							type="number"
+							min="1"
+							step="1"
+							placeholder="10"
+							value={data.filters.week}
+						/>
+					</div>
+
+					<div class="col-sm-6 col-lg-2">
+						<label class="form-label" for="slide">Folie/Seite</label>
+						<input
+							class="form-control"
+							id="slide"
+							name="slide"
+							type="number"
+							min="1"
+							step="1"
+							placeholder="74"
+							value={data.filters.slide}
+						/>
+					</div>
+
+					<div class="col-lg-4">
+						<label class="form-label" for="status">Status</label>
+						<select class="form-select" id="status" name="status" value={data.filters.status}>
+							<option value="">Alle</option>
+							<option value="new">Neu</option>
+							<option value="known">Gewusst</option>
+							<option value="repeat">Repetieren</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="d-flex flex-column flex-md-row gap-2 mt-4">
+					<button class="btn btn-dark fw-semibold" type="submit">Filtern</button>
+					<a class="btn btn-outline-secondary" href={`/stapel/${data.deck.slug}`}>Zurücksetzen</a>
+				</div>
 			</div>
+		</form>
+
+		{#if data.cards.length === 0}
+			{#if data.hasActiveFilters}
+				<div class="alert alert-light" role="alert">Keine Karten für diese Filter gefunden.</div>
+			{:else}
+				<div class="alert alert-light" role="alert">
+					<p class="mb-3">Dieser Stapel enthält noch keine Karten.</p>
+					<a class="btn btn-dark" href={`/stapel/${data.deck.slug}/karten/neu`}>
+						Erste Karte erstellen
+					</a>
+				</div>
+			{/if}
 		{:else}
 			<div class="table-responsive shadow-sm">
 				<table class="table table-light table-bordered table-hover align-middle mb-0">
