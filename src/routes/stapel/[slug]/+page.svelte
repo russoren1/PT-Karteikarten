@@ -70,10 +70,24 @@
 								<td>{card.question || 'Ohne Frage'}</td>
 								<td class="text-center">{card.week ?? '-'}</td>
 								<td class="text-center">{card.slide ?? '-'}</td>
-								<td class="text-center">
-									<a class="btn btn-sm btn-dark" href={`/stapel/${data.deck.slug}/karten/${card._id}`}>
-										Öffnen
-									</a>
+								<td>
+									<div class="d-flex flex-column flex-lg-row justify-content-center gap-2">
+										<a class="btn btn-sm btn-dark" href={`/stapel/${data.deck.slug}/karten/${card._id}`}>
+											Öffnen
+										</a>
+										<a
+											class="btn btn-sm btn-outline-dark"
+											href={`/stapel/${data.deck.slug}/karten/${card._id}/bearbeiten`}
+										>
+											Bearbeiten
+										</a>
+										<a
+											class="btn btn-sm btn-danger"
+											href={`/stapel/${data.deck.slug}/karten/${card._id}/loeschen`}
+										>
+											Löschen
+										</a>
+									</div>
 								</td>
 							</tr>
 						{/each}
