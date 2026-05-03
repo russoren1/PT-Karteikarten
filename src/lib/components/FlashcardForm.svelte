@@ -4,7 +4,8 @@
 		error = '',
 		submitLabel = 'Karte erstellen',
 		formAction = '?/createCard',
-		cancelHref = ''
+		cancelHref = '',
+		cancelLabel = 'Zurück zum Stapel'
 	} = $props();
 </script>
 
@@ -72,7 +73,7 @@
 		<div class="d-flex flex-column flex-md-row gap-2">
 			<button class="btn btn-dark fw-semibold flex-fill" type="submit">{submitLabel}</button>
 			{#if cancelHref}
-				<a class="btn btn-outline-secondary flex-fill" href={cancelHref}>Zurück zum Stapel</a>
+				<a class="btn btn-outline-secondary flex-fill" href={cancelHref}>{cancelLabel}</a>
 			{/if}
 		</div>
 	</div>
