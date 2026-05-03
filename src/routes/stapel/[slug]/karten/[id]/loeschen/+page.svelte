@@ -1,4 +1,6 @@
 <script>
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+
 	let { data, form } = $props();
 </script>
 
@@ -16,6 +18,16 @@
 			<a class="btn btn-dark" href={`/stapel/${data.slug}`}>Zurück zum Stapel</a>
 		</div>
 	{:else}
+		<Breadcrumbs
+			items={[
+				{ label: 'Home', href: '/' },
+				{ label: 'Stapel', href: '/stapel' },
+				{ label: data.card.deckTitle, href: `/stapel/${data.card.deckSlug}` },
+				{ label: 'Karte', href: `/stapel/${data.card.deckSlug}/karten/${data.card._id}` },
+				{ label: 'Löschen' }
+			]}
+		/>
+
 		<div class="mb-4">
 			<h1 class="display-5 fw-bold mb-3">// Karte löschen</h1>
 			<div class="d-flex flex-wrap gap-2">

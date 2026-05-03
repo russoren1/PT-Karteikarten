@@ -1,4 +1,6 @@
 <script>
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+
 	let { data } = $props();
 </script>
 
@@ -18,6 +20,14 @@
 			<a class="btn btn-dark" href="/stapel">Zurück zur Stapelübersicht</a>
 		</div>
 	{:else}
+		<Breadcrumbs
+			items={[
+				{ label: 'Home', href: '/' },
+				{ label: 'Stapel', href: '/stapel' },
+				{ label: data.deck.title }
+			]}
+		/>
+
 		<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-start gap-3 mb-4">
 			<div>
 				<h1 class="display-5 fw-bold mb-3">// {data.deck.title}</h1>

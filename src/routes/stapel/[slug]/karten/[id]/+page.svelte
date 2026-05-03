@@ -1,4 +1,6 @@
 <script>
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+
 	let { data } = $props();
 </script>
 
@@ -16,6 +18,15 @@
 			<a class="btn btn-dark" href={`/stapel/${data.slug}`}>Zurück zum Stapel</a>
 		</div>
 	{:else}
+		<Breadcrumbs
+			items={[
+				{ label: 'Home', href: '/' },
+				{ label: 'Stapel', href: '/stapel' },
+				{ label: data.card.deckTitle, href: `/stapel/${data.card.deckSlug}` },
+				{ label: 'Karte' }
+			]}
+		/>
+
 		<h1 class="display-5 fw-bold mb-5">
 			{data.created ? '// Neue Karte wurde erstellt!' : '// Vorschau der Karte'}
 		</h1>

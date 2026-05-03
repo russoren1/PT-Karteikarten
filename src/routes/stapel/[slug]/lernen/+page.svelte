@@ -1,4 +1,6 @@
 <script>
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+
 	let { data, form } = $props();
 	let showAnswer = $state(false);
 </script>
@@ -8,9 +10,9 @@
 </svelte:head>
 
 <div class="container py-4 py-lg-5">
-	<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
-
 	{#if !data.deck}
+		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
+
 		<div class="alert alert-warning" role="alert">
 			<h2 class="h4 alert-heading">Stapel nicht gefunden</h2>
 			<p class="mb-3">
@@ -19,6 +21,16 @@
 			<a class="btn btn-dark" href="/stapel">Zurück zur Stapelübersicht</a>
 		</div>
 	{:else if data.done}
+		<Breadcrumbs
+			items={[
+				{ label: 'Home', href: '/' },
+				{ label: 'Stapel', href: '/stapel' },
+				{ label: data.deck.title, href: `/stapel/${data.deck.slug}` },
+				{ label: 'Lernmodus' }
+			]}
+		/>
+		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
+
 		<div class="card bg-light text-dark shadow-sm">
 			<div class="card-body p-4 p-lg-5 text-center">
 				<h2 class="h3 fw-bold mb-3">Du hast alle Karten in diesem Stapel durchgearbeitet.</h2>
@@ -34,6 +46,16 @@
 			</div>
 		</div>
 	{:else if data.cards.length === 0}
+		<Breadcrumbs
+			items={[
+				{ label: 'Home', href: '/' },
+				{ label: 'Stapel', href: '/stapel' },
+				{ label: data.deck.title, href: `/stapel/${data.deck.slug}` },
+				{ label: 'Lernmodus' }
+			]}
+		/>
+		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
+
 		<div class="alert alert-light" role="alert">
 			<p class="mb-3">Dieser Stapel enthält noch keine Karten.</p>
 			<a class="btn btn-dark" href={`/stapel/${data.deck.slug}/karten/neu`}>
@@ -41,6 +63,16 @@
 			</a>
 		</div>
 	{:else if data.card}
+		<Breadcrumbs
+			items={[
+				{ label: 'Home', href: '/' },
+				{ label: 'Stapel', href: '/stapel' },
+				{ label: data.deck.title, href: `/stapel/${data.deck.slug}` },
+				{ label: 'Lernmodus' }
+			]}
+		/>
+		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
+
 		<div class="card bg-light text-dark shadow-sm">
 			<div class="card-body p-4 p-lg-5">
 				{#if form?.error}
