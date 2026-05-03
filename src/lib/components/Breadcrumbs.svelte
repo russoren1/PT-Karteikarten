@@ -3,7 +3,7 @@
 </script>
 
 {#if items.length}
-	<nav aria-label="Breadcrumb">
+	<nav aria-label="Breadcrumb" data-bs-theme="dark">
 		<ol class="breadcrumb mb-4">
 			{#each items as item, index}
 				<li
@@ -19,7 +19,7 @@
 							{item.label}
 						</a>
 					{:else}
-						{item.label}
+						<span class="badge rounded-pill text-bg-light text-dark">{item.label}</span>
 					{/if}
 				</li>
 			{/each}
