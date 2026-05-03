@@ -1,44 +1,7 @@
 <script>
 	import DeckCard from '$lib/components/DeckCard.svelte';
 
-	const decks = [
-		{
-			id: 'strategisches-management',
-			title: 'Strategisches Management',
-			semester: 'FS 26',
-			cardCount: 112
-		},
-		{
-			id: 'prototyping',
-			title: 'Prototyping',
-			semester: 'FS 26',
-			cardCount: 221
-		},
-		{
-			id: 'data-management',
-			title: 'Data Management',
-			semester: 'FS 26',
-			cardCount: 188
-		},
-		{
-			id: 'it-project-management',
-			title: 'IT Project Management',
-			semester: 'FS 26',
-			cardCount: 112
-		},
-		{
-			id: 'statistik',
-			title: 'Statistik',
-			semester: 'HS 25',
-			cardCount: 290
-		},
-		{
-			id: 'financial-management',
-			title: 'Financial Management',
-			semester: 'HS 25',
-			cardCount: 248
-		}
-	];
+	let { data } = $props();
 </script>
 
 <div class="container">
@@ -53,11 +16,17 @@
 		</div>
 	</div>
 
-	<div class="row g-4 g-xl-5">
-		{#each decks as deck (deck.id)}
-			<div class="col-md-6 col-lg-4">
-				<DeckCard {deck} />
-			</div>
-		{/each}
-	</div>
+	{#if data.decks.length === 0}
+		<div class="alert alert-light" role="alert">
+			Noch keine Karteikarten gefunden. Lege zuerst Dokumente in MongoDB Atlas an.
+		</div>
+	{:else}
+		<div class="row g-4 g-xl-5">
+			{#each data.decks as deck (deck.slug)}
+				<div class="col-md-6 col-lg-4">
+					<DeckCard {deck} />
+				</div>
+			{/each}
+		</div>
+	{/if}
 </div>
