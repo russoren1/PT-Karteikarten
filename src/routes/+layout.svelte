@@ -1,7 +1,12 @@
 <script>
 	import '../style.css';
+	import { afterNavigate } from '$app/navigation';
 
 	let { children } = $props();
+
+	afterNavigate(() => {
+		document.querySelector('#navbarNavAltMarkup')?.classList.remove('show');
+	});
 </script>
 
 <svelte:head>
