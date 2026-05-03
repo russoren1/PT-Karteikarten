@@ -165,6 +165,91 @@ async function createDeck(deck) {
 	return null;
 }
 
+async function updateDeck(oldDeckSlug, deck) {
+	const newDeckSlug = createDeckSlug(deck.deckTitle);
+
+	try {
+		const existingDeck = await collection.findOne({
+			type: 'deck',
+			deckSlug: newDeckSlug
+		});
+
+		if (existingDeck && newDeckSlug !== oldDeckSlug) {
+			return {
+				error: 'duplicate'
+			};
+		}
+
+		const result = await collection.updateOne(
+			{
+				type: 'deck',
+				deckSlug: oldDeckSlug
+			},
+			{
+				$set: {
+					deckSlug: newDeckSlug,
+					deckTitle: deck.deckTitle,
+					semester: deck.semester,
+					updatedAt: new Date()
+				}
+			}
+		);
+
+		if (result.matchedCount !== 1) {
+			return {
+				error: 'not-found'
+			};
+		}
+
+		await collection.updateMany(
+			{
+				type: 'card',
+				deckSlug: oldDeckSlug
+			},
+			{
+				$set: {
+					deckSlug: newDeckSlug,
+					deckTitle: deck.deckTitle,
+					semester: deck.semester,
+					updatedAt: new Date()
+				}
+			}
+		);
+
+		return {
+			slug: newDeckSlug
+		};
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	return {
+		error: 'failed'
+	};
+}
+
+async function deleteDeck(deckSlug) {
+	try {
+		await collection.deleteMany({
+			type: 'card',
+			deckSlug
+		});
+
+		const result = await collection.deleteOne({
+			type: 'deck',
+			deckSlug
+		});
+
+		if (result.deletedCount === 1) {
+			return deckSlug;
+		}
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	return null;
+}
+
 async function updateCard(card) {
 	try {
 		const id = card._id;
@@ -203,6 +288,8 @@ export default {
 	getCardsByDeckSlug,
 	getCard,
 	createDeck,
+	updateDeck,
+	deleteDeck,
 	createCard,
 	updateCard,
 	deleteCard
