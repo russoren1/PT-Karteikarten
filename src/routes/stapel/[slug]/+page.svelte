@@ -41,9 +41,9 @@
 		</div>
 
 		<div class="mb-5">
-			<button class="btn btn-dark btn-lg border border-light shadow-sm w-100 py-4 fw-bold" type="button" disabled>
+			<a class="btn btn-dark btn-lg border border-light shadow-sm w-100 py-4 fw-bold" href={`/stapel/${data.deck.slug}/lernen`}>
 				⚡ JETZT LERNEN
-			</button>
+			</a>
 		</div>
 
 		{#if data.deleted}
