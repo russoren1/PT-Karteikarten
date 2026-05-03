@@ -41,10 +41,10 @@
 	];
 </script>
 
-<section class="container stack-overview">
-	<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-5">
+<div class="container stack-overview">
+	<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 m-4">
 		<div>
-			<h1 class="display-6 fw-bold page-title mb-0">// Meine Stapel</h1>
+			<h1 class="display-6 fw-bold page-title m-4">// Meine Stapel</h1>
 		</div>
 
 		<div class="d-flex flex-wrap align-items-start gap-3">
@@ -60,4 +60,4 @@
 			</div>
 		{/each}
 	</div>
-</section>
+</div>

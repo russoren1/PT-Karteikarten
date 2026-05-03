@@ -1,8 +1,7 @@
-<section class="container">
+<div class="container">
 	<div class="row align-items-center justify-content-center min-vh-75">
 		<div class="col-lg-8">
 			<div class="mb-4">
-				<span class="badge text-bg-primary mb-3">Prototyping</span>
 				<h1 class="display-5 fw-bold page-title mb-3">// Karteikarten mit Vorlesungskontext</h1>
 				<p class="lead text-light-emphasis mb-4">
 					Lerne fokussiert und finde bei Unsicherheiten direkt zur passenden Semesterwoche,
@@ -21,4 +20,4 @@
 			</div>
 		</div>
 	</div>
-</section>
+</div>

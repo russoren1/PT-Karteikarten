@@ -2,7 +2,7 @@
 	let { deck } = $props();
 </script>
 
-<article class="card deck-card h-100 bg-light text-dark shadow-sm">
+<div class="card deck-card h-100 bg-light text-dark shadow-sm m-4">
 	<div class="card-body d-flex flex-column">
 		<h2 class="h4 card-title fw-bold mb-0">{deck.title}</h2>
 
@@ -13,4 +13,8 @@
 
 		<a class="btn btn-dark w-100 deck-open-button" href={`/stapel/${deck.id}`}>⚡ Öffnen</a>
 	</div>
-</article>
+</div>
+
+<style>
+
+</style>
