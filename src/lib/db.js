@@ -268,6 +268,35 @@ async function updateCard(card) {
 	return null;
 }
 
+async function updateCardStatus(id, status) {
+	if (!['known', 'repeat'].includes(status)) {
+		return null;
+	}
+
+	try {
+		const result = await collection.updateOne(
+			{
+				_id: new ObjectId(id),
+				type: 'card'
+			},
+			{
+				$set: {
+					status,
+					updatedAt: new Date()
+				}
+			}
+		);
+
+		if (result.matchedCount === 1) {
+			return id;
+		}
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	return null;
+}
+
 async function deleteCard(id) {
 	try {
 		const result = await collection.deleteOne({ _id: new ObjectId(id), type: 'card' });
@@ -292,5 +321,6 @@ export default {
 	deleteDeck,
 	createCard,
 	updateCard,
+	updateCardStatus,
 	deleteCard
 };
