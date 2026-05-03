@@ -28,9 +28,9 @@
 			</div>
 
 			<div class="d-flex flex-wrap gap-2">
-				<button class="btn btn-success btn-lg fw-semibold" type="button" disabled>
+				<a class="btn btn-success btn-lg fw-semibold" href={`/stapel/${data.deck.slug}/karten/neu`}>
 					+ Neue Karte
-				</button>
+				</a>
 				<button class="btn btn-light btn-lg fw-semibold" type="button" disabled>
 					Bearbeiten
 				</button>
@@ -48,7 +48,10 @@
 
 		{#if data.cards.length === 0}
 			<div class="alert alert-light" role="alert">
-				Dieser Stapel enthält noch keine Karten. Später kannst du sie über „Neue Karte“ erfassen.
+				<p class="mb-3">Dieser Stapel enthält noch keine Karten.</p>
+				<a class="btn btn-dark" href={`/stapel/${data.deck.slug}/karten/neu`}>
+					Erste Karte erstellen
+				</a>
 			</div>
 		{:else}
 			<div class="table-responsive shadow-sm">
@@ -58,6 +61,7 @@
 							<th scope="col">Frage</th>
 							<th class="text-center" scope="col">Woche</th>
 							<th class="text-center" scope="col">Folie/Seite</th>
+							<th class="text-center" scope="col">Aktion</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -66,6 +70,11 @@
 								<td>{card.question || 'Ohne Frage'}</td>
 								<td class="text-center">{card.week ?? '-'}</td>
 								<td class="text-center">{card.slide ?? '-'}</td>
+								<td class="text-center">
+									<a class="btn btn-sm btn-dark" href={`/stapel/${data.deck.slug}/karten/${card._id}`}>
+										Öffnen
+									</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
