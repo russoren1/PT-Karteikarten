@@ -128,6 +128,12 @@
 				</div>
 			{/if}
 		{:else}
+			{#if data.hasActiveFilters}
+				<p class="text-light fw-semibold mb-3">
+					{data.cards.length} von {data.totalCardCount} Karten angezeigt
+				</p>
+			{/if}
+
 			<div class="table-responsive shadow-sm">
 				<table class="table table-light table-bordered table-hover align-middle mb-0">
 					<thead class="table-secondary">

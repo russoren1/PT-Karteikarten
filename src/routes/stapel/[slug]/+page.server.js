@@ -26,6 +26,7 @@ export async function load({ params, url }) {
 		return {
 			deck: null,
 			cards: [],
+			totalCardCount: 0,
 			slug: params.slug,
 			deleted: false,
 			filters,
@@ -38,6 +39,7 @@ export async function load({ params, url }) {
 	return {
 		deck,
 		cards,
+		totalCardCount: deck.cardCount,
 		filters,
 		hasActiveFilters: hasActiveFilters(filters),
 		deleted: url.searchParams.get('deleted') === '1',
