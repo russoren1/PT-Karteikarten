@@ -1,11 +1,12 @@
 import db from '$lib/db.js';
 import { fail, redirect } from '@sveltejs/kit';
 
-export async function load() {
+export async function load({ url }) {
 	const decks = await db.getDecks();
 
 	return {
-		decks
+		decks,
+		deckDeleted: url.searchParams.get('deckDeleted') === '1'
 	};
 }
 

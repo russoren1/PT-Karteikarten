@@ -17,6 +17,7 @@ export async function load({ params, url }) {
 	return {
 		deck,
 		cards,
-		deleted: url.searchParams.get('deleted') === '1'
+		deleted: url.searchParams.get('deleted') === '1',
+		deckUpdated: url.searchParams.get('deckUpdated') === '1'
 	};
 }

@@ -74,6 +74,10 @@
 		<div class="alert alert-danger" role="alert">{form.error}</div>
 	{/if}
 
+	{#if data.deckDeleted}
+		<div class="alert alert-success" role="alert">Stapel wurde gelöscht.</div>
+	{/if}
+
 	{#if data.decks.length === 0}
 		<div class="alert alert-light" role="alert">
 			Noch keine Stapel vorhanden. Erstelle deinen ersten Stapel über den Button "Neuer Stapel".

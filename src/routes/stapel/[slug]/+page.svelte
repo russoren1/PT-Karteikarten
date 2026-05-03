@@ -31,12 +31,12 @@
 				<a class="btn btn-success btn-lg fw-semibold" href={`/stapel/${data.deck.slug}/karten/neu`}>
 					+ Neue Karte
 				</a>
-				<button class="btn btn-light btn-lg fw-semibold" type="button" disabled>
+				<a class="btn btn-light btn-lg fw-semibold" href={`/stapel/${data.deck.slug}/bearbeiten`}>
 					Bearbeiten
-				</button>
-				<button class="btn btn-danger btn-lg fw-semibold" type="button" disabled>
+				</a>
+				<a class="btn btn-danger btn-lg fw-semibold" href={`/stapel/${data.deck.slug}/loeschen`}>
 					Löschen
-				</button>
+				</a>
 			</div>
 		</div>
 
@@ -48,6 +48,10 @@
 
 		{#if data.deleted}
 			<div class="alert alert-success" role="alert">Karte wurde gelöscht.</div>
+		{/if}
+
+		{#if data.deckUpdated}
+			<div class="alert alert-success" role="alert">Stapel wurde gespeichert.</div>
 		{/if}
 
 		{#if data.cards.length === 0}
