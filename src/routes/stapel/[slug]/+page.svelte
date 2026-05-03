@@ -46,6 +46,10 @@
 			</button>
 		</div>
 
+		{#if data.deleted}
+			<div class="alert alert-success" role="alert">Karte wurde gelöscht.</div>
+		{/if}
+
 		{#if data.cards.length === 0}
 			<div class="alert alert-light" role="alert">
 				<p class="mb-3">Dieser Stapel enthält noch keine Karten.</p>

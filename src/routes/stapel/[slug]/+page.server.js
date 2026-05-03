@@ -1,13 +1,14 @@
 import db from '$lib/db.js';
 
-export async function load({ params }) {
+export async function load({ params, url }) {
 	const deck = await db.getDeckBySlug(params.slug);
 
 	if (!deck) {
 		return {
 			deck: null,
 			cards: [],
-			slug: params.slug
+			slug: params.slug,
+			deleted: false
 		};
 	}
 
@@ -15,6 +16,7 @@ export async function load({ params }) {
 
 	return {
 		deck,
-		cards
+		cards,
+		deleted: url.searchParams.get('deleted') === '1'
 	};
 }
