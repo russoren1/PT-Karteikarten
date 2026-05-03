@@ -5,10 +5,10 @@
 	let showCreateDeckForm = $state(false);
 </script>
 
-<div class="container">
-	<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 m-4">
+<div class="container py-4 py-lg-5">
+	<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
 		<div>
-			<h1 class="display-6 fw-bold m-4">// Meine Stapel</h1>
+			<h1 class="display-6 fw-bold mb-0">// Meine Stapel</h1>
 		</div>
 
 		<div class="d-flex flex-wrap align-items-start gap-3">
@@ -39,7 +39,7 @@
 							class="form-control"
 							id="deckTitle"
 							name="deckTitle"
-							placeholder="Strategisches Management"
+							placeholder="z.B. Strategisches Management"
 							value={form?.deckTitle ?? ''}
 							required
 						/>
@@ -51,7 +51,7 @@
 							class="form-control"
 							id="semester"
 							name="semester"
-							placeholder="FS 26"
+							placeholder="z.B. FS 26"
 							value={form?.semester ?? ''}
 							required
 						/>

@@ -47,7 +47,7 @@
 						class="form-control"
 						id="deckTitle"
 						name="deckTitle"
-						placeholder="Strategisches Management"
+						placeholder="z.B. Strategisches Management"
 						value={form?.deckTitle ?? data.deck.title}
 						required
 					/>
@@ -59,7 +59,7 @@
 						class="form-control"
 						id="semester"
 						name="semester"
-						placeholder="FS 26"
+						placeholder="z.B. FS 26"
 						value={form?.semester ?? data.deck.semester}
 						required
 					/>

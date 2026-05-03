@@ -22,7 +22,7 @@
 				class="form-control"
 				id="question"
 				name="question"
-				placeholder="Was sind Nachteile von Diversifikationen?"
+				placeholder="z.B. Was sind Nachteile von Diversifikationen?"
 				value={values.question ?? ''}
 				required
 			/>
@@ -34,7 +34,7 @@
 				class="form-control"
 				id="answer"
 				name="answer"
-				placeholder="Probleme und Kosten der Synergieerschliessung"
+				placeholder="z.B. Probleme und Kosten der Synergieerschliessung"
 				rows="5"
 				value={values.answer ?? ''}
 				required
@@ -72,13 +72,15 @@
 		</div>
 
 		<div class="mb-4">
-			<label class="form-label fw-semibold" for="sourceName">Datei oder Skript</label>
+			<label class="form-label fw-semibold" for="sourceName">
+				Dateiname bzw. Vorlesungs-Skript (optional)
+			</label>
 			<input
 				class="form-control"
 				id="sourceName"
 				name="sourceName"
 				list="sourceNameOptions"
-				placeholder="Vorlesung 10.pdf"
+				placeholder="z.B. Vorlesung 10.pdf"
 				value={values.sourceName ?? ''}
 			/>
 			{#if sourceNames.length}

@@ -10,7 +10,9 @@ body {
 	color: #f8f9fa;
 }
 
-
+.form-control::placeholder {
+	font-style: italic;
+}
 
 .deck-card {
 	min-height: 200px;
@@ -21,4 +23,3 @@ body {
 .deck-card .card-body {
 	padding: 1.35rem;
 }
-

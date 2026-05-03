@@ -78,7 +78,7 @@
 							class="form-control"
 							id="q"
 							name="q"
-							placeholder="Suchbegriff"
+							placeholder="z.B. Diversifikation"
 							value={data.filters.q}
 						/>
 					</div>
@@ -98,12 +98,14 @@
 					</div>
 
 					<div class="col-sm-6 col-lg-2">
-						<label class="form-label" for="sourceName">Datei oder Skript</label>
+						<label class="form-label" for="sourceName">
+							Dateiname bzw. Vorlesungs-Skript (optional)
+						</label>
 						<input
 							class="form-control"
 							id="sourceName"
 							name="sourceName"
-							placeholder="Vorlesung 10.pdf"
+							placeholder="z.B. Vorlesung 10.pdf"
 							value={data.filters.sourceName}
 						/>
 					</div>
