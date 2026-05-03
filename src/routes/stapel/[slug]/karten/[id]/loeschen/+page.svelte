@@ -32,7 +32,7 @@
 				{/if}
 
 				<div class="alert alert-danger" role="alert">
-					Diese Karte wird dauerhaft aus MongoDB gelöscht.
+					Diese Karte wird dauerhaft gelöscht und kann nicht rückgängig gemacht werden!
 				</div>
 
 				<h2 class="h4 fw-bold mb-3">{data.card.question}</h2>

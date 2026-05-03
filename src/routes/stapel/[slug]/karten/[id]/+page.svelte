@@ -55,7 +55,12 @@
 					>
 						Bearbeiten
 					</a>
-					<button class="btn btn-danger" type="button" disabled>Löschen</button>
+					<a
+						class="btn btn-danger"
+						href={`/stapel/${data.card.deckSlug}/karten/${data.card._id}/loeschen`}
+					>
+						Löschen
+					</a>
 					<a class="btn btn-outline-secondary flex-fill" href={`/stapel/${data.card.deckSlug}`}>
 						Zurück zum Stapel
 					</a>
