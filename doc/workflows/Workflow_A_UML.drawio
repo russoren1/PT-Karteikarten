@@ -1,0 +1,176 @@
+<mxfile version="21.0.0">
+  <diagram id="Workflow_A" name="Workflow A – Karte erstellen und bearbeiten">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="920" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Diagram Title -->
+        <mxCell id="title" value="Workflow A – Karte erstellen und bearbeiten" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="10" width="440" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- START: UML Initial Node (filled black circle) -->
+        <mxCell id="start" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="365" y="55" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- N1: Stapelübersicht aufrufen -->
+        <mxCell id="n1" value="Stapelübersicht aufrufen&#xa;(/stapel)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="270" y="115" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N2: Öffnen klicken -->
+        <mxCell id="n2" value="«Öffnen» bei Stapel klicken" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="270" y="195" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N3: Stapel-Detail öffnet sich -->
+        <mxCell id="n3" value="Stapel-Detail öffnet sich&#xa;(/stapel/[slug])" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="270" y="275" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N4: Neue Karte klicken -->
+        <mxCell id="n4" value="«+ Neue Karte» klicken" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="270" y="355" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N5: Formular ausfüllen (loop target for left branch) -->
+        <mxCell id="n5" value="Formular ausfüllen&#xa;(Frage, Antwort, Woche, Folie-Nr.)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="270" y="435" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N6: Karte erstellen klicken -->
+        <mxCell id="n6" value="«Karte erstellen» klicken" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="270" y="515" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N7: Bestätigungsseite (loop target for right branch) -->
+        <mxCell id="n7" value="Bestätigungsseite mit Kartenvorschau&#xa;(/stapel/[slug]/karten/[id])" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="270" y="595" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- DECISION: Nächste Aktion? -->
+        <mxCell id="dec1" value="Nächste Aktion?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="310" y="675" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Left branch: Formular leeren -->
+        <mxCell id="n8a" value="Formular leeren" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="790" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Right branch: Formular mit bestehenden Daten -->
+        <mxCell id="n8b" value="Formular mit bestehenden Daten öffnen&#xa;(/stapel/[slug]/karten/[id]/bearbeiten)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="500" y="755" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Right branch: Speichern klicken -->
+        <mxCell id="n9b" value="«Speichern» klicken" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="500" y="845" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- END: UML Activity Final Node – outer ring -->
+        <mxCell id="end_outer" value="" style="ellipse;aspect=fixed;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="362" y="783" width="36" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- END: UML Activity Final Node – inner filled circle -->
+        <mxCell id="end_inner" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="371" y="792" width="18" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ EDGES ═══ -->
+
+        <!-- Start → N1 -->
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="start" target="n1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N1 → N2 -->
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n1" target="n2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N2 → N3 -->
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n2" target="n3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N3 → N4 -->
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n3" target="n4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N4 → N5 -->
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n4" target="n5" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N5 → N6 -->
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n5" target="n6" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N6 → N7 -->
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n6" target="n7" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N7 → Decision -->
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n7" target="dec1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Decision → N8a [«Weitere Karte hinzufügen»] (exit left) -->
+        <mxCell id="e9" value="[«Weitere Karte&#xa;hinzufügen»]" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="dec1" target="n8a" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="120" y="715" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- N8a → N5: loop back (left side, waypoints outside page boundary) -->
+        <mxCell id="e10" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="n8a" target="n5" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="10" y="815" />
+              <mxPoint x="10" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Decision → End [Fertig] (exit bottom) -->
+        <mxCell id="e11" value="[Fertig]" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="dec1" target="end_outer" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Decision → N8b [«Bearbeiten»] (exit right) -->
+        <mxCell id="e12" value="[«Bearbeiten»]" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="dec1" target="n8b" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="715" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- N8b → N9b -->
+        <mxCell id="e13" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n8b" target="n9b" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N9b → N7: loop back (right side, waypoints outside right page boundary) -->
+        <mxCell id="e14" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="n9b" target="n7" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="760" y="870" />
+              <mxPoint x="760" y="620" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

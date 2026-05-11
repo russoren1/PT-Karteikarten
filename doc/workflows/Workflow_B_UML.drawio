@@ -1,0 +1,201 @@
+<mxfile version="21.0.0">
+  <diagram id="Workflow_B" name="Workflow B – Lernmodus (Leitner Spaced Repetition)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Diagram Title -->
+        <mxCell id="title" value="Workflow B – Lernmodus (Leitner Spaced Repetition)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="10" width="580" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- START: UML Initial Node -->
+        <mxCell id="start" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="385" y="55" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- N1: Stapelübersicht aufrufen -->
+        <mxCell id="n1" value="Stapelübersicht aufrufen&#xa;(/stapel)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="115" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N2: Öffnen klicken -->
+        <mxCell id="n2" value="«Öffnen» bei Stapel klicken" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="195" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N3: Stapel-Detail öffnet sich -->
+        <mxCell id="n3" value="Stapel-Detail öffnet sich&#xa;(/stapel/[slug])" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="275" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N4: JETZT LERNEN klicken -->
+        <mxCell id="n4" value="«JETZT LERNEN» klicken" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="355" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N5: Lernmodus startet -->
+        <mxCell id="n5" value="Lernmodus startet; priorisierte&#xa;Karte laden (/stapel/[slug]/lernen)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="435" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N6: Frage + Metadaten anzeigen (LOOP TARGET) -->
+        <mxCell id="n6" value="Frage (Vorderseite) +&#xa;Metadaten (Woche, Folie) anzeigen" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="515" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N7: Antwort anzeigen klicken -->
+        <mxCell id="n7" value="«Antwort anzeigen» klicken" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="595" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- N8: Antwort (Rückseite) einblenden -->
+        <mxCell id="n8" value="Antwort (Rückseite) einblenden" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="675" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- DECISION 1: Selbstbewertung? -->
+        <mxCell id="dec1" value="Selbstbewertung?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="755" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Left branch: N9a – Leitner-Box +1 (Gewusst) -->
+        <mxCell id="n9a" value="Leitner-Box +1;&#xa;nächstes Review-Datum berechnen" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="870" width="210" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Right branch: N9b – Leitner-Box auf Box 1 (Repetieren) -->
+        <mxCell id="n9b" value="Leitner-Box auf Box 1&#xa;zurücksetzen" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="440" y="870" width="210" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- DECISION 2: Weitere Karten fällig? -->
+        <mxCell id="dec2" value="Weitere Karten&#xa;fällig?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="970" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- N10: Rückkehr zur Stapel-Detailansicht -->
+        <mxCell id="n10" value="Rückkehr zur Stapel-Detailansicht&#xa;(/stapel/[slug])" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="290" y="1085" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- END: UML Activity Final Node – outer ring -->
+        <mxCell id="end_outer" value="" style="ellipse;aspect=fixed;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="383" y="1165" width="36" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- END: UML Activity Final Node – inner filled circle -->
+        <mxCell id="end_inner" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="392" y="1174" width="18" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ EDGES ═══ -->
+
+        <!-- Start → N1 -->
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="start" target="n1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N1 → N2 -->
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n1" target="n2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N2 → N3 -->
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n2" target="n3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N3 → N4 -->
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n3" target="n4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N4 → N5 -->
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n4" target="n5" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N5 → N6 -->
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n5" target="n6" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N6 → N7 -->
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n6" target="n7" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N7 → N8 -->
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n7" target="n8" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- N8 → Decision1 -->
+        <mxCell id="e9" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="n8" target="dec1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Decision1 → N9a [«Gewusst» ✓ (grün)] (exit left) -->
+        <mxCell id="e10" value="[«Gewusst» ✓]" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#006600;fontStyle=1;" edge="1" source="dec1" target="n9a" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="165" y="795" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Decision1 → N9b [«Repetieren» ✗ (rot)] (exit right) -->
+        <mxCell id="e11" value="[«Repetieren» ✗]" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#990000;fontStyle=1;" edge="1" source="dec1" target="n9b" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="545" y="795" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- N9a → Decision2 (converge at center top of dec2) -->
+        <mxCell id="e12" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="n9a" target="dec2" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="165" y="950" />
+              <mxPoint x="400" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- N9b → Decision2 (converge at center top of dec2) -->
+        <mxCell id="e13" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="n9b" target="dec2" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="545" y="950" />
+              <mxPoint x="400" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Decision2 → N10 [Nein – Stapel abgeschlossen] (exit bottom) -->
+        <mxCell id="e14" value="[Nein – Stapel abgeschlossen]" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="dec2" target="n10" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Decision2 → N6: loop back [Ja – weitere Karten fällig] (exit left, waypoints outside left boundary) -->
+        <mxCell id="e15" value="[Ja – weitere&#xa;Karten fällig]" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="dec2" target="n6" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="30" y="1010" />
+              <mxPoint x="30" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- N10 → End -->
+        <mxCell id="e16" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="n10" target="end_outer" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
