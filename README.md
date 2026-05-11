@@ -448,6 +448,44 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
 
 ---
 
+### 4.3 User Management via Supabase Auth
+
+- **Beschreibung & Nutzen:** Jede Studentin und jeder Student kann sich mit E-Mail und Passwort registrieren und anmelden. Alle Stapel und Karteikarten sind dem jeweiligen Account zugeordnet — niemand sieht die Daten anderer Personen.
+
+- **Warum diese Erweiterung?** Der Prototyp war bisher ein Einzelbenutzer-System ohne Datentrennung. Um die App realistisch nutzbar zu machen (z.B. im Kurskontext), ist eine saubere Nutzertrennung notwendig. Supabase Auth wurde gewählt, weil es vollständig managed ist, keine eigene Auth-Infrastruktur braucht und hervorragend mit SvelteKit via `@supabase/ssr` integriert.
+
+- **Wo umgesetzt:**
+  - **Route-Guard:** `src/hooks.server.js` — prüft Session bei jedem Request; schützt `/stapel` und `/dashboard`
+  - **Login:** `src/routes/login/`
+  - **Registrierung:** `src/routes/registrieren/`
+  - **Logout:** `src/routes/logout/`
+  - **Layout:** `src/routes/+layout.svelte` — Navbar zeigt User-E-Mail und Abmelden-Button
+  - **Datenbank:** `src/lib/db.js` — alle Abfragen filtern via `userId`-Feld (rückwärtskompatibel: Altdaten ohne `userId` bleiben sichtbar)
+
+- **Technologie:** Supabase Auth mit `@supabase/ssr`, Cookie-basierte Sessions
+
+---
+
+### 4.4 Bild-Upload pro Karteikarte via Supabase Storage
+
+- **Beschreibung & Nutzen:** Beim Erstellen oder Bearbeiten einer Karte kann optional ein Screenshot hochgeladen werden (JPG, PNG, WebP) — z.B. aus OneNote, Vorlesungsfolien oder einem Skript. Das Bild wird im Lernmodus direkt unterhalb der Frage angezeigt und stellt so den visuellen Vorlesungskontext her.
+
+- **Warum diese Erweiterung?** Die Kernidee der App ist die Verknüpfung von Karteikarten mit ihrer Vorlesungsquelle. Bisher war diese Verknüpfung rein textuell (Woche, Folie, Dateiname). Ein Bild macht diesen Kontext unmittelbar sichtbar: Der Lernende sieht sofort, zu welchem Slide oder welcher Seite die Frage gehört, ohne die Primärquelle öffnen zu müssen.
+
+- **Wo umgesetzt:**
+  - **Formular:** `src/lib/components/FlashcardForm.svelte` — optionales Datei-Upload-Feld
+  - **Neue Karte:** `src/routes/stapel/[slug]/karten/neu/+page.server.js` — Upload via `uploadCardImage()`, URL in MongoDB
+  - **Bearbeiten:** `src/routes/stapel/[slug]/karten/[id]/bearbeiten/+page.server.js` — Bild ersetzen oder entfernen
+  - **Löschen:** `src/routes/stapel/[slug]/karten/[id]/loeschen/+page.server.js` — Bild aus Storage löschen
+  - **Lernmodus:** `src/routes/stapel/[slug]/lernen/+page.svelte` — Bild unterhalb der Frage anzeigen
+  - **Hilfsfunktionen:** `src/lib/supabase.js` — `uploadCardImage()`, `deleteCardImage()`
+
+- **Datenmodell:** Card-Dokument erhält optionales Feld `imageUrl` (öffentliche URL aus Supabase Storage Bucket `card-images`)
+
+- **Technologie:** Supabase Storage mit Service-Role-Key für server-seitige Uploads
+
+---
+
 ## 5. Projektorganisation [Optional]
 
 - **Repository & GitHub:**
