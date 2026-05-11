@@ -40,7 +40,7 @@ Studierende nutzen Karteikarten zum Lernen, verlieren dabei aber häufig den dir
 Eine schlanke Karteikarten-Web-App, bei der jede Karte explizit mit Semesterwoche und Vorlesungsfolie verknüpft ist. Anstatt komplexer Strukturen steht eine einfache Dashboard-Ansicht mit Filterfunktionen im Fokus.
 
 - **Kernfunktionalität:**
-  - **Workflow A – Karte erstellen und bearbeiten:** Stapel öffnen → Formular ausfüllen (Frage, Antwort, Woche, Folie und optional Datei) → Karte erstellen → Vorschau mit Option zum Bearbeiten oder Weitererstellen
+  - **Workflow A – Karte erstellen und bearbeiten:** Anmelden → Stapel öffnen → Formular ausfüllen (Frage, Antwort, Woche, Folie; optional Screenshot per Drag & Drop) → Karte erstellen → Vorschau mit Option zum Bearbeiten oder Weitererstellen
   - **Workflow B – Lernmodus:** Stapel öffnen → «JETZT LERNEN» → Frage anzeigen → Antwort aufdecken → «Gewusst» oder «Repetieren» wählen → nächste Karte
 - **Annahmen :** Der direkte Rückbezug zur Vorlesungsquelle (Woche + Folie) ist ein echter Mehrwert gegenüber etablierten Tools wie Anki oder Quizlet, da diese den Kontext der Primärquelle nicht priorisieren.
 - **Abgrenzung :** Keine Powersets oder komplexe übergeordnete Stapelstrukturen — diese wurden nach Feedback in der Sketch-Phase während der Kleinklasse bewusst verworfen, da sie den Prototyp über den realistisch umsetzbaren Rahmen hinaus erweitert hätten, ohne direkten Mehrwert für das Kernproblem zu liefern.
@@ -183,8 +183,8 @@ Die User Journey Maps zeigen für beide Haupt-Workflows je Phase, was der User t
 | **Aktion** | Navigiert zu `/stapel` | Klickt «Öffnen» beim Modul | Füllt Frage, Antwort, Woche, Folie aus | Klickt «Karte erstellen» | Prüft Vorschau, wählt nächste Aktion |
 | **Gedanken** | «Welcher Stapel ist der richtige?» | «Hier sind meine bisherigen Karten» | «Welche Woche und Folie war das nochmal?» | «Hat das geklappt?» | «Sieht gut aus, noch eine Karte oder bearbeiten?» |
 | **Emotion** | Neutral | Orientiert | Konzentriert | Angespannt | Erleichtert / Zufrieden |
-| **Pain Point** | Einstieg ohne Anmeldeprozess | – | Folie/Woche muss aus Vorlesungsunterlagen nachgeschaut werden | Ohne Rückmeldung kein Wissen ob gespeichert | – |
-| **Lösung im Prototyp** | Direkteinstieg ohne Auth-Aufwand | Klar gegliederte Card-Liste mit Modulname | Pflichtfelder Woche + Folie erzwingen den Vorlesungsbezug | Sofortige Weiterleitung auf Bestätigungsseite | Kartenvorschau als visuelles Feedback |
+| **Pain Point** | Login erforderlich | – | Folie/Woche muss aus Vorlesungsunterlagen nachgeschaut werden | Ohne Rückmeldung kein Wissen ob gespeichert | – |
+| **Lösung im Prototyp** | Einfache Registrierung via E-Mail + Passwort (Supabase Auth) | Klar gegliederte Card-Liste mit Modulname | Pflichtfelder Woche + Folie erzwingen den Vorlesungsbezug | Sofortige Weiterleitung auf Bestätigungsseite | Kartenvorschau als visuelles Feedback inkl. hochgeladenem Bild |
 
 ---
 
@@ -220,9 +220,11 @@ Das Mockup wurde in Figma erstellt, um die zentralen Screens und den Navigations
 
 Die Informationsarchitektur wurde bewusst flach gehalten. So wenige Klicks wie möglich von jedem Einstiegspunkt zur gewünschten Aktion. Lernende wollen Karten erstellen oder lernen, nicht durch Sub-Menüs navigieren. Tiefe Hierarchien hätten dieses Ziel untergraben und die Usability erschwert.
 
+- Home (`/`) → Login (`/login`) oder Registrieren (`/registrieren`) → Stapelübersicht (`/stapel`)
 - Stapelübersicht (`/stapel`) → Stapel-Detail (`/stapel/[slug]`) → Lernmodus oder Karte erstellen/bearbeiten
 - Dashboard (`/dashboard`) → Stapel-Detail (alternativer Einstieg über Statistiken)
 - Alle destruktiven Aktionen (Löschen) auf separate Bestätigungsseiten ausgelagert — verhindert versehentliches Löschen
+- Geschützte Routen (`/stapel`, `/dashboard`) leiten ohne Session automatisch zu `/login` weiter (`hooks.server.js`)
 
 ##### User Interface Design
 
@@ -284,6 +286,8 @@ Die Designentscheide orientieren sich an den Prinzipien der Benutzerfreundlichke
 | **Vite** | 8 | Schnelle Entwicklungsumgebung mit HMR (Hot Module Replacement) — kein manuelles Reload während der Entwicklung |
 | **MongoDB** | ^7.2.0 (Node.js Treiber) | Flexibles Dokumentenmodell ohne starres Schema — ideal für Prototyping, da sich die Datenstruktur (Card-Felder) während der Entwicklung noch anpassen konnte; kein ORM-Overhead |
 | **Netlify Adapter** | ^6.0.4 | Einfachstes Deployment für SvelteKit; kostenloser Tier ausreichend; automatische CI/CD aus dem GitHub-Repository |
+| **Supabase Auth** | @supabase/ssr | Vollständig managed Auth (E-Mail + Passwort); Cookie-basierte Sessions via `@supabase/ssr`; kein eigener Auth-Server nötig |
+| **Supabase Storage** | @supabase/supabase-js | Bild-Upload pro Karteikarte (JPG, PNG, WebP); öffentlicher Bucket `card-images`; server-seitiger Upload via Service-Role-Key |
 
 ##### Tooling
 
@@ -297,10 +301,16 @@ Seitenstruktur (Routen):
 
 ```mermaid
 flowchart TD
-    Home["Home /"] --> Stapel["Meine Stapel /stapel"]
+    Home["Home /"] --> Login["Login /login"]
+    Home --> Stapel["Meine Stapel /stapel"]
     Home --> Dashboard["Dashboard /dashboard"]
 
-    Stapel --> NeuerStapel["Neuer Stapel"]
+    Login --> Registrieren["Registrieren /registrieren"]
+    Login --> Stapel
+    Registrieren --> Stapel
+    Logout["Logout /logout"] --> Login
+
+    Stapel --> NeuerStapel["Neuer Stapel /stapel/neu"]
     Stapel --> StapelDetail["Stapel-Detail /stapel/[slug]"]
 
     Dashboard --> StapelDetail
@@ -329,12 +339,15 @@ Routenübersicht:
 | Route | Zweck | Einstieg |
 |---|---|---|
 | `/` | Home-Seite mit App-Einstieg | Navbar `Home` |
-| `/stapel` | Übersicht aller Lernstapel | Navbar `Stapel`, Button `Anmelden` |
+| `/login` | Anmeldeformular (E-Mail + Passwort) | Redirect bei fehlender Session, Link in Navbar |
+| `/registrieren` | Registrierungsformular für neue Accounts | Link auf Login-Seite |
+| `/logout` | Session beenden und zu `/login` weiterleiten | Abmelden-Button in Navbar |
+| `/stapel` | Übersicht aller eigenen Lernstapel | Navbar `Stapel` |
 | `/dashboard` | Dashboard mit Kennzahlen und Stapelstatistiken | Navbar `Dashboard` |
 | `/stapel/[slug]` | Detailseite eines Stapels mit Kartenliste und Filtern | Stapelkarte, Dashboard-Tabelle |
 | `/stapel/[slug]/lernen` | Lernmodus mit Frageansicht, Antwortanzeige und Bewertung | Button `JETZT LERNEN` |
 | `/stapel/[slug]/karten/neu` | Formular zum Erstellen einer neuen Karte | Button `+ Neue Karte` |
-| `/stapel/[slug]/karten/[id]` | Vorschau einer einzelnen Karte | Kartenliste, Weiterleitung nach Erstellung |
+| `/stapel/[slug]/karten/[id]` | Vorschau einer einzelnen Karte inkl. Bild | Kartenliste, Weiterleitung nach Erstellung |
 | `/stapel/[slug]/karten/[id]/bearbeiten` | Formular zum Bearbeiten einer Karte | Aktion `Bearbeiten` |
 | `/stapel/[slug]/karten/[id]/loeschen` | Bestätigung zum Löschen einer Karte | Aktion `Löschen` |
 | `/stapel/[slug]/bearbeiten` | Formular zum Bearbeiten eines Stapels | Aktion `Bearbeiten` im Stapel |
@@ -352,19 +365,23 @@ Komponenten (warum als Komponenten ausgelagert):
 
 MongoDB-Collection `Karteikarten` mit zwei Dokument-Typen (statt zwei getrennten Collections, da die Daten in einem einzigen Kontext abgerufen werden und das flexible Dokumentenmodell von MongoDB dies erlaubt):
 
-- **Deck:** `{ type, deckSlug, deckTitle, semester, createdAt, updatedAt }`
-- **Card:** `{ type, question, answer, deckSlug, deckTitle, semester, week, slide, status, sourceName, createdAt, updatedAt }`
+- **Deck:** `{ type, deckSlug, deckTitle, semester, userId (opt.), createdAt, updatedAt }`
+- **Card:** `{ type, question, answer, deckSlug, deckTitle, semester, week, slide, status, sourceName (opt.), imageUrl (opt.), imagePosition (opt.), leitnerBox, repeatCount, knownCount, lastReviewedAt (opt.), nextReviewAt (opt.), userId (opt.), createdAt, updatedAt }`
 
 Datenzugriff zentral in `src/lib/db.js` — alle Datenbankoperationen an einem Ort, damit Routen-Dateien sauber bleiben und die DB-Logik unabhängig getestet bzw. ausgetauscht werden kann:
 
 | Funktion | Typ | Beschreibung |
 |---|---|---|
-| `getDecks()` | Lesen | Alle Stapel mit Kartenanzahl |
-| `getDeckBySlug()` | Lesen | Einzelner Stapel nach URL-Slug |
-| `getCardsByDeckSlug()` | Lesen | Gefilterte Kartenliste (Woche, Quelle, Suchbegriff) |
-| `createCard()` / `createDeck()` | Erstellen | Neue Karte / neuer Stapel |
-| `updateCard()` / `updateDeck()` | Bearbeiten | Bestehende Karte / bestehenden Stapel aktualisieren |
-| `deleteCard()` / `deleteDeck()` | Löschen | Einzelne Karte / Stapel inkl. aller Karten |
+| `getDecks(userId)` | Lesen | Eigene Stapel mit Kartenanzahl (inkl. Altdaten ohne userId) |
+| `getDeckBySlug(slug, userId)` | Lesen | Einzelner Stapel nach URL-Slug |
+| `getCardsByDeckSlug(slug, filters, userId)` | Lesen | Gefilterte Kartenliste (Woche, Quelle, Suchbegriff, Status) |
+| `getSourceNamesByDeckSlug(slug)` | Lesen | Alle verwendeten Dateinamen eines Stapels (Autovervollständigung) |
+| `getLearningQueueByDeckSlug(slug, userId)` | Lesen | Priorisierte Lernwarteschlange (Leitner-Box-gewichtet, fällige Karten zuerst) |
+| `getDashboardStats(userId)` | Lesen | Aggregierte Lernstatistiken über alle Stapel (MongoDB-Pipeline) |
+| `createCard(card)` / `createDeck(deck)` | Erstellen | Neue Karte / neuer Stapel (mit userId aus Session) |
+| `updateCard(id, data)` / `updateDeck(id, data)` | Bearbeiten | Bestehende Karte / bestehenden Stapel aktualisieren |
+| `updateCardStatus(id, box, nextReviewAt)` | Bearbeiten | Leitner-Box und Review-Datum nach Lernbewertung setzen |
+| `deleteCard(id)` / `deleteDeck(slug)` | Löschen | Einzelne Karte / Stapel inkl. aller zugehörigen Karten |
 
 ![ER-Modell](doc/ER_Model.drawio.svg)
 *ER-Modell: Stapel und Karte in Chen Notation mit MongoDB-Dokumenttypen.*
@@ -381,9 +398,12 @@ Netlify via `@sveltejs/adapter-netlify`; URL: _[wird nach Deployment ergänzt]_
 | Entscheid | Warum |
 |---|---|
 | Kein Powerset-Feature | Komplexität unverhältnismässig zum Nutzen; hätte die Entwicklung des Kernfeatures (Vorlesungsbezug) gefährdet |
-| Minimales Formular (4 Felder) | Jedes zusätzliche Pflichtfeld erhöht die Hürde zum Erstellen einer Karte; die 4 gewählten Felder decken den Minimalfall vollständig ab |
+| Minimales Formular (4 Pflichtfelder) | Jedes zusätzliche Pflichtfeld erhöht die Hürde zum Erstellen einer Karte; die 4 gewählten Felder decken den Minimalfall vollständig ab |
 | Server-seitige DB-Verbindung | MongoDB-Credentials werden nie an den Browser übermittelt; `+page.server.js` sorgt dafür, dass die Verbindung ausschliesslich server-seitig stattfindet |
 | Slug statt ID in URLs | Lesbare URLs (z.B. `/stapel/statistik`) verbessern die Orientierung und Teilbarkeit — kein kryptischer UUID in der Adressleiste |
+| Supabase Auth statt eigener Implementation | Vollständig managed; keine eigene Auth-Infrastruktur; Cookie-basierte Sessions via `@supabase/ssr` integrieren nahtlos in SvelteKit-Hooks |
+| Supabase Storage für Bilder | Server-seitiger Upload via Service-Role-Key verhindert direkten Browser-Zugriff auf Storage-Credentials; öffentlicher Bucket ermöglicht direkte Bild-URLs ohne Proxy |
+| userId rückwärtskompatibel | `$or: [{ userId }, { userId: { $exists: false } }]` — Altdaten ohne userId bleiben für alle eingeloggten User sichtbar; kein Datenverlust beim Rollout |
 
 ---
 
@@ -473,14 +493,16 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
 - **Warum diese Erweiterung?** Die Kernidee der App ist die Verknüpfung von Karteikarten mit ihrer Vorlesungsquelle. Bisher war diese Verknüpfung rein textuell (Woche, Folie, Dateiname). Ein Bild macht diesen Kontext unmittelbar sichtbar: Der Lernende sieht sofort, zu welchem Slide oder welcher Seite die Frage gehört, ohne die Primärquelle öffnen zu müssen.
 
 - **Wo umgesetzt:**
-  - **Formular:** `src/lib/components/FlashcardForm.svelte` — optionales Datei-Upload-Feld
-  - **Neue Karte:** `src/routes/stapel/[slug]/karten/neu/+page.server.js` — Upload via `uploadCardImage()`, URL in MongoDB
-  - **Bearbeiten:** `src/routes/stapel/[slug]/karten/[id]/bearbeiten/+page.server.js` — Bild ersetzen oder entfernen
-  - **Löschen:** `src/routes/stapel/[slug]/karten/[id]/loeschen/+page.server.js` — Bild aus Storage löschen
-  - **Lernmodus:** `src/routes/stapel/[slug]/lernen/+page.svelte` — Bild unterhalb der Frage anzeigen
+  - **Formular:** `src/lib/components/FlashcardForm.svelte` — Drag & Drop Zone unterhalb des Antwortfeldes; alternativ Klick zum Öffnen des Dateiauswahl-Dialogs; Vorschau mit «Ersetzen»- und «Entfernen»-Button
+  - **Neue Karte:** `src/routes/stapel/[slug]/karten/neu/+page.server.js` — Upload via `uploadCardImage()`, öffentliche URL in MongoDB gespeichert
+  - **Bearbeiten:** `src/routes/stapel/[slug]/karten/[id]/bearbeiten/+page.server.js` — Bild ersetzen (altes Bild wird zuerst gelöscht) oder entfernen
+  - **Löschen:** `src/routes/stapel/[slug]/karten/[id]/loeschen/+page.server.js` — Bild aus Supabase Storage löschen vor DB-Eintrag entfernen
+  - **Lernmodus:** `src/routes/stapel/[slug]/lernen/+page.svelte` — Bild unterhalb der Frage angezeigt (vor «Antwort anzeigen»)
+  - **Kartenvorschau:** `src/routes/stapel/[slug]/karten/[id]/+page.svelte` — Bild in der Bestätigungsansicht nach Erstellung sichtbar
+  - **Kartenliste:** `src/routes/stapel/[slug]/+page.svelte` — Bild-Badge (🖼) in der Tabelle, wenn Karte ein Bild hat
   - **Hilfsfunktionen:** `src/lib/supabase.js` — `uploadCardImage()`, `deleteCardImage()`
 
-- **Datenmodell:** Card-Dokument erhält optionales Feld `imageUrl` (öffentliche URL aus Supabase Storage Bucket `card-images`)
+- **Datenmodell:** Card-Dokument erhält optionales Feld `imageUrl` (öffentliche URL aus Supabase Storage Bucket `card-images`) und `imagePosition` (fix: `'answer'`)
 
 - **Technologie:** Supabase Storage mit Service-Role-Key für server-seitige Uploads
 
@@ -507,8 +529,9 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
   ```
 
 - **Artefakt-Ablage:**
-  - `doc/ER_Model.drawio.svg` — ER-Modell nach Chen-ähnlicher Notation für Stapel und Karten
-  - `doc/System_Architektur.drawio.svg` — Systemarchitektur des SvelteKit-Prototyps
+  - `doc/ER_Model.drawio.svg` — ER-Modell nach Chen-ähnlicher Notation für Stapel und Karten (inkl. Supabase-Felder)
+  - `doc/System_Architektur.drawio.svg` — Systemarchitektur des SvelteKit-Prototyps (inkl. Supabase Auth + Storage)
+  - `doc/ARCHITEKTUR.md` — Textuelle Beschreibung der System-Architektur: Stack, Datenfluss, MongoDB-Collections, Leitner-System
   - `doc/sketches/` — Handschriftliche Skizzen aus der Sketch-Phase und Mockup-Screenshots
   - `doc/screenshots/` — App-Screenshots der implementierten Screens
 
