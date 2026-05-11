@@ -11,9 +11,16 @@
 	} = $props();
 
 	let isDragging = $state(false);
-	let previewUrl = $state(existingImageUrl || null);
+	let previewUrl = $state(null);
+	let hasSelectedImage = $state(false);
 	let removeImageFlag = $state(false);
 	let fileInputEl = $state(null);
+
+	$effect(() => {
+		if (!hasSelectedImage && !removeImageFlag) {
+			previewUrl = existingImageUrl || null;
+		}
+	});
 
 	function handleDragOver(e) {
 		e.preventDefault();
@@ -30,6 +37,7 @@
 		const file = e.dataTransfer?.files[0];
 		if (file && file.type.startsWith('image/')) {
 			previewUrl = URL.createObjectURL(file);
+			hasSelectedImage = true;
 			removeImageFlag = false;
 			const dt = new DataTransfer();
 			dt.items.add(file);
@@ -41,12 +49,14 @@
 		const file = e.target.files[0];
 		if (file) {
 			previewUrl = URL.createObjectURL(file);
+			hasSelectedImage = true;
 			removeImageFlag = false;
 		}
 	}
 
 	function handleRemoveImage() {
 		previewUrl = null;
+		hasSelectedImage = false;
 		removeImageFlag = true;
 		if (fileInputEl) fileInputEl.value = '';
 	}
@@ -88,7 +98,7 @@
 		</div>
 
 		<div class="mb-4">
-			<label class="form-label fw-semibold small text-secondary mb-1">
+			<label class="form-label fw-semibold small text-secondary mb-1" for="image">
 				Screenshot zur Antwort <span class="fw-normal">(optional)</span>
 			</label>
 			{@render imageDropZone()}
@@ -161,6 +171,7 @@
 {#snippet imageDropZone()}
 	<input
 		bind:this={fileInputEl}
+		id="image"
 		type="file"
 		name="image"
 		accept="image/jpeg,image/png,image/webp"
