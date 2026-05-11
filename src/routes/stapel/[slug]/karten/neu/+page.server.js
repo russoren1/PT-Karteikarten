@@ -84,6 +84,7 @@ export const actions = {
 		}
 
 		const imageFile = formData.get('image');
+		const imagePosition = formData.get('imagePosition') === 'answer' ? 'answer' : 'question';
 		let imageUrl = null;
 		if (imageFile instanceof File && imageFile.size > 0) {
 			imageUrl = await uploadCardImage(imageFile, deck.slug, `new-${Date.now()}`);
@@ -100,6 +101,7 @@ export const actions = {
 			semester: deck.semester,
 			status: 'new',
 			imageUrl,
+			imagePosition,
 			...(userId ? { userId } : {})
 		});
 

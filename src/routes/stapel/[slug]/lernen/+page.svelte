@@ -134,7 +134,7 @@
 
 				<h2 class="h4 fw-bold mb-4">{data.card.question}</h2>
 
-				{#if data.card.imageUrl}
+				{#if data.card.imageUrl && data.card.imagePosition !== 'answer'}
 					<div class="mb-4 text-center">
 						<img
 							src={data.card.imageUrl}
@@ -146,13 +146,24 @@
 				{/if}
 
 				{#if showAnswer}
-					<div class="border-top pt-4 mb-5">
+					<div class="border-top pt-4 mb-4">
 						{#each data.card.answer.split('\n') as answerLine}
 							{#if answerLine}
 								<p class="fw-semibold mb-1">{answerLine}</p>
 							{/if}
 						{/each}
 					</div>
+
+					{#if data.card.imageUrl && data.card.imagePosition === 'answer'}
+						<div class="mb-4 text-center">
+							<img
+								src={data.card.imageUrl}
+								class="img-fluid rounded shadow-sm"
+								alt="Vorlesungsbild"
+								style="max-height: 400px;"
+							/>
+						</div>
+					{/if}
 
 					<div class="row g-3 justify-content-center mb-4">
 						<div class="col-md-5">

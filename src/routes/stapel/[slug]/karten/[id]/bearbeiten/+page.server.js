@@ -88,6 +88,7 @@ export const actions = {
 
 		const removeImage = formData.get('removeImage') === '1';
 		const imageFile = formData.get('image');
+		const imagePosition = formData.get('imagePosition') === 'answer' ? 'answer' : 'question';
 		let imageUrl = card.imageUrl ?? null;
 
 		if (removeImage && imageUrl) {
@@ -105,7 +106,8 @@ export const actions = {
 			week: cardForm.week,
 			sourceName: cardForm.sourceName,
 			slide: cardForm.slide,
-			imageUrl
+			imageUrl,
+			imagePosition
 		});
 
 		if (!id) {

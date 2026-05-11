@@ -107,12 +107,42 @@
 				</div>
 			{/if}
 			<input
-				class="form-control"
+				class="form-control mb-3"
 				id="image"
 				name="image"
 				type="file"
 				accept="image/jpeg,image/png,image/webp"
 			/>
+			{#if existingImageUrl || true}
+				<div class="d-flex gap-3">
+					<div class="form-check">
+						<input
+							class="form-check-input"
+							type="radio"
+							name="imagePosition"
+							id="imagePositionQuestion"
+							value="question"
+							checked={!values.imagePosition || values.imagePosition === 'question'}
+						/>
+						<label class="form-check-label small" for="imagePositionQuestion">
+							Bild bei Frage anzeigen
+						</label>
+					</div>
+					<div class="form-check">
+						<input
+							class="form-check-input"
+							type="radio"
+							name="imagePosition"
+							id="imagePositionAnswer"
+							value="answer"
+							checked={values.imagePosition === 'answer'}
+						/>
+						<label class="form-check-label small" for="imagePositionAnswer">
+							Bild bei Antwort anzeigen
+						</label>
+					</div>
+				</div>
+			{/if}
 			<div class="form-text">JPG, PNG oder WebP. Wird im Lernmodus zur Karte angezeigt.</div>
 		</div>
 
