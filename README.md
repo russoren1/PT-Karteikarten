@@ -156,9 +156,8 @@ Die einfache Dashboard-Filter-Variante mit direktem Vorlesungsbezug wurde gewäh
 7. Bestätigungsansicht mit Kartenvorschau erscheint
 8. Optional: «Bearbeiten» (Formular erneut öffnen) oder «Weitere Karte hinzufügen»
 
-![Workflow A – Karte erstellen und bearbeiten](doc/workflows/workflow_a.jpg)
+![Workflow A – Karte erstellen und bearbeiten](doc/workflows/Workflow_A_UML.drawio.svg)
 
-> UML Activity Diagram (draw.io): [Workflow\_A\_UML.drawio](doc/workflows/Workflow_A_UML.drawio)
 
 **Workflow B – Lernmodus:**
 1. Aus Stapel-Detailansicht: Klick auf «JETZT LERNEN»
@@ -168,9 +167,7 @@ Die einfache Dashboard-Filter-Variante mit direktem Vorlesungsbezug wurde gewäh
 5. User evaluiert Wissen: Klick auf «Gewusst» (grün) oder «Repetieren» (rot)
 6. Nächste Karte wird geladen (Loop bis Stapel durchgearbeitet)
 
-![Workflow B – Lernmodus](doc/workflows/workflow_b.jpg)
-
-> UML Activity Diagram (draw.io): [Workflow\_B\_UML.drawio](doc/workflows/Workflow_B_UML.drawio)
+![Workflow B – Lernmodus](doc/workflows/Workflow_B_UML.drawio.svg)
 
 #### User Journey Map
 
