@@ -6,6 +6,34 @@
 	let showCsvImportForm = $state(false);
 	let csvFileInput = $state();
 	let selectedCsvFileName = $state('');
+	let promptCopied = $state(false);
+	const csvPrompt = `Erstelle aus den hochgeladenen Vorlesungsunterlagen Karteikarten im CSV-Format.
+
+Gib ausschließlich CSV aus, keine Erklärung und keine Markdown-Tabelle.
+
+Verwende exakt diese Header-Zeile:
+deckTitle,semester,question,answer,week,slide,sourceName
+
+Regeln:
+- deckTitle: Name des Moduls oder Stapels
+- semester: Semesterangabe, z.B. FS 26 oder HS 25
+- question: kurze, prüfungsnahe Frage
+- answer: präzise Antwort
+- week: Semesterwoche als Zahl
+- slide: Foliennummer oder Seitennummer als Zahl
+- sourceName: optionaler Datei- oder Skriptname, z.B. Vorlesung 10.pdf
+- Erstelle eine Zeile pro Karte.
+- Wenn ein Wert Kommas, Anführungszeichen oder Zeilenumbrüche enthält, setze ihn in doppelte Anführungszeichen.
+- Wenn sourceName unbekannt ist, lasse das Feld leer.`;
+
+	async function copyCsvPrompt() {
+		await navigator.clipboard.writeText(csvPrompt);
+		promptCopied = true;
+
+		setTimeout(() => {
+			promptCopied = false;
+		}, 2000);
+	}
 
 	function handleCsvDrop(event) {
 		event.preventDefault();
@@ -139,6 +167,43 @@
 				{/if}
 
 				<form method="POST" action="?/previewCsv" enctype="multipart/form-data">
+					<div class="accordion mb-4" id="csvPromptAccordion">
+						<div class="accordion-item">
+							<h3 class="accordion-header">
+								<button
+									class="accordion-button collapsed fw-semibold"
+									type="button"
+									data-bs-toggle="collapse"
+									data-bs-target="#csvPromptCollapse"
+									aria-expanded="false"
+									aria-controls="csvPromptCollapse"
+								>
+									Prompt-Vorlage für KI-Tool
+								</button>
+							</h3>
+							<div
+								class="accordion-collapse collapse"
+								id="csvPromptCollapse"
+								data-bs-parent="#csvPromptAccordion"
+							>
+								<div class="accordion-body">
+									<p class="text-secondary">
+										Lade deine Vorlesungsfolien in ein LLM deiner Wahl hoch, kopiere diesen
+										Prompt und importiere das Ergebnis anschließend als CSV.
+									</p>
+									<textarea class="form-control font-monospace mb-3" rows="12" readonly>{csvPrompt}</textarea>
+									<button
+										class="btn btn-outline-dark btn-sm fw-semibold"
+										type="button"
+										onclick={copyCsvPrompt}
+									>
+										{promptCopied ? 'Kopiert' : 'Prompt kopieren'}
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<div class="row g-4">
 						<div class="col-lg-6">
 							<label class="form-label fw-semibold" for="csvFile">CSV-Datei hochladen</label>
