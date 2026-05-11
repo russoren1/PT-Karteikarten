@@ -9,6 +9,51 @@
 		sourceNames = [],
 		existingImageUrl = ''
 	} = $props();
+
+	let isDragging = $state(false);
+	let previewUrl = $state(existingImageUrl || null);
+	let removeImageFlag = $state(false);
+	let fileInputEl = $state(null);
+
+	function handleDragOver(e) {
+		e.preventDefault();
+		isDragging = true;
+	}
+
+	function handleDragLeave() {
+		isDragging = false;
+	}
+
+	function handleDrop(e) {
+		e.preventDefault();
+		isDragging = false;
+		const file = e.dataTransfer?.files[0];
+		if (file && file.type.startsWith('image/')) {
+			previewUrl = URL.createObjectURL(file);
+			removeImageFlag = false;
+			const dt = new DataTransfer();
+			dt.items.add(file);
+			if (fileInputEl) fileInputEl.files = dt.files;
+		}
+	}
+
+	function handleFileChange(e) {
+		const file = e.target.files[0];
+		if (file) {
+			previewUrl = URL.createObjectURL(file);
+			removeImageFlag = false;
+		}
+	}
+
+	function handleRemoveImage() {
+		previewUrl = null;
+		removeImageFlag = true;
+		if (fileInputEl) fileInputEl.value = '';
+	}
+
+	function openFilePicker() {
+		fileInputEl?.click();
+	}
 </script>
 
 <form class="card bg-light text-dark shadow-sm" method="POST" action={formAction} enctype="multipart/form-data">
@@ -29,7 +74,7 @@
 			/>
 		</div>
 
-		<div class="mb-4">
+		<div class="mb-3">
 			<label class="form-label fw-semibold" for="answer">Antwort</label>
 			<textarea
 				class="form-control"
@@ -41,6 +86,15 @@
 				required
 			></textarea>
 		</div>
+
+		<div class="mb-4">
+			<label class="form-label fw-semibold small text-secondary mb-1">
+				Screenshot zur Antwort <span class="fw-normal">(optional)</span>
+			</label>
+			{@render imageDropZone()}
+		</div>
+
+		<input type="hidden" name="imagePosition" value="answer" />
 
 		<div class="mb-4">
 			<label class="form-label fw-semibold" for="week">Woche</label>
@@ -93,58 +147,7 @@
 			{/if}
 		</div>
 
-		<div class="mb-4">
-			<label class="form-label fw-semibold" for="image">
-				Screenshot / Vorlesungsbild (optional)
-			</label>
-			{#if existingImageUrl}
-				<div class="mb-2">
-					<img src={existingImageUrl} class="img-fluid rounded shadow-sm" alt="Aktuelles Bild" style="max-height: 200px;" />
-				</div>
-				<div class="form-check mb-2">
-					<input class="form-check-input" type="checkbox" name="removeImage" id="removeImage" value="1" />
-					<label class="form-check-label text-secondary small" for="removeImage">Bild entfernen</label>
-				</div>
-			{/if}
-			<input
-				class="form-control mb-3"
-				id="image"
-				name="image"
-				type="file"
-				accept="image/jpeg,image/png,image/webp"
-			/>
-			{#if existingImageUrl || true}
-				<div class="d-flex gap-3">
-					<div class="form-check">
-						<input
-							class="form-check-input"
-							type="radio"
-							name="imagePosition"
-							id="imagePositionQuestion"
-							value="question"
-							checked={!values.imagePosition || values.imagePosition === 'question'}
-						/>
-						<label class="form-check-label small" for="imagePositionQuestion">
-							Bild bei Frage anzeigen
-						</label>
-					</div>
-					<div class="form-check">
-						<input
-							class="form-check-input"
-							type="radio"
-							name="imagePosition"
-							id="imagePositionAnswer"
-							value="answer"
-							checked={values.imagePosition === 'answer'}
-						/>
-						<label class="form-check-label small" for="imagePositionAnswer">
-							Bild bei Antwort anzeigen
-						</label>
-					</div>
-				</div>
-			{/if}
-			<div class="form-text">JPG, PNG oder WebP. Wird im Lernmodus zur Karte angezeigt.</div>
-		</div>
+		<input type="hidden" name="removeImage" value={removeImageFlag ? '1' : '0'} />
 
 		<div class="d-flex flex-column flex-md-row gap-2">
 			<button class="btn btn-dark fw-semibold flex-fill" type="submit">{submitLabel}</button>
@@ -154,3 +157,64 @@
 		</div>
 	</div>
 </form>
+
+{#snippet imageDropZone()}
+	<input
+		bind:this={fileInputEl}
+		type="file"
+		name="image"
+		accept="image/jpeg,image/png,image/webp"
+		class="d-none"
+		onchange={handleFileChange}
+	/>
+
+	{#if previewUrl}
+		<div class="image-preview-wrapper position-relative rounded overflow-hidden">
+			<img src={previewUrl} class="img-fluid rounded w-100" alt="Vorschau" style="max-height: 280px; object-fit: contain; background: #1a1a1a;" />
+			<div class="image-preview-actions d-flex gap-2 mt-2">
+				<button type="button" class="btn btn-sm btn-outline-secondary" onclick={openFilePicker}>
+					Ersetzen
+				</button>
+				<button type="button" class="btn btn-sm btn-outline-danger" onclick={handleRemoveImage}>
+					Entfernen
+				</button>
+			</div>
+		</div>
+	{:else}
+		<div
+			class="drop-zone rounded p-4 text-center"
+			class:drop-zone--active={isDragging}
+			role="button"
+			tabindex="0"
+			ondragover={handleDragOver}
+			ondragleave={handleDragLeave}
+			ondrop={handleDrop}
+			onclick={openFilePicker}
+			onkeydown={(e) => e.key === 'Enter' && openFilePicker()}
+		>
+			<div class="drop-zone-icon mb-2">🖼</div>
+			<p class="mb-1 fw-semibold small">Screenshot hier ablegen</p>
+			<p class="text-secondary small mb-0">oder klicken zum Auswählen · JPG, PNG, WebP</p>
+		</div>
+	{/if}
+{/snippet}
+
+<style>
+	.drop-zone {
+		border: 2px dashed #ced4da;
+		background: #f8f9fa;
+		cursor: pointer;
+		transition: border-color 0.15s, background 0.15s;
+	}
+
+	.drop-zone:hover,
+	.drop-zone--active {
+		border-color: #0d6efd;
+		background: #e8f0fe;
+	}
+
+	.drop-zone-icon {
+		font-size: 2rem;
+		line-height: 1;
+	}
+</style>
