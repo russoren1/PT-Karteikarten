@@ -1,94 +1,144 @@
-<svg host="app.diagrams.net" xmlns="http://www.w3.org/2000/svg" width="1200px" height="640px" viewBox="0 0 1200 640" content="&lt;mxfile host=&quot;app.diagrams.net&quot; modified=&quot;2026-05-09T00:00:00.000Z&quot; agent=&quot;Codex&quot; version=&quot;26.0.0&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;System_Architektur&quot; name=&quot;System_Architektur&quot;&gt;&lt;mxGraphModel dx=&quot;1200&quot; dy=&quot;640&quot; grid=&quot;1&quot; gridSize=&quot;10&quot; guides=&quot;1&quot; tooltips=&quot;1&quot; connect=&quot;1&quot; arrows=&quot;1&quot; fold=&quot;1&quot; page=&quot;1&quot; pageScale=&quot;1&quot; pageWidth=&quot;1200&quot; pageHeight=&quot;640&quot; math=&quot;0&quot; shadow=&quot;0&quot;&gt;&lt;root&gt;&lt;mxCell id=&quot;0&quot;/&gt;&lt;mxCell id=&quot;1&quot; parent=&quot;0&quot;/&gt;&lt;mxCell id=&quot;browser&quot; value=&quot;Browser / User Interface&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;60&quot; y=&quot;210&quot; width=&quot;190&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;netlify&quot; value=&quot;Netlify Deployment / SvelteKit Adapter&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;315&quot; y=&quot;70&quot; width=&quot;230&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;routes&quot; value=&quot;SvelteKit Routes / src/routes&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;315&quot; y=&quot;210&quot; width=&quot;230&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;components&quot; value=&quot;Svelte Components / src/lib/components&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;315&quot; y=&quot;350&quot; width=&quot;230&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;server&quot; value=&quot;Server Load Functions + Actions&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;625&quot; y=&quot;210&quot; width=&quot;230&quot; height=&quot;90&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;dbjs&quot; value=&quot;Datenbankzugriff / src/lib/db.js&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;925&quot; y=&quot;210&quot; width=&quot;230&quot; height=&quot;90&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;mongodb&quot; value=&quot;MongoDB / DB Karteikarten / Collection Karteikarten&quot; style=&quot;shape=cylinder3d;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;925&quot; y=&quot;390&quot; width=&quot;230&quot; height=&quot;100&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;env&quot; value=&quot;.env / DB_URI / private server config&quot; style=&quot;shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;625&quot; y=&quot;380&quot; width=&quot;230&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;static&quot; value=&quot;Static Assets / static&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;60&quot; y=&quot;350&quot; width=&quot;190&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e-browser-routes&quot; value=&quot;HTTP / HTML&quot; style=&quot;endArrow=block;html=1;rounded=0;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;browser&quot; target=&quot;routes&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e-netlify-routes&quot; value=&quot;hosts app&quot; style=&quot;endArrow=block;html=1;rounded=0;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;netlify&quot; target=&quot;routes&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e-routes-components&quot; value=&quot;renders UI&quot; style=&quot;endArrow=block;html=1;rounded=0;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;routes&quot; target=&quot;components&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e-routes-server&quot; value=&quot;load data / forms&quot; style=&quot;endArrow=block;html=1;rounded=0;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;routes&quot; target=&quot;server&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e-server-dbjs&quot; value=&quot;CRUD + queue&quot; style=&quot;endArrow=block;html=1;rounded=0;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;server&quot; target=&quot;dbjs&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e-dbjs-mongodb&quot; value=&quot;read / write&quot; style=&quot;endArrow=block;html=1;rounded=0;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;dbjs&quot; target=&quot;mongodb&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e-env-dbjs&quot; value=&quot;DB_URI&quot; style=&quot;endArrow=block;html=1;rounded=0;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;dashed=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;env&quot; target=&quot;dbjs&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e-static-browser&quot; value=&quot;assets&quot; style=&quot;endArrow=block;html=1;rounded=0;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;static&quot; target=&quot;browser&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;title&quot; value=&quot;System Architektur PT-Karteikarten&quot; style=&quot;text;html=1;strokeColor=none;fillColor=none;fontColor=#ffffff;fontSize=24;fontStyle=1;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;60&quot; y=&quot;20&quot; width=&quot;480&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;legend&quot; value=&quot;Client-seitige UI bleibt im Browser. Datenbankzugriff erfolgt server-seitig ueber SvelteKit und src/lib/db.js.&quot; style=&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#ffffff;fontColor=#ffffff;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;60&quot; y=&quot;545&quot; width=&quot;1095&quot; height=&quot;50&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;&lt;/diagram&gt;&lt;/mxfile&gt;">
-  <rect width="1200" height="640" fill="#000000"/>
+<svg host="app.diagrams.net" xmlns="http://www.w3.org/2000/svg" width="1540px" height="660px" viewBox="0 0 1540 660" content="&lt;mxfile host=&quot;app.diagrams.net&quot; version=&quot;26.0.0&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;System_Architektur&quot; name=&quot;System_Architektur&quot;&gt;&lt;mxGraphModel dx=&quot;1540&quot; dy=&quot;660&quot; grid=&quot;1&quot; gridSize=&quot;10&quot; pageWidth=&quot;1540&quot; pageHeight=&quot;660&quot;&gt;&lt;root&gt;&lt;mxCell id=&quot;0&quot;/&gt;&lt;mxCell id=&quot;1&quot; parent=&quot;0&quot;/&gt;&lt;mxCell id=&quot;title&quot; value=&quot;System Architektur PT-Karteikarten&quot; style=&quot;text;html=1;strokeColor=none;fillColor=none;fontColor=#ffffff;fontSize=24;fontStyle=1;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;60&quot; y=&quot;20&quot; width=&quot;580&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;browser&quot; value=&quot;Browser / User Interface&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;60&quot; y=&quot;210&quot; width=&quot;190&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;static&quot; value=&quot;Static Assets / static&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;60&quot; y=&quot;350&quot; width=&quot;190&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;netlify&quot; value=&quot;Netlify Deployment / SvelteKit Adapter&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;315&quot; y=&quot;70&quot; width=&quot;230&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;routes&quot; value=&quot;SvelteKit Routes / src/routes&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;315&quot; y=&quot;210&quot; width=&quot;230&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;components&quot; value=&quot;Svelte Components / src/lib/components&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;315&quot; y=&quot;350&quot; width=&quot;230&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;hooks&quot; value=&quot;hooks.server.js / Session Guard / /stapel+/dashboard to /login&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;625&quot; y=&quot;70&quot; width=&quot;230&quot; height=&quot;90&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;server&quot; value=&quot;Server Load Functions + Actions / +page.server.js&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;625&quot; y=&quot;210&quot; width=&quot;230&quot; height=&quot;90&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;env&quot; value=&quot;.env / DB_URI / PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY / SUPABASE_SERVICE_ROLE_KEY&quot; style=&quot;shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;625&quot; y=&quot;370&quot; width=&quot;230&quot; height=&quot;130&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;dbjs&quot; value=&quot;Datenbankzugriff / src/lib/db.js / MongoDB Node Driver&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;925&quot; y=&quot;210&quot; width=&quot;230&quot; height=&quot;90&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;supabasejs&quot; value=&quot;Supabase Helper / src/lib/supabase.js / Auth-Client + Storage-Client&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;925&quot; y=&quot;370&quot; width=&quot;230&quot; height=&quot;90&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;mongodb&quot; value=&quot;MongoDB Atlas / DB Karteikarten / Collection Karteikarten&quot; style=&quot;shape=cylinder3d;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;1235&quot; y=&quot;60&quot; width=&quot;230&quot; height=&quot;110&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;supabaseauth&quot; value=&quot;Supabase Auth / E-Mail + Passwort / Session via Cookies (@supabase/ssr)&quot; style=&quot;shape=cylinder3d;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;1235&quot; y=&quot;240&quot; width=&quot;230&quot; height=&quot;110&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;supabasestorage&quot; value=&quot;Supabase Storage / Bucket: card-images / Pfad: deckSlug/cardId.ext&quot; style=&quot;shape=cylinder3d;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;strokeColor=#ffffff;fontColor=#000000;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;1235&quot; y=&quot;420&quot; width=&quot;230&quot; height=&quot;110&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e1&quot; value=&quot;HTTP/HTML&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;browser&quot; target=&quot;routes&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e2&quot; value=&quot;assets&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;static&quot; target=&quot;browser&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e3&quot; value=&quot;hosts app&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;netlify&quot; target=&quot;routes&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e4&quot; value=&quot;jeder Request&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;netlify&quot; target=&quot;hooks&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e5&quot; value=&quot;leitet weiter&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;hooks&quot; target=&quot;server&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e6&quot; value=&quot;renders UI&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;routes&quot; target=&quot;components&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e7&quot; value=&quot;load/forms&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;routes&quot; target=&quot;server&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e8&quot; value=&quot;CRUD+queue&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;server&quot; target=&quot;dbjs&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e9&quot; value=&quot;upload/auth&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;server&quot; target=&quot;supabasejs&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e10&quot; value=&quot;read/write&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;dbjs&quot; target=&quot;mongodb&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e11&quot; value=&quot;signIn/signOut&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;supabasejs&quot; target=&quot;supabaseauth&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e12&quot; value=&quot;upload/delete&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;supabasejs&quot; target=&quot;supabasestorage&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e13&quot; value=&quot;config&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;dashed=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;env&quot; target=&quot;server&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e14&quot; value=&quot;Session pruefen&quot; style=&quot;endArrow=block;html=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#000000;dashed=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;hooks&quot; target=&quot;supabasejs&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;legend&quot; value=&quot;Auth: hooks.server.js validiert Session via Supabase bei jedem Request. Bild-Upload server-seitig via supabase.js (Service-Role-Key). Inhaltsdaten (Stapel, Karten, Leitner) in MongoDB Atlas.&quot; style=&quot;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#ffffff;fontColor=#ffffff;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;60&quot; y=&quot;590&quot; width=&quot;1390&quot; height=&quot;50&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;&lt;/diagram&gt;&lt;/mxfile&gt;">
+  <rect width="1540" height="660" fill="#000000"/>
   <defs>
     <style>
-      .box { fill: #ffffff; stroke: #ffffff; stroke-width: 2; }
-      .line { stroke: #ffffff; stroke-width: 2; fill: none; marker-end: url(#arrow); }
-      .dash { stroke-dasharray: 8 6; }
-      .inside { fill: #000000; font-family: Arial, Helvetica, sans-serif; font-size: 16px; text-anchor: middle; dominant-baseline: middle; }
-      .small { fill: #000000; font-family: Arial, Helvetica, sans-serif; font-size: 13px; text-anchor: middle; dominant-baseline: middle; }
-      .edge { fill: #ffffff; font-family: Arial, Helvetica, sans-serif; font-size: 13px; text-anchor: middle; dominant-baseline: middle; }
-      .title { fill: #ffffff; font-family: Arial, Helvetica, sans-serif; font-size: 24px; font-weight: 700; }
-      .note { fill: #ffffff; font-family: Arial, Helvetica, sans-serif; font-size: 15px; text-anchor: middle; dominant-baseline: middle; }
+      .bx{fill:#ffffff;stroke:#ffffff;stroke-width:2}
+      .ln{stroke:#ffffff;stroke-width:2;fill:none;marker-end:url(#ar)}
+      .ds{stroke-dasharray:8 6}
+      .t1{fill:#000000;font-family:Arial,sans-serif;font-size:16px;text-anchor:middle;dominant-baseline:middle}
+      .t2{fill:#000000;font-family:Arial,sans-serif;font-size:12px;text-anchor:middle;dominant-baseline:middle}
+      .te{fill:#ffffff;font-family:Arial,sans-serif;font-size:12px;text-anchor:middle;dominant-baseline:middle}
+      .ti{fill:#ffffff;font-family:Arial,sans-serif;font-size:24px;font-weight:700}
+      .lg{fill:#ffffff;font-family:Arial,sans-serif;font-size:12px;text-anchor:middle;dominant-baseline:middle}
     </style>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
       <path d="M0,0 L0,6 L9,3 z" fill="#ffffff"/>
     </marker>
   </defs>
+  <text class="ti" x="60" y="45">System Architektur PT-Karteikarten</text>
 
-  <text class="title" x="60" y="45">System Architektur PT-Karteikarten</text>
+  <!-- CLIENT -->
+  <rect class="bx" x="60"  y="210" width="190" height="80"  rx="8"/>
+  <text class="t1" x="155" y="242">Browser /</text><text class="t1" x="155" y="264">User Interface</text>
+  <rect class="bx" x="60"  y="350" width="190" height="80"  rx="8"/>
+  <text class="t1" x="155" y="382">Static Assets</text><text class="t2" x="155" y="405">static/</text>
 
-  <rect class="box" x="60" y="210" width="190" height="80" rx="8"/>
-  <text class="inside" x="155" y="242">Browser /</text>
-  <text class="inside" x="155" y="264">User Interface</text>
+  <!-- SVELTEKIT / NETLIFY -->
+  <rect class="bx" x="315" y="70"  width="230" height="80"  rx="8"/>
+  <text class="t1" x="430" y="102">Netlify Deployment</text><text class="t2" x="430" y="125">SvelteKit Adapter</text>
+  <rect class="bx" x="315" y="210" width="230" height="80"  rx="8"/>
+  <text class="t1" x="430" y="242">SvelteKit Routes</text><text class="t2" x="430" y="265">src/routes</text>
+  <rect class="bx" x="315" y="350" width="230" height="80"  rx="8"/>
+  <text class="t1" x="430" y="382">Svelte Components</text><text class="t2" x="430" y="405">src/lib/components</text>
 
-  <rect class="box" x="60" y="350" width="190" height="80" rx="8"/>
-  <text class="inside" x="155" y="382">Static Assets</text>
-  <text class="small" x="155" y="405">static/</text>
+  <!-- SERVER LAYER -->
+  <rect class="bx" x="625" y="70"  width="230" height="90"  rx="8"/>
+  <text class="t1" x="740" y="98" >hooks.server.js</text>
+  <text class="t2" x="740" y="120">Session Guard · Route-Schutz</text>
+  <text class="t2" x="740" y="142">/stapel + /dashboard → /login</text>
 
-  <rect class="box" x="315" y="70" width="230" height="80" rx="8"/>
-  <text class="inside" x="430" y="102">Netlify Deployment</text>
-  <text class="small" x="430" y="125">SvelteKit Adapter</text>
+  <rect class="bx" x="625" y="210" width="230" height="90"  rx="8"/>
+  <text class="t1" x="740" y="243">Server Load Functions</text><text class="t1" x="740" y="266">+ Actions</text>
 
-  <rect class="box" x="315" y="210" width="230" height="80" rx="8"/>
-  <text class="inside" x="430" y="242">SvelteKit Routes</text>
-  <text class="small" x="430" y="265">src/routes</text>
+  <!-- .env note (expanded) -->
+  <path class="bx" d="M625 370 L835 370 L855 390 L855 502 L625 502 Z"/>
+  <text class="t1" x="738" y="396">.env</text>
+  <text class="t2" x="738" y="418">DB_URI</text>
+  <text class="t2" x="738" y="438">PUBLIC_SUPABASE_URL</text>
+  <text class="t2" x="738" y="458">PUBLIC_SUPABASE_ANON_KEY</text>
+  <text class="t2" x="738" y="478">SUPABASE_SERVICE_ROLE_KEY</text>
 
-  <rect class="box" x="315" y="350" width="230" height="80" rx="8"/>
-  <text class="inside" x="430" y="382">Svelte Components</text>
-  <text class="small" x="430" y="405">src/lib/components</text>
+  <!-- DATA ACCESS -->
+  <rect class="bx" x="925" y="210" width="230" height="90"  rx="8"/>
+  <text class="t1" x="1040" y="238">Datenbankzugriff</text>
+  <text class="t2" x="1040" y="260">src/lib/db.js</text>
+  <text class="t2" x="1040" y="282">MongoDB Node Driver</text>
 
-  <rect class="box" x="625" y="210" width="230" height="90" rx="8"/>
-  <text class="inside" x="740" y="243">Server Load</text>
-  <text class="inside" x="740" y="266">Functions + Actions</text>
+  <rect class="bx" x="925" y="370" width="230" height="90"  rx="8"/>
+  <text class="t1" x="1040" y="398">Supabase Helper</text>
+  <text class="t2" x="1040" y="420">src/lib/supabase.js</text>
+  <text class="t2" x="1040" y="442">Auth-Client · Storage-Client</text>
 
-  <path class="box" d="M625 380 L835 380 L855 400 L855 460 L625 460 Z"/>
-  <text class="inside" x="740" y="412">.env / DB_URI</text>
-  <text class="small" x="740" y="435">private server config</text>
+  <!-- EXTERNAL SERVICES (Zylinder) -->
+  <!-- MongoDB -->
+  <path class="bx" d="M1235 87  C1235 60, 1465 60, 1465 87  L1465 147 C1465 174,1235 174,1235 147 Z"/>
+  <ellipse class="bx" cx="1350" cy="87"  rx="115" ry="27"/>
+  <text class="t1" x="1350" y="110">MongoDB Atlas</text>
+  <text class="t2" x="1350" y="132">DB: Karteikarten</text>
+  <text class="t2" x="1350" y="152">Collection: Karteikarten</text>
 
-  <rect class="box" x="925" y="210" width="230" height="90" rx="8"/>
-  <text class="inside" x="1040" y="238">Datenbankzugriff</text>
-  <text class="small" x="1040" y="260">src/lib/db.js</text>
-  <text class="small" x="1040" y="282">MongoDB Node Driver</text>
+  <!-- Supabase Auth -->
+  <path class="bx" d="M1235 267 C1235 240,1465 240,1465 267 L1465 327 C1465 354,1235 354,1235 327 Z"/>
+  <ellipse class="bx" cx="1350" cy="267" rx="115" ry="27"/>
+  <text class="t1" x="1350" y="288">Supabase Auth</text>
+  <text class="t2" x="1350" y="310">E-Mail + Passwort</text>
+  <text class="t2" x="1350" y="330">Session via Cookies</text>
 
-  <path class="box" d="M925 410 C925 383,1155 383,1155 410 L1155 470 C1155 497,925 497,925 470 Z"/>
-  <ellipse class="box" cx="1040" cy="410" rx="115" ry="27"/>
-  <text class="inside" x="1040" y="428">MongoDB</text>
-  <text class="small" x="1040" y="452">DB: Karteikarten</text>
-  <text class="small" x="1040" y="472">Collection: Karteikarten</text>
+  <!-- Supabase Storage -->
+  <path class="bx" d="M1235 447 C1235 420,1465 420,1465 447 L1465 507 C1465 534,1235 534,1235 507 Z"/>
+  <ellipse class="bx" cx="1350" cy="447" rx="115" ry="27"/>
+  <text class="t1" x="1350" y="468">Supabase Storage</text>
+  <text class="t2" x="1350" y="490">Bucket: card-images</text>
+  <text class="t2" x="1350" y="510">JPG · PNG · WebP</text>
 
-  <line class="line" x1="250" y1="250" x2="315" y2="250"/>
-  <rect x="242" y="217" width="82" height="22" fill="#000000"/>
-  <text class="edge" x="283" y="228">HTTP / HTML</text>
+  <!-- CONNECTIONS -->
+  <line class="ln" x1="250" y1="250" x2="315" y2="250"/>
+  <rect x="245" y="230" width="76" height="18" fill="#000000"/>
+  <text class="te" x="283" y="239">HTTP / HTML</text>
 
-  <line class="line" x1="430" y1="150" x2="430" y2="210"/>
-  <rect x="445" y="170" width="74" height="22" fill="#000000"/>
-  <text class="edge" x="482" y="181">hosts app</text>
+  <line class="ln" x1="155" y1="350" x2="155" y2="290"/>
+  <rect x="160" y="314" width="44" height="18" fill="#000000"/>
+  <text class="te" x="182" y="323">assets</text>
 
-  <line class="line" x1="430" y1="290" x2="430" y2="350"/>
-  <rect x="446" y="310" width="76" height="22" fill="#000000"/>
-  <text class="edge" x="484" y="321">renders UI</text>
+  <line class="ln" x1="430" y1="150" x2="430" y2="210"/>
+  <rect x="436" y="173" width="64" height="18" fill="#000000"/>
+  <text class="te" x="468" y="182">hosts app</text>
 
-  <line class="line" x1="545" y1="250" x2="625" y2="250"/>
-  <rect x="531" y="217" width="108" height="22" fill="#000000"/>
-  <text class="edge" x="585" y="228">load data / forms</text>
+  <line class="ln" x1="545" y1="110" x2="625" y2="110"/>
+  <rect x="549" y="90" width="84" height="18" fill="#000000"/>
+  <text class="te" x="591" y="99">jeder Request</text>
 
-  <line class="line" x1="855" y1="255" x2="925" y2="255"/>
-  <rect x="845" y="222" width="90" height="22" fill="#000000"/>
-  <text class="edge" x="890" y="233">CRUD + queue</text>
+  <line class="ln" x1="740" y1="160" x2="740" y2="210"/>
+  <rect x="746" y="179" width="72" height="18" fill="#000000"/>
+  <text class="te" x="782" y="188">leitet weiter</text>
 
-  <line class="line" x1="1040" y1="300" x2="1040" y2="383"/>
-  <rect x="1051" y="331" width="82" height="22" fill="#000000"/>
-  <text class="edge" x="1092" y="342">read / write</text>
+  <line class="ln" x1="430" y1="290" x2="430" y2="350"/>
+  <rect x="436" y="313" width="68" height="18" fill="#000000"/>
+  <text class="te" x="470" y="322">renders UI</text>
 
-  <line class="line dash" x1="855" y1="420" x2="985" y2="300"/>
-  <rect x="889" y="370" width="50" height="22" fill="#000000"/>
-  <text class="edge" x="914" y="381">DB_URI</text>
+  <line class="ln" x1="545" y1="250" x2="625" y2="250"/>
+  <rect x="536" y="231" width="82" height="18" fill="#000000"/>
+  <text class="te" x="577" y="240">load / forms</text>
 
-  <line class="line" x1="155" y1="350" x2="155" y2="290"/>
-  <rect x="181" y="310" width="48" height="22" fill="#000000"/>
-  <text class="edge" x="205" y="321">assets</text>
+  <line class="ln" x1="855" y1="255" x2="925" y2="255"/>
+  <rect x="848" y="235" width="86" height="18" fill="#000000"/>
+  <text class="te" x="891" y="244">CRUD + queue</text>
 
-  <rect x="60" y="545" width="1095" height="50" fill="none" stroke="#ffffff" stroke-width="2"/>
-  <text class="note" x="607" y="570">Client-seitige UI bleibt im Browser. Datenbankzugriff erfolgt server-seitig ueber SvelteKit und src/lib/db.js.</text>
+  <line class="ln" x1="855" y1="282" x2="925" y2="410"/>
+  <rect x="856" y="346" width="78" height="18" fill="#000000"/>
+  <text class="te" x="895" y="355">upload / auth</text>
+
+  <line class="ln" x1="1155" y1="235" x2="1235" y2="117"/>
+  <rect x="1166" y="168" width="74" height="18" fill="#000000"/>
+  <text class="te" x="1203" y="177">read / write</text>
+
+  <line class="ln" x1="1155" y1="400" x2="1235" y2="297"/>
+  <rect x="1158" y="340" width="92" height="18" fill="#000000"/>
+  <text class="te" x="1204" y="349">signIn / signOut</text>
+
+  <line class="ln" x1="1155" y1="430" x2="1235" y2="477"/>
+  <rect x="1158" y="450" width="80" height="18" fill="#000000"/>
+  <text class="te" x="1198" y="459">upload / delete</text>
+
+  <line class="ln ds" x1="740" y1="370" x2="740" y2="300"/>
+  <rect x="746" y="328" width="44" height="18" fill="#000000"/>
+  <text class="te" x="768" y="337">config</text>
+
+  <path d="M855 115 L900 115 L900 415 L925 415" stroke="#ffffff" stroke-width="2" fill="none" stroke-dasharray="8 6" marker-end="url(#ar)"/>
+  <rect x="858" y="95" width="94" height="18" fill="#000000"/>
+  <text class="te" x="905" y="104">Session prüfen</text>
+
+  <!-- Legend -->
+  <rect x="60" y="580" width="1410" height="50" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <text class="lg" x="765" y="605">Auth: hooks.server.js prüft Session via Supabase bei jedem Request · Bild-Upload server-seitig via supabase.js (Service-Role-Key) · Inhaltsdaten in MongoDB Atlas</text>
 </svg>
