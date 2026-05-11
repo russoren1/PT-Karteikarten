@@ -4,9 +4,14 @@
 	let { data, form } = $props();
 	let showCreateDeckForm = $state(false);
 	let showCsvImportForm = $state(false);
+	let csvImportDismissed = $state(false);
 	let csvFileInput = $state();
 	let selectedCsvFileName = $state('');
+	let isCsvDragging = $state(false);
 	let promptCopied = $state(false);
+	let showCsvImportPanel = $derived(
+		showCsvImportForm || ((form?.csvPreview || form?.csvError) && !csvImportDismissed)
+	);
 	const csvPrompt = `Erstelle aus den hochgeladenen Vorlesungsunterlagen Karteikarten im CSV-Format.
 
 Gib ausschließlich CSV aus, keine Erklärung und keine Markdown-Tabelle.
@@ -37,6 +42,7 @@ Regeln:
 
 	function handleCsvDrop(event) {
 		event.preventDefault();
+		isCsvDragging = false;
 		const csvFile = event.dataTransfer?.files?.[0];
 
 		if (csvFile && csvFileInput) {
@@ -44,6 +50,34 @@ Regeln:
 			dataTransfer.items.add(csvFile);
 			csvFileInput.files = dataTransfer.files;
 			selectedCsvFileName = csvFile.name;
+		}
+	}
+
+	function handleCsvDragOver(event) {
+		event.preventDefault();
+		isCsvDragging = true;
+	}
+
+	function handleCsvDragLeave() {
+		isCsvDragging = false;
+	}
+
+	function openCsvFilePicker() {
+		csvFileInput?.click();
+	}
+
+	function toggleCsvImportForm() {
+		csvImportDismissed = false;
+		showCsvImportForm = !showCsvImportForm;
+	}
+
+	function closeCsvImportForm() {
+		showCsvImportForm = false;
+		csvImportDismissed = true;
+		selectedCsvFileName = '';
+
+		if (csvFileInput) {
+			csvFileInput.value = '';
 		}
 	}
 </script>
@@ -65,7 +99,7 @@ Regeln:
 			<button
 				class="btn btn-success fw-semibold"
 				type="button"
-				onclick={() => (showCsvImportForm = !showCsvImportForm)}
+				onclick={toggleCsvImportForm}
 			>
 				CSV Import
 			</button>
@@ -134,20 +168,18 @@ Regeln:
 		</div>
 	{/if}
 
-	{#if showCsvImportForm || form?.csvPreview || form?.csvError}
+	{#if showCsvImportPanel}
 		<div class="card bg-light text-dark shadow-sm mb-4">
 			<div class="card-body p-4">
-				<div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+				<div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-3">
 					<div>
-						<h2 class="h4 fw-bold mb-2">CSV Import</h2>
-						<p class="text-secondary mb-0">
-							Lade eine CSV-Datei hoch oder füge CSV-formatierten Text direkt ein.
-						</p>
+						<h2 class="h4 fw-bold mb-1">CSV Import</h2>
+						<p class="text-secondary mb-0">CSV-Datei ablegen oder CSV-Text einfügen.</p>
 					</div>
 					<button
 						class="btn btn-outline-secondary align-self-start"
 						type="button"
-						onclick={() => (showCsvImportForm = false)}
+						onclick={closeCsvImportForm}
 					>
 						Schließen
 					</button>
@@ -155,19 +187,28 @@ Regeln:
 
 				{#if form?.csvError}
 					<div class="alert alert-danger" role="alert">
-						<p class="fw-semibold mb-2">{form.csvError}</p>
+						<p class="fw-semibold mb-2">CSV konnte nicht geprüft werden.</p>
+						<p class="mb-3">{form.csvError}</p>
 						{#if form.csvErrors?.length}
+							<p class="fw-semibold mb-2">Bitte korrigiere diese Punkte:</p>
 							<ul class="mb-0">
 								{#each form.csvErrors as csvError}
 									<li>{csvError}</li>
 								{/each}
 							</ul>
 						{/if}
+						<hr />
+						<p class="mb-0">
+							Die erste Zeile muss die Header
+							<code>deckTitle,semester,question,answer,week,slide,sourceName</code>
+							enthalten. Pflichtfelder dürfen nicht leer sein; <code>week</code> und
+							<code>slide</code> müssen positive ganze Zahlen sein.
+						</p>
 					</div>
 				{/if}
 
 				<form method="POST" action="?/previewCsv" enctype="multipart/form-data">
-					<div class="accordion mb-4" id="csvPromptAccordion">
+					<div class="accordion mb-3" id="csvImportHelpAccordion">
 						<div class="accordion-item">
 							<h3 class="accordion-header">
 								<button
@@ -184,7 +225,7 @@ Regeln:
 							<div
 								class="accordion-collapse collapse"
 								id="csvPromptCollapse"
-								data-bs-parent="#csvPromptAccordion"
+								data-bs-parent="#csvImportHelpAccordion"
 							>
 								<div class="accordion-body">
 									<p class="text-secondary">
@@ -202,42 +243,105 @@ Regeln:
 								</div>
 							</div>
 						</div>
+						<div class="accordion-item">
+							<h3 class="accordion-header">
+								<button
+									class="accordion-button collapsed fw-semibold"
+									type="button"
+									data-bs-toggle="collapse"
+									data-bs-target="#csvFormatCollapse"
+									aria-expanded="false"
+									aria-controls="csvFormatCollapse"
+								>
+									CSV-Format anzeigen
+								</button>
+							</h3>
+							<div
+								class="accordion-collapse collapse"
+								id="csvFormatCollapse"
+								data-bs-parent="#csvImportHelpAccordion"
+							>
+								<div class="accordion-body">
+									<p class="fw-semibold mb-2">Erwartete Spalten</p>
+									<code>deckTitle,semester,question,answer,week,slide,sourceName</code>
+									<p class="small text-secondary mb-3 mt-2">
+										Pflichtfelder: deckTitle, semester, question, answer, week und slide.
+										sourceName ist optional.
+									</p>
+									<div class="table-responsive">
+										<table class="table table-sm table-bordered align-middle mb-0">
+											<thead>
+												<tr>
+													<th scope="col">deckTitle</th>
+													<th scope="col">semester</th>
+													<th scope="col">question</th>
+													<th scope="col">answer</th>
+													<th scope="col">week</th>
+													<th scope="col">slide</th>
+													<th scope="col">sourceName</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Strategisches Management</td>
+													<td>FS 26</td>
+													<td>Was ist VRINO?</td>
+													<td>Ein Framework zur Ressourcenanalyse.</td>
+													<td>10</td>
+													<td>55</td>
+													<td>Vorlesung 10.pdf</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 
-					<div class="row g-4">
+					<div class="row g-3">
 						<div class="col-lg-6">
-							<label class="form-label fw-semibold" for="csvFile">CSV-Datei hochladen</label>
+							<label class="form-label fw-semibold" for="csvFile">CSV-Datei</label>
+							<input
+								bind:this={csvFileInput}
+								class="d-none"
+								id="csvFile"
+								name="csvFile"
+								type="file"
+								accept=".csv,text/csv"
+								onchange={(event) => (selectedCsvFileName = event.currentTarget.files?.[0]?.name ?? '')}
+							/>
 							<div
-								class="border border-2 border-secondary rounded p-4 text-center bg-body-tertiary"
-								role="group"
-								aria-label="CSV-Datei per Drag and Drop hochladen"
-								ondragover={(event) => event.preventDefault()}
+								class="border border-2 rounded p-4 text-center bg-body-tertiary"
+								class:border-primary={isCsvDragging}
+								class:bg-primary-subtle={isCsvDragging}
+								role="button"
+								tabindex="0"
+								aria-label="CSV-Datei per Drag and Drop hochladen oder auswählen"
+								ondragover={handleCsvDragOver}
+								ondragleave={handleCsvDragLeave}
 								ondrop={handleCsvDrop}
+								onclick={openCsvFilePicker}
+								onkeydown={(event) => event.key === 'Enter' && openCsvFilePicker()}
 							>
-								<p class="fw-semibold mb-2">CSV-Datei hier ablegen</p>
-								<p class="text-secondary mb-3">oder Datei auswählen</p>
-								<input
-									bind:this={csvFileInput}
-									class="form-control"
-									id="csvFile"
-									name="csvFile"
-									type="file"
-									accept=".csv,text/csv"
-									onchange={(event) => (selectedCsvFileName = event.currentTarget.files?.[0]?.name ?? '')}
-								/>
+								<span class="badge text-bg-dark mb-2">CSV</span>
+								<p class="fw-semibold mb-1">
+									{selectedCsvFileName || 'CSV-Datei hier ablegen'}
+								</p>
+								<p class="text-secondary small mb-0">oder klicken zum Auswählen</p>
 								{#if selectedCsvFileName}
-									<p class="small text-secondary mt-2 mb-0">Ausgewählt: {selectedCsvFileName}</p>
+									<p class="small text-secondary mt-2 mb-0">Datei ist für die Vorschau bereit.</p>
 								{/if}
 							</div>
 						</div>
 
 						<div class="col-lg-6">
-							<label class="form-label fw-semibold" for="csvText">CSV-Text einfügen</label>
+							<label class="form-label fw-semibold" for="csvText">CSV-Text</label>
 							<textarea
 								class="form-control"
 								id="csvText"
 								name="csvText"
-								rows="8"
+								rows="5"
 								placeholder="deckTitle,semester,question,answer,week,slide,sourceName"
 							>{form?.csvText ?? ''}</textarea>
 							<p class="form-text mb-0">
@@ -246,42 +350,12 @@ Regeln:
 						</div>
 					</div>
 
-					<div class="alert alert-secondary mt-4" role="note">
-						<p class="fw-semibold mb-2">Erwartete Spalten</p>
-						<code>deckTitle,semester,question,answer,week,slide,sourceName</code>
-						<p class="mb-0 mt-2">
-							Pflichtfelder: deckTitle, semester, question, answer, week und slide. sourceName ist optional.
+					<div class="d-flex flex-wrap align-items-center gap-3 mt-3">
+						<button class="btn btn-dark fw-semibold" type="submit">CSV Vorschau prüfen</button>
+						<p class="small text-secondary mb-0">
+							Die Vorschau speichert noch nichts.
 						</p>
 					</div>
-
-					<div class="table-responsive mb-4">
-						<table class="table table-sm table-bordered align-middle mb-0">
-							<thead>
-								<tr>
-									<th scope="col">deckTitle</th>
-									<th scope="col">semester</th>
-									<th scope="col">question</th>
-									<th scope="col">answer</th>
-									<th scope="col">week</th>
-									<th scope="col">slide</th>
-									<th scope="col">sourceName</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Strategisches Management</td>
-									<td>FS 26</td>
-									<td>Was ist VRINO?</td>
-									<td>Ein Framework zur Ressourcenanalyse.</td>
-									<td>10</td>
-									<td>55</td>
-									<td>Vorlesung 10.pdf</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-
-					<button class="btn btn-dark fw-semibold" type="submit">CSV Vorschau prüfen</button>
 				</form>
 
 				{#if form?.csvPreview}
