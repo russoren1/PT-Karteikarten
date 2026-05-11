@@ -149,6 +149,47 @@ function parseCsvContent(csvContent) {
 	};
 }
 
+function readCsvPayload(payload) {
+	let cards = [];
+
+	try {
+		cards = JSON.parse(payload);
+	} catch {
+		return {
+			error: 'Die CSV-Vorschau konnte nicht gelesen werden.',
+			cards: []
+		};
+	}
+
+	if (!Array.isArray(cards) || cards.length === 0) {
+		return {
+			error: 'Die CSV-Vorschau enthält keine importierbaren Karten.',
+			cards: []
+		};
+	}
+
+	for (const card of cards) {
+		if (
+			!card.deckTitle ||
+			!card.semester ||
+			!card.question ||
+			!card.answer ||
+			!Number.isInteger(card.week) ||
+			!Number.isInteger(card.slide)
+		) {
+			return {
+				error: 'Die CSV-Vorschau enthält ungültige Kartendaten. Bitte prüfe die CSV erneut.',
+				cards: []
+			};
+		}
+	}
+
+	return {
+		error: '',
+		cards
+	};
+}
+
 async function readCsvInput(formData) {
 	const csvFile = formData.get('csvFile');
 	const csvText = formData.get('csvText')?.toString().trim() ?? '';
@@ -171,7 +212,9 @@ export async function load({ url }) {
 
 	return {
 		decks,
-		deckDeleted: url.searchParams.get('deckDeleted') === '1'
+		deckDeleted: url.searchParams.get('deckDeleted') === '1',
+		importedCards: Number(url.searchParams.get('importedCards') ?? 0),
+		importedDecks: Number(url.searchParams.get('importedDecks') ?? 0)
 	};
 }
 
@@ -207,6 +250,59 @@ export const actions = {
 				csvPayload: JSON.stringify(csvPreview.cards)
 			}
 		};
+	},
+	importCsv: async ({ request }) => {
+		const formData = await request.formData();
+		const csvPayload = formData.get('csvPayload')?.toString() ?? '';
+		const csvImport = readCsvPayload(csvPayload);
+
+		if (csvImport.error) {
+			return fail(400, {
+				csvError: csvImport.error
+			});
+		}
+
+		const importedDeckSlugs = new Set();
+		let importedCards = 0;
+
+		for (const card of csvImport.cards) {
+			const deckSlug = await db.createDeck({
+				deckTitle: card.deckTitle,
+				semester: card.semester
+			});
+
+			if (!deckSlug) {
+				return fail(500, {
+					csvError: `Der Stapel "${card.deckTitle}" konnte nicht gespeichert werden.`
+				});
+			}
+
+			const cardId = await db.createCard({
+				question: card.question,
+				answer: card.answer,
+				week: card.week,
+				sourceName: card.sourceName ?? '',
+				slide: card.slide,
+				deckSlug,
+				deckTitle: card.deckTitle,
+				semester: card.semester,
+				status: 'new'
+			});
+
+			if (!cardId) {
+				return fail(500, {
+					csvError: `Eine Karte aus Zeile ${card.lineNumber ?? '?'} konnte nicht gespeichert werden.`
+				});
+			}
+
+			importedDeckSlugs.add(deckSlug);
+			importedCards += 1;
+		}
+
+		redirect(
+			303,
+			`/stapel?importedCards=${importedCards}&importedDecks=${importedDeckSlugs.size}`
+		);
 	},
 	createDeck: async ({ request }) => {
 		const data = await request.formData();

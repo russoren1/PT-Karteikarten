@@ -99,6 +99,13 @@
 		<div class="alert alert-success" role="alert">Stapel wurde gelöscht.</div>
 	{/if}
 
+	{#if data.importedCards > 0}
+		<div class="alert alert-success" role="alert">
+			CSV Import abgeschlossen: {data.importedCards} Karten wurden gespeichert,
+			{data.importedDecks} Stapel betroffen.
+		</div>
+	{/if}
+
 	{#if showCsvImportForm || form?.csvPreview || form?.csvError}
 		<div class="card bg-light text-dark shadow-sm mb-4">
 			<div class="card-body p-4">
