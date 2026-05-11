@@ -207,8 +207,9 @@ async function readCsvInput(formData) {
 	};
 }
 
-export async function load({ url }) {
-	const decks = await db.getDecks();
+export async function load({ url, locals }) {
+	const userId = locals.user?.id ?? null;
+	const decks = await db.getDecks(userId);
 
 	return {
 		decks,
@@ -251,7 +252,7 @@ export const actions = {
 			}
 		};
 	},
-	importCsv: async ({ request }) => {
+	importCsv: async ({ request, locals }) => {
 		const formData = await request.formData();
 		const csvPayload = formData.get('csvPayload')?.toString() ?? '';
 		const csvImport = readCsvPayload(csvPayload);
@@ -262,13 +263,15 @@ export const actions = {
 			});
 		}
 
+		const userId = locals.user?.id ?? null;
 		const importedDeckSlugs = new Set();
 		let importedCards = 0;
 
 		for (const card of csvImport.cards) {
 			const deckSlug = await db.createDeck({
 				deckTitle: card.deckTitle,
-				semester: card.semester
+				semester: card.semester,
+				...(userId ? { userId } : {})
 			});
 
 			if (!deckSlug) {
@@ -286,7 +289,8 @@ export const actions = {
 				deckSlug,
 				deckTitle: card.deckTitle,
 				semester: card.semester,
-				status: 'new'
+				status: 'new',
+				...(userId ? { userId } : {})
 			});
 
 			if (!cardId) {
@@ -304,10 +308,11 @@ export const actions = {
 			`/stapel?importedCards=${importedCards}&importedDecks=${importedDeckSlugs.size}`
 		);
 	},
-	createDeck: async ({ request }) => {
+	createDeck: async ({ request, locals }) => {
 		const data = await request.formData();
 		const deckTitle = data.get('deckTitle')?.toString().trim();
 		const semester = data.get('semester')?.toString().trim();
+		const userId = locals.user?.id ?? null;
 
 		if (!deckTitle || !semester) {
 			return fail(400, {
@@ -319,7 +324,8 @@ export const actions = {
 
 		const deckSlug = await db.createDeck({
 			deckTitle,
-			semester
+			semester,
+			...(userId ? { userId } : {})
 		});
 
 		if (!deckSlug) {

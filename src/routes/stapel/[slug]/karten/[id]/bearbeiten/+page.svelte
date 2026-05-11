@@ -45,6 +45,7 @@
 			cancelHref={`/stapel/${data.card.deckSlug}/karten/${data.card._id}`}
 			cancelLabel="Zurück zur Vorschau"
 			sourceNames={data.sourceNames}
+			existingImageUrl={data.card.imageUrl ?? ''}
 		/>
 	{/if}
 </div>

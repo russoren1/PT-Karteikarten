@@ -22,9 +22,10 @@ function hasActiveFilters(filters) {
 	return Boolean(filters.q || filters.week || filters.sourceName || filters.status);
 }
 
-export async function load({ params, url }) {
+export async function load({ params, url, locals }) {
 	const filters = readFilters(url);
-	const deck = await db.getDeckBySlug(params.slug);
+	const userId = locals.user?.id ?? null;
+	const deck = await db.getDeckBySlug(params.slug, userId);
 
 	if (!deck) {
 		return {
@@ -38,7 +39,7 @@ export async function load({ params, url }) {
 		};
 	}
 
-	const cards = await db.getCardsByDeckSlug(params.slug, filters);
+	const cards = await db.getCardsByDeckSlug(params.slug, filters, userId);
 
 	return {
 		deck,

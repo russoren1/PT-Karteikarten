@@ -149,11 +149,19 @@ function getCardSort(sort) {
 	}
 }
 
-async function getDecks() {
+function userFilter(userId) {
+	if (!userId) return {};
+	return { $or: [{ userId }, { userId: { $exists: false } }] };
+}
+
+async function getDecks(userId = null) {
 	let decks = [];
 
 	try {
-		const deckDocuments = await collection.find({ type: 'deck' }).sort({ deckTitle: 1 }).toArray();
+		const deckDocuments = await collection
+			.find({ type: 'deck', ...userFilter(userId) })
+			.sort({ deckTitle: 1 })
+			.toArray();
 
 		decks = await Promise.all(
 			deckDocuments.map(async (deck) => {
@@ -178,13 +186,14 @@ async function getDecks() {
 	return decks;
 }
 
-async function getDeckBySlug(deckSlug) {
+async function getDeckBySlug(deckSlug, userId = null) {
 	let deck = null;
 
 	try {
 		const deckDocument = await collection.findOne({
 			type: 'deck',
-			deckSlug
+			deckSlug,
+			...userFilter(userId)
 		});
 
 		if (deckDocument) {
@@ -208,11 +217,12 @@ async function getDeckBySlug(deckSlug) {
 	return deck;
 }
 
-async function getCardsByDeckSlug(deckSlug, filters = {}) {
+async function getCardsByDeckSlug(deckSlug, filters = {}, userId = null) {
 	let cards = [];
 	const query = {
 		type: 'card',
-		deckSlug
+		deckSlug,
+		...userFilter(userId)
 	};
 	const conditions = [];
 
@@ -310,13 +320,13 @@ function getAverageLeitnerBox(cards) {
 	return Math.round((total / cards.length) * 10) / 10;
 }
 
-async function getDashboardStats() {
+async function getDashboardStats(userId = null) {
 	const now = new Date();
-	const decks = await getDecks();
+	const decks = await getDecks(userId);
 	let cards = [];
 
 	try {
-		cards = await collection.find({ type: 'card' }).toArray();
+		cards = await collection.find({ type: 'card', ...userFilter(userId) }).toArray();
 		cards = cards.map((card) => normalizeCard(card));
 	} catch (error) {
 		console.log(error.message);

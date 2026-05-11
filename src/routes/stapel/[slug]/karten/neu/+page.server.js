@@ -1,4 +1,5 @@
 import db from '$lib/db.js';
+import { uploadCardImage } from '$lib/supabase.js';
 import { fail, redirect } from '@sveltejs/kit';
 
 function readCardForm(formData) {
@@ -47,8 +48,9 @@ function formValues(cardForm) {
 	};
 }
 
-export async function load({ params }) {
-	const deck = await db.getDeckBySlug(params.slug);
+export async function load({ params, locals }) {
+	const userId = locals.user?.id ?? null;
+	const deck = await db.getDeckBySlug(params.slug, userId);
 	const sourceNames = deck ? await db.getSourceNamesByDeckSlug(params.slug) : [];
 
 	return {
@@ -59,8 +61,9 @@ export async function load({ params }) {
 }
 
 export const actions = {
-	createCard: async ({ request, params }) => {
-		const deck = await db.getDeckBySlug(params.slug);
+	createCard: async ({ request, params, locals }) => {
+		const userId = locals.user?.id ?? null;
+		const deck = await db.getDeckBySlug(params.slug, userId);
 
 		if (!deck) {
 			return fail(404, {
@@ -69,7 +72,8 @@ export const actions = {
 			});
 		}
 
-		const cardForm = readCardForm(await request.formData());
+		const formData = await request.formData();
+		const cardForm = readCardForm(formData);
 		const error = validateCardForm(cardForm);
 
 		if (error) {
@@ -77,6 +81,12 @@ export const actions = {
 				error,
 				values: formValues(cardForm)
 			});
+		}
+
+		const imageFile = formData.get('image');
+		let imageUrl = null;
+		if (imageFile instanceof File && imageFile.size > 0) {
+			imageUrl = await uploadCardImage(imageFile, deck.slug, `new-${Date.now()}`);
 		}
 
 		const id = await db.createCard({
@@ -88,7 +98,9 @@ export const actions = {
 			deckSlug: deck.slug,
 			deckTitle: deck.title,
 			semester: deck.semester,
-			status: 'new'
+			status: 'new',
+			imageUrl,
+			...(userId ? { userId } : {})
 		});
 
 		if (!id) {

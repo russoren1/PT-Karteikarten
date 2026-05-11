@@ -1,8 +1,10 @@
 import db from '$lib/db.js';
+import { deleteCardImage } from '$lib/supabase.js';
 import { fail, redirect } from '@sveltejs/kit';
 
-export async function load({ params }) {
-	const deck = await db.getDeckBySlug(params.slug);
+export async function load({ params, locals }) {
+	const userId = locals.user?.id ?? null;
+	const deck = await db.getDeckBySlug(params.slug, userId);
 	const card = await db.getCard(params.id);
 	const belongsToDeck = card?.deckSlug === params.slug;
 
@@ -22,6 +24,10 @@ export const actions = {
 			return fail(404, {
 				error: 'Die Karte wurde nicht gefunden oder gehört nicht zum geöffneten Stapel.'
 			});
+		}
+
+		if (card.imageUrl) {
+			await deleteCardImage(card.imageUrl);
 		}
 
 		const deletedCardId = await db.deleteCard(params.id);

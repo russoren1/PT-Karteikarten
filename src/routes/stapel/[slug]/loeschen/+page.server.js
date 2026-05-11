@@ -1,8 +1,9 @@
 import db from '$lib/db.js';
 import { fail, redirect } from '@sveltejs/kit';
 
-export async function load({ params }) {
-	const deck = await db.getDeckBySlug(params.slug);
+export async function load({ params, locals }) {
+	const userId = locals.user?.id ?? null;
+	const deck = await db.getDeckBySlug(params.slug, userId);
 
 	return {
 		deck,
@@ -11,8 +12,9 @@ export async function load({ params }) {
 }
 
 export const actions = {
-	deleteDeck: async ({ params }) => {
-		const deck = await db.getDeckBySlug(params.slug);
+	deleteDeck: async ({ params, locals }) => {
+		const userId = locals.user?.id ?? null;
+		const deck = await db.getDeckBySlug(params.slug, userId);
 
 		if (!deck) {
 			return fail(404, {

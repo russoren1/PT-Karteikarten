@@ -1,8 +1,9 @@
 import db from '$lib/db.js';
 import { fail, redirect } from '@sveltejs/kit';
 
-export async function load({ params }) {
-	const deck = await db.getDeckBySlug(params.slug);
+export async function load({ params, locals }) {
+	const userId = locals.user?.id ?? null;
+	const deck = await db.getDeckBySlug(params.slug, userId);
 
 	return {
 		deck,

@@ -32,8 +32,9 @@ function removeCurrentCardFromQueue(queue, cardId, status) {
 	return remainingQueue;
 }
 
-export async function load({ params, url }) {
-	const deck = await db.getDeckBySlug(params.slug);
+export async function load({ params, url, locals }) {
+	const userId = locals.user?.id ?? null;
+	const deck = await db.getDeckBySlug(params.slug, userId);
 
 	if (!deck) {
 		return {

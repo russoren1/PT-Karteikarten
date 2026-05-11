@@ -134,6 +134,17 @@
 
 				<h2 class="h4 fw-bold mb-4">{data.card.question}</h2>
 
+				{#if data.card.imageUrl}
+					<div class="mb-4 text-center">
+						<img
+							src={data.card.imageUrl}
+							class="img-fluid rounded shadow-sm"
+							alt="Vorlesungsbild"
+							style="max-height: 400px;"
+						/>
+					</div>
+				{/if}
+
 				{#if showAnswer}
 					<div class="border-top pt-4 mb-5">
 						{#each data.card.answer.split('\n') as answerLine}
