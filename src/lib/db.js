@@ -277,6 +277,19 @@ async function getLearningQueueByDeckSlug(deckSlug) {
 	return createLearningQueue(cards);
 }
 
+async function getAllCardsQueueByDeckSlug(deckSlug) {
+	let cards = [];
+
+	try {
+		cards = await collection.find({ type: 'card', deckSlug }).toArray();
+		cards = cards.map((card) => normalizeCard(card));
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	return createLearningQueue(cards);
+}
+
 function isDueCard(card, now) {
 	if (!card.nextReviewAt) {
 		return true;
@@ -622,6 +635,7 @@ export default {
 	getDeckBySlug,
 	getCardsByDeckSlug,
 	getLearningQueueByDeckSlug,
+	getAllCardsQueueByDeckSlug,
 	getDashboardStats,
 	getSourceNamesByDeckSlug,
 	getCard,

@@ -48,7 +48,10 @@ export async function load({ params, url }) {
 	}
 
 	const done = url.searchParams.get('done') === '1';
-	const queue = done ? [] : getLearningQueue(url) ?? (await db.getLearningQueueByDeckSlug(params.slug));
+	const all = url.searchParams.get('all') === '1';
+	const queue = done ? [] : getLearningQueue(url) ?? (all
+		? await db.getAllCardsQueueByDeckSlug(params.slug)
+		: await db.getLearningQueueByDeckSlug(params.slug));
 	const total = getLearningTotal(url, queue);
 	const card = queue[0] ? await db.getCard(queue[0]) : null;
 	const activeCard = card && card.deckSlug === params.slug ? card : null;

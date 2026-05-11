@@ -84,7 +84,7 @@
 					Neue oder wiederholte Karten erscheinen hier automatisch nach ihrem Leitner-Rhythmus.
 				</p>
 				<div class="d-flex flex-column flex-md-row justify-content-center gap-2">
-					<a class="btn btn-dark fw-semibold" href={`/stapel/${data.deck.slug}/lernen`}>
+					<a class="btn btn-dark fw-semibold" href={`/stapel/${data.deck.slug}/lernen?all=1`}>
 						Erneut prüfen
 					</a>
 					<a class="btn btn-outline-secondary" href={`/stapel/${data.deck.slug}`}>
