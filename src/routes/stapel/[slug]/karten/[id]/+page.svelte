@@ -57,6 +57,17 @@
 							<p class="fw-semibold mb-1">{answerLine}</p>
 						{/if}
 					{/each}
+
+					{#if data.card.imageUrl}
+						<div class="mt-4 text-center">
+							<img
+								src={data.card.imageUrl}
+								class="img-fluid rounded shadow-sm"
+								alt="Vorlesungsbild"
+								style="max-height: 400px;"
+							/>
+						</div>
+					{/if}
 				</div>
 
 				<div class="d-flex flex-column flex-lg-row align-items-lg-center gap-3">

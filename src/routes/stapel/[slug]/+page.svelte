@@ -230,6 +230,9 @@
 										{#if card.isNew}
 											<span class="badge rounded-pill text-bg-success">Neu</span>
 										{/if}
+										{#if card.imageUrl}
+											<span class="badge rounded-pill text-bg-secondary">🖼</span>
+										{/if}
 									</a>
 								</td>
 								<td class="text-center">{card.week ?? '-'}</td>
