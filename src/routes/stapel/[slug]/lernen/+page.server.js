@@ -13,9 +13,10 @@ function getLearningQueue(url) {
 
 function getLearningTotal(url, queue) {
 	const total = Number(url.searchParams.get('total'));
+	const uniqueSize = new Set(queue).size;
 
-	if (!Number.isInteger(total) || total < queue.length) {
-		return queue.length;
+	if (!Number.isInteger(total) || total < uniqueSize) {
+		return uniqueSize;
 	}
 
 	return total;
@@ -49,10 +50,14 @@ export async function load({ params, url }) {
 
 	const done = url.searchParams.get('done') === '1';
 	const all = url.searchParams.get('all') === '1';
-	const queue = done ? [] : getLearningQueue(url) ?? (all
+	const rawQueueFromUrl = getLearningQueue(url);
+	const queue = done ? [] : rawQueueFromUrl ?? (all
 		? await db.getAllCardsQueueByDeckSlug(params.slug)
 		: await db.getLearningQueueByDeckSlug(params.slug));
-	const total = getLearningTotal(url, queue);
+	const total = rawQueueFromUrl
+		? getLearningTotal(url, queue)
+		: new Set(queue).size;
+	const uniqueCurrentSize = new Set(queue).size;
 	const card = queue[0] ? await db.getCard(queue[0]) : null;
 	const activeCard = card && card.deckSlug === params.slug ? card : null;
 
@@ -61,7 +66,7 @@ export async function load({ params, url }) {
 		card: activeCard,
 		hasCards: deck.cardCount > 0,
 		queue,
-		progressCurrent: total - queue.length + 1,
+		progressCurrent: total > 0 && uniqueCurrentSize > 0 ? total - uniqueCurrentSize + 1 : 0,
 		progressTotal: total,
 		done: done || queue.length === 0 || !activeCard,
 		slug: params.slug
@@ -102,7 +107,8 @@ export const actions = {
 			redirect(303, `/stapel/${params.slug}/lernen?done=1`);
 		}
 
-		const learningTotal = Number.isInteger(total) && total >= remainingQueue.length ? total : remainingQueue.length;
+		const uniqueRemainingSize = new Set(remainingQueue).size;
+		const learningTotal = Number.isInteger(total) && total >= uniqueRemainingSize ? total : uniqueRemainingSize;
 
 		redirect(
 			303,
