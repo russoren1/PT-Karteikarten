@@ -4,18 +4,42 @@
  */
 :root {
 	--color-accent: #FF670F;
+	--color-accent-rgb: 255, 103, 15;
 	--navbar-height: 74px;
 	--color-form-media-bg: #1a1a1a;
 }
 
-/* Kein !important nötig – wird nie mit Bootstrap-Text-Utilities kombiniert */
-.text-accent        { color: var(--color-accent); }
-/* !important nötig – kann mit Bootstrap bg-*/border-*/text-bg-* Utilities kombiniert werden */
-.bg-accent          { background-color: var(--color-accent) !important; }
-.border-accent      { border-color: var(--color-accent) !important; }
-.btn-accent         { background-color: var(--color-accent); border-color: var(--color-accent); color: #fff; }
-.btn-accent:hover   { background-color: #d95500; border-color: #d95500; color: #fff; }
-.text-bg-accent     { background-color: var(--color-accent) !important; color: #fff !important; }
+.text-accent {
+	color: var(--color-accent);
+}
+
+.bg-accent {
+	--bs-bg-opacity: 1;
+	background-color: rgba(var(--color-accent-rgb), var(--bs-bg-opacity));
+}
+
+.border-accent {
+	--bs-border-color: var(--color-accent);
+	border-color: var(--color-accent);
+}
+
+.btn-accent {
+	--bs-btn-color: #fff;
+	--bs-btn-bg: var(--color-accent);
+	--bs-btn-border-color: var(--color-accent);
+	--bs-btn-hover-color: #fff;
+	--bs-btn-hover-bg: #d95500;
+	--bs-btn-hover-border-color: #d95500;
+	--bs-btn-focus-shadow-rgb: var(--color-accent-rgb);
+	--bs-btn-active-color: #fff;
+	--bs-btn-active-bg: #bf4b00;
+	--bs-btn-active-border-color: #bf4b00;
+}
+
+.text-bg-accent {
+	color: #fff;
+	background-color: var(--color-accent);
+}
 
 .navbar-logo {
 	height: 80px;

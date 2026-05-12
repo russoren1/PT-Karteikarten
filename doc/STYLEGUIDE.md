@@ -114,13 +114,14 @@ Die zentrale technische Definition liegt in `src/style.css`:
 ```css
 :root {
 	--color-accent: #FF670F;
+	--color-accent-rgb: 255, 103, 15;
 }
 
-.text-accent { color: var(--color-accent) !important; }
-.bg-accent { background-color: var(--color-accent) !important; }
-.border-accent { border-color: var(--color-accent) !important; }
-.btn-accent { background-color: var(--color-accent); border-color: var(--color-accent); color: #fff; }
-.text-bg-accent { background-color: var(--color-accent) !important; color: #fff !important; }
+.text-accent { color: var(--color-accent); }
+.bg-accent { background-color: rgba(var(--color-accent-rgb), var(--bs-bg-opacity, 1)); }
+.border-accent { --bs-border-color: var(--color-accent); border-color: var(--color-accent); }
+.btn-accent { --bs-btn-bg: var(--color-accent); --bs-btn-border-color: var(--color-accent); --bs-btn-color: #fff; }
+.text-bg-accent { background-color: var(--color-accent); color: #fff; }
 ```
 
 Neue Farbregeln sollen nur ergänzt werden, wenn Bootstrap oder diese Akzent-Utilities nicht ausreichen.
