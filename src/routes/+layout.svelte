@@ -13,19 +13,19 @@
 	<link rel="icon" href="/favicon.svg" />
 </svelte:head>
 
-<nav class="navbar navbar-expand-lg bg-black fw-bold" data-bs-theme="dark">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="/">
+<nav class="navbar navbar-expand-lg bg-black py-3 fw-bold" data-bs-theme="dark">
+	<div class="container">
+		<a class="navbar-brand me-4" href="/">
 			<img class="navbar-logo" src="/logo.png" alt="PT Karteikarten" />
 		</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-			<div class="navbar-nav me-auto">
-				<a class="nav-link" href="/">Home</a>
-				<a class="nav-link" href="/stapel">Stapel</a>
-				<a class="nav-link" href="/dashboard">Dashboard</a>
+			<div class="navbar-nav me-auto gap-lg-2">
+				<a class="nav-link px-lg-3" href="/">Home</a>
+				<a class="nav-link px-lg-3" href="/stapel">Stapel</a>
+				<a class="nav-link px-lg-3" href="/dashboard">Dashboard</a>
 			</div>
 			<div class="navbar-nav ms-auto">
 				{#if data.user}
@@ -41,6 +41,6 @@
 	</div>
 </nav>
 
-<div>
+<div class="app-shell">
 	{@render children()}
 </div>

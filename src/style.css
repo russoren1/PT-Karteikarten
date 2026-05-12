@@ -18,6 +18,10 @@
 	width: auto;
 }
 
+.app-shell {
+	min-height: calc(100vh - 74px);
+}
+
 body {
 	min-height: 100vh;
 	margin: 0;
