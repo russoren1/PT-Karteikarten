@@ -1,3 +1,18 @@
+/* Projektspezifische Akzentfarbe #FF670F (Orange) — einzige Ergänzung zu Bootstrap.
+ * Rot → Bootstrap danger, Grün → Bootstrap success.
+ * Body-Hintergrund (#000000) und Textfarbe (#f8f9fa) sind via body{} gesetzt.
+ */
+:root {
+	--color-accent: #FF670F;
+}
+
+.text-accent        { color: var(--color-accent) !important; }
+.bg-accent          { background-color: var(--color-accent) !important; }
+.border-accent      { border-color: var(--color-accent) !important; }
+.btn-accent         { background-color: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.btn-accent:hover   { background-color: #d95500; border-color: #d95500; color: #fff; }
+.text-bg-accent     { background-color: var(--color-accent) !important; color: #fff !important; }
+
 .navbar-logo {
 	height: 40px;
 	width: auto;

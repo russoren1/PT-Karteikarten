@@ -268,6 +268,7 @@ Die Designentscheide orientieren sich an den Prinzipien der Benutzerfreundlichke
 | **Card-Design** | Module als einzelne Cards auf der Übersicht | Kartenbasiertes Layout ist intuitiv greifbar und räumt die Oberfläche auf. Jedes Modul ist ein klar abgegrenzter Lernblock. |
 | **Klare visuelle Hierarchie** | Blitz-Buttons heben sich deutlich ab | Lernende sollen ohne Suchen in den Workflow finden. Ausserdem wurden prominente Buttons (grün/primär) für die Wissensabfrage, löschen und erstellen verwendet vs. sekundäre Aktionen (Weiss oder Schwarz) die bewusst für Navigation usw. dienen.|
 | **Farbcodierung Lernmodus** | Grün = «Gewusst», Rot = «Repetieren» | Etablierte Farbcodes (grün = Erfolg, rot = Fehler) minimieren den  Aufwand bei der Selbstbewertung, somit ist wenig bis keine Erklärung nötig. |
+| **Akzentfarbe Orange (#FF670F)** | `--color-accent` in `src/style.css`; Utility-Klassen `.text-accent`, `.btn-accent`, `.text-bg-accent`. Rot/Grün über Bootstrap `danger`/`success`; Body-Hintergrund und Textfarbe via `body {}` in `style.css`. | Einzige projektspezifische Ergänzung zu Bootstrap — hebt Hero-Titel, Abschnittsüberschriften und primäre Buttons hervor, ohne das Dark Theme zu überladen. |
 | **Feedback-Schleifen** | Vorschau nach Kartenerstellung | Verhindert das blinde Weiterarbeiten mit fehlerhaften Karten; sofortiges Feedback erlaubt schnelle Korrektur ohne Unterbrechung des Workflows. |
 
 ---
