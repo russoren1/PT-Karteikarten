@@ -266,7 +266,7 @@ Die Designentscheide orientieren sich an den Prinzipien der Benutzerfreundlichke
 | **Desktop-First** | Querformat, optimiert für Laptop/PC | Studierende lernen typischerweise am Schreibtisch; Desktop ermöglicht paralleles Öffnen von Vorlesungsfolien und der App nebeneinander. |
 | **Dark Theme** | Dunkler Hintergrund, weisse Content-Cards | Hoher Kontrast fokussiert den Blick auf den Lerninhalt; schont die Augen bei längeren Lernsessions am Abend. |
 | **Card-Design** | Module als einzelne Cards auf der Übersicht | Kartenbasiertes Layout ist intuitiv greifbar und räumt die Oberfläche auf. Jedes Modul ist ein klar abgegrenzter Lernblock. |
-| **Klare visuelle Hierarchie** | Blitz-Buttons heben sich deutlich ab | Lernende sollen ohne Suchen in den Workflow finden. Ausserdem wurden prominente Buttons (grün/primär) für die Wissensabfrage, löschen und erstellen verwendet vs. sekundäre Aktionen (Weiss oder Schwarz) die bewusst für Navigation usw. dienen.|
+| **Klare visuelle Hierarchie** | Orange für zentrale Lern-CTAs, helle Cards für Inhalte und Bootstrap-Statusfarben für Erfolg/Gefahr | Nach dem Redesign trennt diese Logik Orientierung, Inhalt und Status semantisch klarer und macht die Bedienung konsistenter. |
 | **Farbcodierung Lernmodus** | Grün = «Gewusst», Rot = «Repetieren» | Etablierte Farbcodes (grün = Erfolg, rot = Fehler) minimieren den  Aufwand bei der Selbstbewertung, somit ist wenig bis keine Erklärung nötig. |
 | **Akzentfarbe Orange (#FF670F)** | `--color-accent` in `src/style.css`; Utility-Klassen `.text-accent`, `.btn-accent`, `.text-bg-accent`. Rot/Grün über Bootstrap `danger`/`success`; Body-Hintergrund und Textfarbe via `body {}` in `style.css`. | Einzige projektspezifische Ergänzung zu Bootstrap — hebt Hero-Titel, Abschnittsüberschriften und primäre Buttons hervor, ohne das Dark Theme zu überladen. |
 | **Feedback-Schleifen** | Vorschau nach Kartenerstellung | Verhindert das blinde Weiterarbeiten mit fehlerhaften Karten; sofortiges Feedback erlaubt schnelle Korrektur ohne Unterbrechung des Workflows. |
@@ -308,7 +308,7 @@ flowchart TD
     Registrieren --> Stapel
     Logout["Logout /logout"] --> Login
 
-    Stapel --> NeuerStapel["Neuer Stapel /stapel/neu"]
+    Stapel --> NeuerStapel["Neuer Stapel als Formularaktion in /stapel"]
     Stapel --> StapelDetail["Stapel-Detail /stapel/[slug]"]
 
     Dashboard --> StapelDetail
@@ -378,14 +378,14 @@ Datenzugriff zentral in `src/lib/db.js` — alle Datenbankoperationen an einem O
 | `getDashboardStats(userId)` | Lesen | Aggregierte Lernstatistiken über alle Stapel (MongoDB-Pipeline) |
 | `createCard(card)` / `createDeck(deck)` | Erstellen | Neue Karte / neuer Stapel (mit userId aus Session) |
 | `updateCard(id, data)` / `updateDeck(id, data)` | Bearbeiten | Bestehende Karte / bestehenden Stapel aktualisieren |
-| `updateCardStatus(id, box, nextReviewAt)` | Bearbeiten | Leitner-Box und Review-Datum nach Lernbewertung setzen |
+| `updateCardStatus(id, status)` | Bearbeiten | Speichert `known` oder `repeat` und berechnet daraus Leitner-Box, Zähler und nächstes Review-Datum |
 | `deleteCard(id)` / `deleteDeck(slug)` | Löschen | Einzelne Karte / Stapel inkl. aller zugehörigen Karten |
 
 ![ER-Modell](doc/ER_Model.drawio.svg)
 *ER-Modell: Stapel und Karte in Chen Notation mit MongoDB-Dokumenttypen.*
 
 ![Systemarchitektur](doc/System_Architektur.drawio.svg)
-*Systemarchitektur: Browser, SvelteKit-Routen, serverseitige Actions, zentrale Datenbankschicht und MongoDB-Anbindung.*
+*Systemarchitektur: Browser, SvelteKit-Routen, serverseitige Actions, zentrale Datenbankschicht, MongoDB-Anbindung sowie Supabase Auth und Supabase Storage.*
 
 ##### Deployment
 
@@ -529,7 +529,6 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
 - **Artefakt-Ablage:**
   - `doc/ER_Model.drawio.svg` — ER-Modell nach Chen-ähnlicher Notation für Stapel und Karten (inkl. Supabase-Felder)
   - `doc/System_Architektur.drawio.svg` — Systemarchitektur des SvelteKit-Prototyps (inkl. Supabase Auth + Storage)
-  - `doc/ARCHITEKTUR.md` — Textuelle Beschreibung der System-Architektur: Stack, Datenfluss, MongoDB-Collections, Leitner-System
   - `doc/sketches/` — Handschriftliche Skizzen aus der Sketch-Phase und Mockup-Screenshots
   - `doc/screenshots/` — App-Screenshots der implementierten Screens
 
