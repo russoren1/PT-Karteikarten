@@ -10,10 +10,10 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href="/favicon.svg" />
+	<link rel="icon" href="/logo.png" type="image/png" />
 </svelte:head>
 
-<nav class="navbar navbar-expand-lg bg-black py-3 fw-bold" data-bs-theme="dark">
+<nav class="navbar navbar-expand-lg bg-black py-3 fw-bold app-navbar" data-bs-theme="dark">
 	<div class="container">
 		<a class="navbar-brand me-4" href="/">
 			<img class="navbar-logo" src="/logo.png" alt="PT Karteikarten" />
