@@ -114,28 +114,6 @@
 					<div class="alert alert-danger" role="alert">{form.error}</div>
 				{/if}
 
-				<div class="border-start border-4 border-accent rounded-4 bg-white p-4 mb-5" role="status">
-					<div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
-						<div>
-							<p class="text-uppercase text-accent fw-semibold small mb-3">Vorlesungskontext</p>
-							<div class="d-flex flex-wrap gap-2 gap-lg-3">
-								<span class="badge rounded-pill text-bg-dark fs-6 px-3 py-2">Woche {data.card.week}</span>
-								{#if data.card.sourceName}
-									<span class="badge rounded-pill text-bg-dark fs-6 px-3 py-2">
-										{data.card.sourceName}
-									</span>
-								{/if}
-								<span class="badge rounded-pill text-bg-dark fs-6 px-3 py-2">
-									Folie/Seite {data.card.slide}
-								</span>
-							</div>
-						</div>
-						{#if data.card.isNew}
-							<span class="badge rounded-pill text-bg-success align-self-start align-self-lg-center">Neu</span>
-						{/if}
-					</div>
-				</div>
-
 				<h2 class="display-6 fw-bold mb-5">{data.card.question}</h2>
 
 				{#if data.card.imageUrl && data.card.imagePosition !== 'answer'}
@@ -185,6 +163,28 @@
 								<input type="hidden" name="total" value={data.progressTotal} />
 								<button class="btn btn-danger fw-semibold w-100" type="submit">Repetieren</button>
 							</form>
+						</div>
+					</div>
+
+					<div class="border-start border-4 border-accent rounded-4 bg-white p-4 mb-5" role="status">
+						<div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+							<div>
+								<p class="text-uppercase text-accent fw-semibold small mb-3">Vorlesungskontext</p>
+								<div class="d-flex flex-wrap gap-2 gap-lg-3">
+									<span class="badge rounded-pill text-bg-dark fs-6 px-3 py-2">Woche {data.card.week}</span>
+									{#if data.card.sourceName}
+										<span class="badge rounded-pill text-bg-dark fs-6 px-3 py-2">
+											{data.card.sourceName}
+										</span>
+									{/if}
+									<span class="badge rounded-pill text-bg-dark fs-6 px-3 py-2">
+										Folie/Seite {data.card.slide}
+									</span>
+								</div>
+							</div>
+							{#if data.card.isNew}
+								<span class="badge rounded-pill text-bg-success align-self-start align-self-lg-center">Neu</span>
+							{/if}
 						</div>
 					</div>
 				{:else}
