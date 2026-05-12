@@ -66,8 +66,8 @@
 	}
 </script>
 
-<form class="card bg-light text-dark shadow-sm" method="POST" action={formAction} enctype="multipart/form-data">
-	<div class="card-body p-4">
+<form class="card bg-light text-dark border-0 rounded-4 shadow-sm" method="POST" action={formAction} enctype="multipart/form-data">
+	<div class="card-body p-4 p-lg-5">
 		{#if error}
 			<div class="alert alert-danger" role="alert">{error}</div>
 		{/if}
@@ -159,7 +159,7 @@
 
 		<input type="hidden" name="removeImage" value={removeImageFlag ? '1' : '0'} />
 
-		<div class="d-flex flex-column flex-md-row gap-2">
+		<div class="d-flex flex-column flex-md-row gap-2 pt-2">
 			<button class="btn btn-dark fw-semibold flex-fill" type="submit">{submitLabel}</button>
 			{#if cancelHref}
 				<a class="btn btn-outline-secondary flex-fill" href={cancelHref}>{cancelLabel}</a>
@@ -181,7 +181,7 @@
 
 	{#if previewUrl}
 		<div class="image-preview-wrapper position-relative rounded overflow-hidden">
-			<img src={previewUrl} class="img-fluid rounded w-100" alt="Vorschau" style="max-height: 280px; object-fit: contain; background: #1a1a1a;" />
+			<img src={previewUrl} class="img-fluid rounded w-100 flashcard-form-media" alt="Vorschau" />
 			<div class="image-preview-actions d-flex gap-2 mt-2">
 				<button type="button" class="btn btn-sm btn-outline-secondary" onclick={openFilePicker}>
 					Ersetzen
@@ -193,8 +193,9 @@
 		</div>
 	{:else}
 		<div
-			class="drop-zone rounded p-4 text-center"
-			class:drop-zone--active={isDragging}
+			class="rounded p-4 text-center border border-2 border-secondary-subtle bg-body-tertiary"
+			class:border-primary={isDragging}
+			class:bg-primary-subtle={isDragging}
 			role="button"
 			tabindex="0"
 			ondragover={handleDragOver}
@@ -203,29 +204,9 @@
 			onclick={openFilePicker}
 			onkeydown={(e) => e.key === 'Enter' && openFilePicker()}
 		>
-			<div class="drop-zone-icon mb-2">🖼</div>
+			<span class="badge text-bg-dark mb-2">Bild</span>
 			<p class="mb-1 fw-semibold small">Screenshot hier ablegen</p>
 			<p class="text-secondary small mb-0">oder klicken zum Auswählen · JPG, PNG, WebP</p>
 		</div>
 	{/if}
 {/snippet}
-
-<style>
-	.drop-zone {
-		border: 2px dashed #ced4da;
-		background: #f8f9fa;
-		cursor: pointer;
-		transition: border-color 0.15s, background 0.15s;
-	}
-
-	.drop-zone:hover,
-	.drop-zone--active {
-		border-color: #0d6efd;
-		background: #e8f0fe;
-	}
-
-	.drop-zone-icon {
-		font-size: 2rem;
-		line-height: 1;
-	}
-</style>

@@ -38,9 +38,10 @@
 	<title>{data.deck ? `Lernmodus | ${data.deck.title}` : 'Lernmodus | PT Karteikarten'}</title>
 </svelte:head>
 
-<div class="container py-4 py-lg-5">
+<div class="container py-5">
 	{#if !data.deck}
-		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
+		<p class="text-uppercase text-accent fw-semibold mb-2">Lernmodus</p>
+		<h1 class="display-5 fw-bold mb-5">Lernmodus</h1>
 
 		<div class="alert alert-warning" role="alert">
 			<h2 class="h4 alert-heading">Stapel nicht gefunden</h2>
@@ -58,9 +59,10 @@
 				{ label: 'Lernmodus' }
 			]}
 		/>
-		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
+		<p class="text-uppercase text-accent fw-semibold mb-2">{data.deck.title}</p>
+		<h1 class="display-5 fw-bold mb-5">Lernmodus</h1>
 
-		<div class="alert alert-light" role="alert">
+		<div class="alert alert-light rounded-4" role="alert">
 			<p class="mb-3">Dieser Stapel enthält noch keine Karten.</p>
 			<a class="btn btn-dark" href={`/stapel/${data.deck.slug}/karten/neu`}>
 				Erste Karte erstellen
@@ -75,9 +77,10 @@
 				{ label: 'Lernmodus' }
 			]}
 		/>
-		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
+		<p class="text-uppercase text-accent fw-semibold mb-2">{data.deck.title}</p>
+		<h1 class="display-5 fw-bold mb-5">Lernmodus</h1>
 
-		<div class="card bg-light text-dark shadow-sm">
+		<div class="card bg-light text-dark border-0 rounded-4 shadow-sm">
 			<div class="card-body p-4 p-lg-5 text-center">
 				<h2 class="h3 fw-bold mb-3">Aktuell sind keine Karten zur Wiederholung fällig.</h2>
 				<p class="text-secondary mb-4">
@@ -102,26 +105,27 @@
 				{ label: 'Lernmodus' }
 			]}
 		/>
-		<h1 class="display-6 fw-bold mb-5">// Lernmodus</h1>
+		<p class="text-uppercase text-accent fw-semibold mb-2">{data.deck.title}</p>
+		<h1 class="display-5 fw-bold mb-5">Lernmodus</h1>
 
-		<div class="card bg-light text-dark shadow-sm">
+		<div class="card bg-light text-dark border-0 rounded-4 shadow-sm">
 			<div class="card-body p-4 p-lg-5">
 				{#if form?.error}
 					<div class="alert alert-danger" role="alert">{form.error}</div>
 				{/if}
 
-				<div class="alert alert-secondary mb-4" role="status">
+				<div class="border-start border-4 border-accent rounded-4 bg-white p-4 mb-5" role="status">
 					<div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
 						<div>
-							<p class="text-uppercase fw-semibold small mb-2">Vorlesungskontext</p>
-							<div class="d-flex flex-wrap gap-2">
-								<span class="badge rounded-pill text-bg-dark px-3 py-2">Woche {data.card.week}</span>
+							<p class="text-uppercase text-accent fw-semibold small mb-3">Vorlesungskontext</p>
+							<div class="d-flex flex-wrap gap-2 gap-lg-3">
+								<span class="badge rounded-pill text-bg-dark fs-6 px-3 py-2">Woche {data.card.week}</span>
 								{#if data.card.sourceName}
-									<span class="badge rounded-pill text-bg-dark px-3 py-2">
+									<span class="badge rounded-pill text-bg-dark fs-6 px-3 py-2">
 										{data.card.sourceName}
 									</span>
 								{/if}
-								<span class="badge rounded-pill text-bg-dark px-3 py-2">
+								<span class="badge rounded-pill text-bg-dark fs-6 px-3 py-2">
 									Folie/Seite {data.card.slide}
 								</span>
 							</div>
@@ -132,24 +136,23 @@
 					</div>
 				</div>
 
-				<h2 class="h4 fw-bold mb-4">{data.card.question}</h2>
+				<h2 class="display-6 fw-bold mb-5">{data.card.question}</h2>
 
 				{#if data.card.imageUrl && data.card.imagePosition !== 'answer'}
 					<div class="mb-4 text-center">
 						<img
 							src={data.card.imageUrl}
-							class="img-fluid rounded shadow-sm"
+							class="img-fluid rounded shadow-sm flashcard-media"
 							alt="Vorlesungsbild"
-							style="max-height: 400px;"
 						/>
 					</div>
 				{/if}
 
 				{#if showAnswer}
-					<div class="border-top pt-4 mb-4">
+					<div class="border-top border-2 pt-4 mb-5">
 						{#each data.card.answer.split('\n') as answerLine}
 							{#if answerLine}
-								<p class="fw-semibold mb-1">{answerLine}</p>
+								<p class="fs-4 lh-lg mb-3">{answerLine}</p>
 							{/if}
 						{/each}
 					</div>
@@ -158,9 +161,8 @@
 						<div class="mb-4 text-center">
 							<img
 								src={data.card.imageUrl}
-								class="img-fluid rounded shadow-sm"
+								class="img-fluid rounded shadow-sm flashcard-media"
 								alt="Vorlesungsbild"
-								style="max-height: 400px;"
 							/>
 						</div>
 					{/if}

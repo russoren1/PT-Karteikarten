@@ -9,7 +9,7 @@
 	<title>Neue Karte | PT Karteikarten</title>
 </svelte:head>
 
-<div class="container py-4 py-lg-5">
+<div class="container py-5">
 	{#if !data.deck}
 		<div class="alert alert-warning" role="alert">
 			<h1 class="h4 alert-heading">Stapel nicht gefunden</h1>
@@ -29,7 +29,8 @@
 		/>
 
 		<div class="mb-4">
-			<h1 class="display-5 fw-bold mb-3">// Neue Karte</h1>
+			<p class="text-uppercase text-accent fw-semibold mb-2">Karte erstellen</p>
+			<h1 class="display-5 fw-bold mb-3">Neue Karte</h1>
 			<div class="d-flex flex-wrap gap-2">
 				<span class="badge text-bg-light">{data.deck.title}</span>
 				<span class="badge text-bg-light">{data.deck.semester}</span>

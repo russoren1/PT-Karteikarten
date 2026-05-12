@@ -43,7 +43,7 @@
 	</title>
 </svelte:head>
 
-<div class="container py-4 py-lg-5">
+<div class="container py-5">
 	{#if !data.deck}
 		<div class="alert alert-warning" role="alert">
 			<h1 class="h4 alert-heading">Stapel nicht gefunden</h1>
@@ -61,9 +61,10 @@
 			]}
 		/>
 
-		<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-start gap-3 mb-4">
+		<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-start gap-4 mb-4">
 			<div>
-				<h1 class="display-5 fw-bold mb-3">// {data.deck.title}</h1>
+				<p class="text-uppercase text-accent fw-semibold mb-2">Kartenübersicht</p>
+				<h1 class="display-5 fw-bold mb-3">{data.deck.title}</h1>
 				<div class="d-flex flex-wrap gap-2">
 					<span class="badge text-bg-light">{data.deck.semester}</span>
 					<span class="badge text-bg-light">{data.deck.cardCount} Karten</span>
@@ -87,7 +88,7 @@
 		</div>
 
 		<div class="mb-5">
-			<a class="btn btn-dark btn-lg border border-light shadow-sm w-100 py-4 fw-bold" href={`/stapel/${data.deck.slug}/lernen`}>
+			<a class="btn btn-accent btn-lg border-0 shadow-sm w-100 py-4 fw-bold" href={`/stapel/${data.deck.slug}/lernen`}>
 				⚡ JETZT LERNEN
 			</a>
 		</div>
@@ -100,9 +101,19 @@
 			<div class="alert alert-success" role="alert">Stapel wurde gespeichert.</div>
 		{/if}
 
-		<form class="card bg-light text-dark shadow-sm mb-4" method="GET" bind:this={filterForm}>
-			<div class="card-body">
-				<h2 class="h5 fw-bold mb-3">Karten filtern</h2>
+		<form class="card bg-light text-dark border-0 rounded-4 shadow-sm mb-4" method="GET" bind:this={filterForm}>
+			<div class="card-body p-4">
+				<div class="d-flex flex-column flex-lg-row justify-content-between gap-2 mb-3">
+					<div>
+						<p class="text-uppercase text-accent fw-semibold small mb-1">Kartenliste</p>
+						<h2 class="h4 fw-bold mb-0">Karten filtern</h2>
+					</div>
+					{#if data.hasActiveFilters}
+						<p class="text-secondary fw-semibold mb-0 align-self-lg-end">
+							{data.cards.length} von {data.totalCardCount} Karten
+						</p>
+					{/if}
+				</div>
 
 				<div class="row g-3">
 					<div class="col-lg-4">
@@ -186,9 +197,9 @@
 
 		{#if data.cards.length === 0}
 			{#if data.hasActiveFilters}
-				<div class="alert alert-light" role="alert">Keine Karten für diese Filter gefunden.</div>
+				<div class="alert alert-light rounded-4" role="alert">Keine Karten für diese Filter gefunden.</div>
 			{:else}
-				<div class="alert alert-light" role="alert">
+				<div class="alert alert-light rounded-4" role="alert">
 					<p class="mb-3">Dieser Stapel enthält noch keine Karten.</p>
 					<a class="btn btn-dark" href={`/stapel/${data.deck.slug}/karten/neu`}>
 						Erste Karte erstellen
@@ -196,23 +207,18 @@
 				</div>
 			{/if}
 		{:else}
-			{#if data.hasActiveFilters}
-				<p class="text-light fw-semibold mb-3">
-					{data.cards.length} von {data.totalCardCount} Karten angezeigt
-				</p>
-			{/if}
-
-			<div class="table-responsive shadow-sm">
-				<table class="table table-light table-bordered table-hover align-middle mb-0">
-					<thead class="table-secondary">
+			<div class="card bg-light text-dark border-0 rounded-4 shadow-sm overflow-hidden">
+				<div class="table-responsive">
+					<table class="table table-light table-hover align-middle mb-0">
+						<thead class="table-secondary">
 						<tr>
 							<th scope="col">Frage</th>
 							<th class="text-center" scope="col">Woche</th>
 							<th class="text-center" scope="col">Folie/Seite</th>
 							<th class="text-center" scope="col">Aktion</th>
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 						{#each data.cards as card (card._id)}
 							<tr
 								tabindex="0"
@@ -255,8 +261,9 @@
 								</td>
 							</tr>
 						{/each}
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		{/if}
 	{/if}

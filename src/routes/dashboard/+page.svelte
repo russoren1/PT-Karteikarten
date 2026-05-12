@@ -11,16 +11,10 @@
 	// --- Lernstand-Filter ---
 	let snapshotDeck = $state('all');
 
-	// --- Hero ---
 	let overallProgress = $derived(
 		stats.totalCards > 0
 			? Math.round(stats.decks.reduce((s, d) => s + d.knownCount, 0) / stats.totalCards * 100)
 			: 0
-	);
-	let urgentDeck = $derived(
-		stats.decks.length > 0
-			? stats.decks.toSorted((a, b) => b.dueCount - a.dueCount)[0]
-			: null
 	);
 
 	// --- Gefilterte Stapel ---
@@ -58,6 +52,10 @@
 		return { total, known, due, other, knownPct: pct(known), duePct: pct(due), otherPct: pct(other) };
 	});
 
+	let knownProgressStyle = $derived(`--progress-width: ${snapshotData.knownPct}%`);
+	let dueProgressStyle = $derived(`--progress-width: ${snapshotData.duePct}%`);
+	let otherProgressStyle = $derived(`--progress-width: ${snapshotData.otherPct}%`);
+
 	function resetDeckFilters() {
 		deckStatusFilter = 'all';
 		deckSort = 'due-desc';
@@ -68,7 +66,7 @@
 	<title>Dashboard | PT Karteikarten</title>
 </svelte:head>
 
-<div class="container py-4 py-lg-5">
+<div class="container py-5">
 	<Breadcrumbs
 		items={[
 			{ label: 'Home', href: '/' },
@@ -76,68 +74,51 @@
 		]}
 	/>
 
-	<h1 class="display-6 fw-bold mb-4">// Dashboard</h1>
-
-	<!-- HERO -->
-	<div
-		class="card shadow-sm mb-3 border-start border-4 {stats.dueCount > 0
-			? 'border-danger'
-			: 'border-success'}"
-	>
-		<div class="card-body p-4">
-			<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-				<div>
-					{#if stats.dueCount > 0}
-						<p class="text-danger fw-bold fs-5 mb-1">{stats.dueCount} Karten zur Wiederholung</p>
-						<p class="text-secondary mb-0">Starte jetzt mit dem Lernen und hole deinen Rückstand auf.</p>
-					{:else}
-						<p class="text-success fw-bold fs-5 mb-1">Alles erledigt – gut gemacht!</p>
-						<p class="text-secondary mb-0">Heute sind keine Karten fällig.</p>
-					{/if}
-				</div>
-				{#if urgentDeck}
-					<a
-						class="btn {stats.dueCount > 0 ? 'btn-danger' : 'btn-outline-success'} flex-shrink-0"
-						href="/stapel/{urgentDeck.slug}"
-					>
-						{stats.dueCount > 0 ? 'Lernen starten →' : 'Stapel ansehen'}
-					</a>
-				{/if}
-			</div>
-		</div>
-	</div>
+	<p class="text-uppercase text-accent fw-semibold mb-2">Lernstatistik</p>
+	<h1 class="display-5 fw-bold mb-4">Dashboard</h1>
 
 	<!-- SEKUNDÄR-STATS -->
 	<div class="row g-3 mb-4">
-		<div class="col-4">
-			<div class="card bg-light text-dark h-100 shadow-sm">
-				<div class="card-body text-center py-3">
-					<p class="text-secondary fw-semibold small mb-1">Stapel</p>
-					<p class="h3 fw-bold mb-0">{stats.totalDecks}</p>
+		<div class="col-md-3">
+			<div class="card bg-light text-dark border-0 rounded-4 h-100 shadow-sm">
+				<div class="card-body p-4">
+					<p class="text-uppercase text-secondary fw-semibold small mb-2">Stapel</p>
+					<p class="display-6 fw-bold mb-0">{stats.totalDecks}</p>
 				</div>
 			</div>
 		</div>
-		<div class="col-4">
-			<div class="card bg-light text-dark h-100 shadow-sm">
-				<div class="card-body text-center py-3">
-					<p class="text-secondary fw-semibold small mb-1">Karten</p>
-					<p class="h3 fw-bold mb-0">{stats.totalCards}</p>
+		<div class="col-md-3">
+			<div class="card bg-light text-dark border-0 rounded-4 h-100 shadow-sm">
+				<div class="card-body p-4">
+					<p class="text-uppercase text-secondary fw-semibold small mb-2">Karten</p>
+					<p class="display-6 fw-bold mb-0">{stats.totalCards}</p>
 				</div>
 			</div>
 		</div>
-		<div class="col-4">
-			<div class="card bg-light text-dark h-100 shadow-sm">
-				<div class="card-body text-center py-3">
-					<p class="text-secondary fw-semibold small mb-1">Gelernt</p>
-					<p class="h3 fw-bold mb-0">{overallProgress}%</p>
+		<div class="col-md-3">
+			<div class="card bg-light text-dark border-0 rounded-4 h-100 shadow-sm">
+				<div class="card-body p-4">
+					<p class="text-uppercase text-secondary fw-semibold small mb-2">Gelernt</p>
+					<p class="display-6 fw-bold mb-0">{overallProgress}%</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card bg-light text-dark border-0 rounded-4 h-100 shadow-sm">
+				<div class="card-body p-4">
+					<p class="text-uppercase text-secondary fw-semibold small mb-2">Fällig</p>
+					<p class="display-6 fw-bold mb-0 {stats.dueCount > 0 ? 'text-danger' : 'text-success'}">
+						{stats.dueCount}
+					</p>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- DEINE STAPEL -->
-	<div class="card bg-light text-dark shadow-sm mb-4">
+	<div class="card bg-light text-dark border-0 rounded-4 shadow-sm mb-4">
 		<div class="card-body p-4">
+			<p class="text-uppercase text-accent fw-semibold small mb-1">Training</p>
 			<h2 class="h4 fw-bold mb-3">Deine Stapel</h2>
 
 			{#if stats.decks.length > 0}
@@ -184,7 +165,7 @@
 							<tr>
 								<th scope="col">Stapel</th>
 								<th scope="col">Karten</th>
-								<th scope="col" style="min-width:180px">Fortschritt</th>
+								<th scope="col">Fortschritt</th>
 								<th scope="col">Fällig</th>
 								<th scope="col">Aktion</th>
 							</tr>
@@ -198,17 +179,7 @@
 									<th scope="row">{deck.title}</th>
 									<td>{deck.cardCount}</td>
 									<td>
-										<div class="progress mb-1" style="height:6px">
-											<div
-												class="progress-bar bg-success"
-												role="progressbar"
-												style="width:{pct}%"
-												aria-valuenow={pct}
-												aria-valuemin="0"
-												aria-valuemax="100"
-											></div>
-										</div>
-										<small class="text-secondary">{pct}% gelernt</small>
+										<span class="badge rounded-pill text-bg-success">{pct}% gelernt</span>
 									</td>
 									<td>
 										{#if deck.dueCount > 0}
@@ -219,7 +190,7 @@
 									</td>
 									<td>
 										{#if deck.dueCount > 0}
-											<a class="btn btn-sm btn-dark" href="/stapel/{deck.slug}/lernen">
+											<a class="btn btn-sm btn-accent" href="/stapel/{deck.slug}/lernen">
 												Lernen →
 											</a>
 										{:else}
@@ -240,8 +211,9 @@
 	<!-- SCHWÄCHSTE KARTEN + NOCH NICHT GELERNT -->
 	<div class="row g-4 mb-4">
 		<div class="col-lg-6">
-			<div class="card bg-light text-dark h-100 shadow-sm">
+			<div class="card bg-light text-dark border-0 rounded-4 h-100 shadow-sm">
 				<div class="card-body p-4">
+					<p class="text-uppercase text-accent fw-semibold small mb-1">Fokus</p>
 					<h2 class="h4 fw-bold mb-1">Schwächste Karten</h2>
 					<p class="text-secondary small mb-3">Karten, die du oft als nicht gewusst markiert hast</p>
 					{#if stats.repeatedCards.length === 0}
@@ -269,8 +241,9 @@
 		</div>
 
 		<div class="col-lg-6">
-			<div class="card bg-light text-dark h-100 shadow-sm">
+			<div class="card bg-light text-dark border-0 rounded-4 h-100 shadow-sm">
 				<div class="card-body p-4">
+					<p class="text-uppercase text-accent fw-semibold small mb-1">Grundlagen</p>
 					<h2 class="h4 fw-bold mb-1">Noch nicht gelernt</h2>
 					<p class="text-secondary small mb-3">
 						Karten in der frühesten Lernstufe – hier besteht noch Nachholbedarf
@@ -303,8 +276,9 @@
 	</div>
 
 	<!-- LERNSTAND -->
-	<div class="card bg-light text-dark shadow-sm">
+	<div class="card bg-light text-dark border-0 rounded-4 shadow-sm">
 		<div class="card-body p-4">
+			<p class="text-uppercase text-accent fw-semibold small mb-1">Überblick</p>
 			<h2 class="h4 fw-bold mb-3">Lernstand</h2>
 
 			<div class="p-3 rounded border bg-white mb-4">
@@ -329,55 +303,43 @@
 			{#if snapshotData.total === 0}
 				<p class="text-secondary mb-0">Keine Karten vorhanden.</p>
 			{:else}
-				<div class="d-flex flex-column gap-4">
-					<div>
-						<div class="d-flex justify-content-between align-items-baseline mb-1">
-							<span class="fw-semibold text-success">Bekannt</span>
-							<span class="text-secondary small">{snapshotData.known} Karten · {snapshotData.knownPct}%</span>
-						</div>
-						<div class="progress" style="height:12px">
-							<div
-								class="progress-bar bg-success"
-								role="progressbar"
-								style="width:{snapshotData.knownPct}%"
-								aria-valuenow={snapshotData.knownPct}
-								aria-valuemin="0"
-								aria-valuemax="100"
-							></div>
+				<div class="row g-3">
+					<div class="col-md-4">
+						<div class="border rounded-4 bg-white p-3 h-100">
+							<p class="fw-semibold text-success mb-1">Bekannt</p>
+							<div class="d-flex justify-content-between align-items-baseline gap-3 mb-2">
+								<p class="h4 fw-bold mb-0">{snapshotData.known}</p>
+								<span class="badge rounded-pill text-bg-success">{snapshotData.knownPct}%</span>
+							</div>
+							<div class="progress app-progress" role="progressbar" aria-valuenow={snapshotData.knownPct} aria-valuemin="0" aria-valuemax="100">
+								<div class="progress-bar bg-success app-progress-bar" style={knownProgressStyle}></div>
+							</div>
 						</div>
 					</div>
 
-					<div>
-						<div class="d-flex justify-content-between align-items-baseline mb-1">
-							<span class="fw-semibold text-danger">Zu wiederholen</span>
-							<span class="text-secondary small">{snapshotData.due} Karten · {snapshotData.duePct}%</span>
-						</div>
-						<div class="progress" style="height:12px">
-							<div
-								class="progress-bar bg-danger"
-								role="progressbar"
-								style="width:{snapshotData.duePct}%"
-								aria-valuenow={snapshotData.duePct}
-								aria-valuemin="0"
-								aria-valuemax="100"
-							></div>
+					<div class="col-md-4">
+						<div class="border rounded-4 bg-white p-3 h-100">
+							<p class="fw-semibold text-danger mb-1">Zu wiederholen</p>
+							<div class="d-flex justify-content-between align-items-baseline gap-3 mb-2">
+								<p class="h4 fw-bold mb-0">{snapshotData.due}</p>
+								<span class="badge rounded-pill text-bg-danger">{snapshotData.duePct}%</span>
+							</div>
+							<div class="progress app-progress" role="progressbar" aria-valuenow={snapshotData.duePct} aria-valuemin="0" aria-valuemax="100">
+								<div class="progress-bar bg-danger app-progress-bar" style={dueProgressStyle}></div>
+							</div>
 						</div>
 					</div>
 
-					<div>
-						<div class="d-flex justify-content-between align-items-baseline mb-1">
-							<span class="fw-semibold text-secondary">Noch nicht gestartet</span>
-							<span class="text-secondary small">{snapshotData.other} Karten · {snapshotData.otherPct}%</span>
-						</div>
-						<div class="progress" style="height:12px">
-							<div
-								class="progress-bar bg-secondary"
-								role="progressbar"
-								style="width:{snapshotData.otherPct}%"
-								aria-valuenow={snapshotData.otherPct}
-								aria-valuemin="0"
-								aria-valuemax="100"
-							></div>
+					<div class="col-md-4">
+						<div class="border rounded-4 bg-white p-3 h-100">
+							<p class="fw-semibold text-secondary mb-1">Noch nicht gestartet</p>
+							<div class="d-flex justify-content-between align-items-baseline gap-3 mb-2">
+								<p class="h4 fw-bold mb-0">{snapshotData.other}</p>
+								<span class="badge rounded-pill text-bg-secondary">{snapshotData.otherPct}%</span>
+							</div>
+							<div class="progress app-progress" role="progressbar" aria-valuenow={snapshotData.otherPct} aria-valuemin="0" aria-valuemax="100">
+								<div class="progress-bar bg-secondary app-progress-bar" style={otherProgressStyle}></div>
+							</div>
 						</div>
 					</div>
 				</div>

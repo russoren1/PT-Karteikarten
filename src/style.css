@@ -36,3 +36,21 @@ body {
 .deck-card {
 	min-height: 220px;
 }
+
+.flashcard-media {
+	max-height: 320px;
+}
+
+.flashcard-form-media {
+	max-height: 280px;
+	object-fit: contain;
+	background: #1a1a1a;
+}
+
+.app-progress {
+	height: 0.75rem;
+}
+
+.app-progress-bar {
+	width: var(--progress-width);
+}

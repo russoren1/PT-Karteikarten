@@ -19,7 +19,3 @@
 		<a class="btn btn-dark fw-semibold w-100" href={`/stapel/${deck.slug}`}>Öffnen →</a>
 	</div>
 </div>
-
-<style>
-
-</style>

@@ -8,7 +8,7 @@
 	<title>{data.deck ? 'Stapel löschen | PT Karteikarten' : 'Stapel nicht gefunden | PT Karteikarten'}</title>
 </svelte:head>
 
-<div class="container py-4 py-lg-5">
+<div class="container py-5">
 	{#if !data.deck}
 		<div class="alert alert-warning" role="alert">
 			<h1 class="h4 alert-heading">Stapel nicht gefunden</h1>
@@ -28,7 +28,8 @@
 		/>
 
 		<div class="mb-4">
-			<h1 class="display-5 fw-bold mb-3">// Stapel löschen</h1>
+			<p class="text-uppercase text-accent fw-semibold mb-2">Stapel löschen</p>
+			<h1 class="display-5 fw-bold mb-3">Stapel löschen</h1>
 			<div class="d-flex flex-wrap gap-2">
 				<span class="badge text-bg-light">{data.deck.title}</span>
 				<span class="badge text-bg-light">{data.deck.semester}</span>
@@ -36,8 +37,8 @@
 			</div>
 		</div>
 
-		<div class="card bg-light text-dark shadow-sm">
-			<div class="card-body p-4">
+		<div class="card bg-light text-dark border-0 rounded-4 shadow-sm">
+			<div class="card-body p-4 p-lg-5">
 				{#if form?.error}
 					<div class="alert alert-danger" role="alert">{form.error}</div>
 				{/if}

@@ -10,12 +10,13 @@
 	<div class="row justify-content-center">
 		<div class="col-sm-10 col-md-7 col-lg-5">
 			<div class="text-center mb-5">
-				<h1 class="display-6 fw-bold">// Registrieren</h1>
+				<p class="text-uppercase text-accent fw-semibold mb-2">Konto erstellen</p>
+				<h1 class="display-5 fw-bold">Registrieren</h1>
 				<p class="text-light">Erstelle ein Konto, um deine Karteikarten zu verwalten.</p>
 			</div>
 
-			<div class="card bg-light text-dark shadow-sm">
-				<div class="card-body p-4">
+			<div class="card bg-light text-dark border-0 rounded-4 shadow-sm">
+				<div class="card-body p-4 p-lg-5">
 					{#if form?.error}
 						<div class="alert alert-danger" role="alert">{form.error}</div>
 					{/if}
