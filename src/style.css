@@ -34,11 +34,5 @@ body {
 }
 
 .deck-card {
-	min-height: 200px;
-	border-color: #d9d9d9;
-	border-radius: 0.45rem;
-}
-
-.deck-card .card-body {
-	padding: 1.35rem;
+	min-height: 220px;
 }

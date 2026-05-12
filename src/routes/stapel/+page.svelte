@@ -82,10 +82,11 @@ Regeln:
 	}
 </script>
 
-<div class="container py-4 py-lg-5">
+<div class="container py-5">
 	<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
 		<div>
-			<h1 class="display-6 fw-bold mb-0">// Meine Stapel</h1>
+			<p class="text-uppercase text-accent fw-semibold mb-2">Stapelübersicht</p>
+			<h1 class="display-5 fw-bold mb-0">Meine Stapel</h1>
 		</div>
 
 		<div class="d-flex flex-wrap align-items-start gap-3">
@@ -107,8 +108,8 @@ Regeln:
 	</div>
 
 	{#if showCreateDeckForm || form?.error}
-		<form class="card bg-light text-dark shadow-sm mb-4" method="POST" action="?/createDeck">
-			<div class="card-body">
+		<form class="card bg-light text-dark border-0 rounded-4 shadow-sm mb-4" method="POST" action="?/createDeck">
+			<div class="card-body p-4">
 				<h2 class="h5 card-title mb-3">Neuen Stapel erstellen</h2>
 
 				{#if form?.error}
@@ -169,7 +170,7 @@ Regeln:
 	{/if}
 
 	{#if showCsvImportPanel}
-		<div class="card bg-light text-dark shadow-sm mb-4">
+		<div class="card bg-light text-dark border-0 rounded-4 shadow-sm mb-5">
 			<div class="card-body p-4">
 				<div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-3">
 					<div>
@@ -410,11 +411,11 @@ Regeln:
 	{/if}
 
 	{#if data.decks.length === 0}
-		<div class="alert alert-light" role="alert">
+		<div class="alert alert-light rounded-4" role="alert">
 			Noch keine Stapel vorhanden. Erstelle deinen ersten Stapel über den Button "Neuer Stapel".
 		</div>
 	{:else}
-		<div class="row g-4 g-xl-5">
+		<div class="row g-4">
 			{#each data.decks as deck (deck.slug)}
 				<div class="col-md-6 col-lg-4">
 					<DeckCard {deck} />
