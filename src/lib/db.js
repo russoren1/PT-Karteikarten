@@ -163,24 +163,26 @@ async function getDecks(userId = null) {
 			.sort({ deckTitle: 1 })
 			.toArray();
 
-		decks = await Promise.all(
-			deckDocuments.map(async (deck) => {
-				const cardCount = await collection.countDocuments({
-					type: 'card',
-					deckSlug: deck.deckSlug
-				});
+		if (!deckDocuments.length) return decks;
 
-				return {
-					slug: deck.deckSlug,
-					title: deck.deckTitle,
-					semester: deck.semester,
-					cardCount,
-					isNew: isNewDocument(deck.createdAt)
-				};
-			})
-		);
+		const deckSlugs = deckDocuments.map((d) => d.deckSlug);
+		const cardCountsRaw = await collection
+			.aggregate([
+				{ $match: { type: 'card', deckSlug: { $in: deckSlugs } } },
+				{ $group: { _id: '$deckSlug', count: { $sum: 1 } } }
+			])
+			.toArray();
+		const countBySlug = Object.fromEntries(cardCountsRaw.map(({ _id, count }) => [_id, count]));
+
+		decks = deckDocuments.map((deck) => ({
+			slug: deck.deckSlug,
+			title: deck.deckTitle,
+			semester: deck.semester,
+			cardCount: countBySlug[deck.deckSlug] ?? 0,
+			isNew: isNewDocument(deck.createdAt)
+		}));
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return decks;
@@ -211,7 +213,7 @@ async function getDeckBySlug(deckSlug, userId = null) {
 			};
 		}
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return deck;
@@ -257,7 +259,7 @@ async function getCardsByDeckSlug(deckSlug, filters = {}, userId = null) {
 		cards = await collection.find(query).sort(getCardSort(filters.sort)).toArray();
 		cards = cards.map((card) => normalizeCard(card));
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return cards;
@@ -281,7 +283,7 @@ async function getLearningQueueByDeckSlug(deckSlug) {
 			.toArray();
 		cards = cards.map((card) => normalizeCard(card));
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return createLearningQueue(cards);
@@ -294,78 +296,133 @@ async function getAllCardsQueueByDeckSlug(deckSlug) {
 		cards = await collection.find({ type: 'card', deckSlug }).toArray();
 		cards = cards.map((card) => normalizeCard(card));
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return createLearningQueue(cards);
 }
 
-function isDueCard(card, now) {
-	if (!card.nextReviewAt) {
-		return true;
-	}
-
-	const nextReviewAt = card.nextReviewAt instanceof Date ? card.nextReviewAt : new Date(card.nextReviewAt);
-
-	return !Number.isNaN(nextReviewAt.getTime()) && nextReviewAt <= now;
-}
-
-function getAverageLeitnerBox(cards) {
-	if (!cards.length) {
-		return 0;
-	}
-
-	const total = cards.reduce((sum, card) => sum + card.leitnerBox, 0);
-
-	return Math.round((total / cards.length) * 10) / 10;
-}
-
 async function getDashboardStats(userId = null) {
 	const now = new Date();
+	const epoch = new Date(0);
 	const decks = await getDecks(userId);
-	let cards = [];
+
+	const dueCond = { $lte: [{ $ifNull: ['$nextReviewAt', epoch] }, now] };
 
 	try {
-		cards = await collection.find({ type: 'card', ...userFilter(userId) }).toArray();
-		cards = cards.map((card) => normalizeCard(card));
-	} catch (error) {
-		console.log(error.message);
-	}
+		const deckSlugs = decks.map((d) => d.slug);
 
-	const dueCards = cards
-		.filter((card) => isDueCard(card, now))
-		.sort((a, b) => {
-			const firstDate = a.nextReviewAt ? new Date(a.nextReviewAt).getTime() : 0;
-			const secondDate = b.nextReviewAt ? new Date(b.nextReviewAt).getTime() : 0;
-			return firstDate - secondDate;
-		});
-	const repeatedCards = [...cards]
-		.filter((card) => card.repeatCount > 0)
-		.sort((a, b) => b.repeatCount - a.repeatCount || a.leitnerBox - b.leitnerBox);
-	const lowLeitnerCards = [...cards]
-		.filter((card) => card.leitnerBox <= 2)
-		.sort((a, b) => a.leitnerBox - b.leitnerBox || b.repeatCount - a.repeatCount);
-	const deckStats = decks.map((deck) => {
-		const deckCards = cards.filter((card) => card.deckSlug === deck.slug);
+		const [globalStats, deckStatsRaw, dueCardsRaw, repeatedCardsRaw, lowLeitnerCardsRaw] =
+			await Promise.all([
+				collection
+					.aggregate([
+						{ $match: { type: 'card', ...userFilter(userId) } },
+						{
+							$group: {
+								_id: null,
+								totalCards: { $sum: 1 },
+								repeatCount: { $sum: { $cond: [{ $eq: ['$status', 'repeat'] }, 1, 0] } },
+								dueCount: { $sum: { $cond: [dueCond, 1, 0] } }
+							}
+						}
+					])
+					.toArray(),
+				collection
+					.aggregate([
+						{ $match: { type: 'card', deckSlug: { $in: deckSlugs }, ...userFilter(userId) } },
+						{
+							$group: {
+								_id: '$deckSlug',
+								dueCount: { $sum: { $cond: [dueCond, 1, 0] } },
+								repeatCount: { $sum: { $cond: [{ $eq: ['$status', 'repeat'] }, 1, 0] } },
+								knownCount: { $sum: { $cond: [{ $eq: ['$status', 'known'] }, 1, 0] } },
+								leitnerSum: { $sum: { $ifNull: ['$leitnerBox', 1] } },
+								leitnerCount: { $sum: 1 }
+							}
+						}
+					])
+					.toArray(),
+				collection
+					.find({
+						type: 'card',
+						...userFilter(userId),
+						$or: [
+							{ nextReviewAt: { $exists: false } },
+							{ nextReviewAt: null },
+							{ nextReviewAt: { $lte: now } }
+						]
+					})
+					.sort({ nextReviewAt: 1 })
+					.limit(8)
+					.toArray(),
+				collection
+					.find({ type: 'card', ...userFilter(userId), repeatCount: { $gt: 0 } })
+					.sort({ repeatCount: -1, leitnerBox: 1 })
+					.limit(8)
+					.toArray(),
+				collection
+					.find({
+						type: 'card',
+						...userFilter(userId),
+						$or: [
+							{ leitnerBox: { $exists: false } },
+							{ leitnerBox: null },
+							{ leitnerBox: { $lte: 2 } }
+						]
+					})
+					.sort({ leitnerBox: 1, repeatCount: -1 })
+					.limit(8)
+					.toArray()
+			]);
+
+		const stats = globalStats[0] ?? { totalCards: 0, repeatCount: 0, dueCount: 0 };
+		const deckStatsMap = Object.fromEntries(
+			deckStatsRaw.map((s) => [
+				s._id,
+				{
+					dueCount: s.dueCount,
+					repeatCount: s.repeatCount,
+					knownCount: s.knownCount,
+					averageLeitnerBox:
+						s.leitnerCount > 0
+							? Math.round((s.leitnerSum / s.leitnerCount) * 10) / 10
+							: 0
+				}
+			])
+		);
+		const deckStats = decks.map((deck) => ({
+			...deck,
+			...(deckStatsMap[deck.slug] ?? {
+				dueCount: 0,
+				repeatCount: 0,
+				knownCount: 0,
+				averageLeitnerBox: 0
+			})
+		}));
 
 		return {
-			...deck,
-			dueCount: deckCards.filter((card) => isDueCard(card, now)).length,
-			repeatCount: deckCards.filter((card) => card.status === 'repeat').length,
-			knownCount: deckCards.filter((card) => card.status === 'known').length,
-			averageLeitnerBox: getAverageLeitnerBox(deckCards)
+			totalDecks: decks.length,
+			totalCards: stats.totalCards,
+			dueCount: stats.dueCount,
+			repeatCount: stats.repeatCount,
+			decks: deckStats,
+			dueCards: dueCardsRaw.map(normalizeCard),
+			repeatedCards: repeatedCardsRaw.map(normalizeCard),
+			lowLeitnerCards: lowLeitnerCardsRaw.map(normalizeCard)
 		};
-	});
+	} catch (error) {
+		console.error('[db]', error);
+	}
 
 	return {
 		totalDecks: decks.length,
-		totalCards: cards.length,
-		dueCount: dueCards.length,
-		repeatCount: cards.filter((card) => card.status === 'repeat').length,
-		decks: deckStats,
-		dueCards: dueCards.slice(0, 8),
-		repeatedCards: repeatedCards.slice(0, 8),
-		lowLeitnerCards: lowLeitnerCards.slice(0, 8)
+		totalCards: 0,
+		dueCount: 0,
+		repeatCount: 0,
+		decks: [],
+		dueCards: [],
+		repeatedCards: [],
+		lowLeitnerCards: []
 	};
 }
 
@@ -395,7 +452,7 @@ async function getSourceNamesByDeckSlug(deckSlug) {
 			...new Set(cards.map((card) => card.sourceName.trim()).filter(Boolean))
 		].sort((a, b) => a.localeCompare(b));
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return sourceNames;
@@ -411,7 +468,7 @@ async function getCard(id) {
 			card = normalizeCard(card);
 		}
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return card;
@@ -434,7 +491,7 @@ async function createCard(card) {
 		const result = await collection.insertOne(card);
 		return result.insertedId.toString();
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return null;
@@ -442,11 +499,13 @@ async function createCard(card) {
 
 async function createDeck(deck) {
 	const deckSlug = createDeckSlug(deck.deckTitle);
+	const userId = deck.userId ?? null;
 
 	try {
 		const existingDeck = await collection.findOne({
 			type: 'deck',
-			deckSlug
+			deckSlug,
+			...userFilter(userId)
 		});
 
 		if (existingDeck) {
@@ -462,10 +521,14 @@ async function createDeck(deck) {
 			updatedAt: new Date()
 		};
 
+		if (userId) {
+			newDeck.userId = userId;
+		}
+
 		await collection.insertOne(newDeck);
 		return deckSlug;
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return null;
@@ -526,7 +589,7 @@ async function updateDeck(oldDeckSlug, deck) {
 			slug: newDeckSlug
 		};
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return {
@@ -550,7 +613,7 @@ async function deleteDeck(deckSlug) {
 			return deckSlug;
 		}
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return null;
@@ -558,17 +621,19 @@ async function deleteDeck(deckSlug) {
 
 async function updateCard(card) {
 	try {
-		const id = card._id;
-		delete card._id;
-		card.updatedAt = new Date();
+		const { _id: id, ...cardData } = card;
+		cardData.updatedAt = new Date();
 
-		const result = await collection.updateOne({ _id: new ObjectId(id), type: 'card' }, { $set: card });
+		const result = await collection.updateOne(
+			{ _id: new ObjectId(id), type: 'card' },
+			{ $set: cardData }
+		);
 
 		if (result.matchedCount === 1) {
 			return id;
 		}
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return null;
@@ -620,7 +685,7 @@ async function updateCardStatus(id, status) {
 			return id;
 		}
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return null;
@@ -634,7 +699,7 @@ async function deleteCard(id) {
 			return id;
 		}
 	} catch (error) {
-		console.log(error.message);
+		console.error('[db]', error);
 	}
 
 	return null;

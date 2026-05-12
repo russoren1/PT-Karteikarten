@@ -4,9 +4,13 @@
  */
 :root {
 	--color-accent: #FF670F;
+	--navbar-height: 74px;
+	--color-form-media-bg: #1a1a1a;
 }
 
-.text-accent        { color: var(--color-accent) !important; }
+/* Kein !important nötig – wird nie mit Bootstrap-Text-Utilities kombiniert */
+.text-accent        { color: var(--color-accent); }
+/* !important nötig – kann mit Bootstrap bg-*/border-*/text-bg-* Utilities kombiniert werden */
 .bg-accent          { background-color: var(--color-accent) !important; }
 .border-accent      { border-color: var(--color-accent) !important; }
 .btn-accent         { background-color: var(--color-accent); border-color: var(--color-accent); color: #fff; }
@@ -23,7 +27,7 @@
 }
 
 .app-shell {
-	min-height: calc(100vh - 74px);
+	min-height: calc(100vh - var(--navbar-height));
 }
 
 body {
@@ -48,7 +52,7 @@ body {
 .flashcard-form-media {
 	max-height: 280px;
 	object-fit: contain;
-	background: #1a1a1a;
+	background: var(--color-form-media-bg);
 }
 
 .app-progress {
