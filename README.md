@@ -227,39 +227,56 @@ Die Informationsarchitektur wurde bewusst flach gehalten. So wenige Klicks wie m
 
 Die folgenden Screenshots zeigen die implementierten Hauptansichten des Prototyps.
 
+**Login (`/login`)**
+
+![Login](Screenshots/Login.png)
+*Anmeldeseite mit E-Mail- und Passwortfeld. Der Einstieg bleibt bewusst schlicht, damit der Fokus schnell auf den eigentlichen Lernbereich wechselt.*
+
+**Registrierung (`/registrieren`)**
+
+![Registrierung](Screenshots/Registrieren.png)
+*Registrierungsseite für neue Accounts. Die Oberfläche folgt dem gleichen Formularmuster wie der Login und bleibt dadurch konsistent.*
+
 **Stapelübersicht (`/stapel`)**
 
-![Stapelübersicht](doc/screenshots/stapel_uebersicht.png)
+![Stapelübersicht](Screenshots/stapel_uebersicht.png)
 *Übersicht aller Lernstapel als Card-Raster. Jede Karte zeigt Modulname, Semester und Kartenanzahl. Die Primäraktion «Öffnen» ist prominent platziert.*
 
 **Stapel-Detail mit Kartenliste und Filtern (`/stapel/[slug]`)**
 
-![Stapel-Detail](doc/screenshots/stapel_detail.png)
-*Detailansicht eines Stapels: Kartenliste mit Filtern (Woche, Quelle, Suchfeld). Hauptaktionen «JETZT LERNEN» und «+ Neue Karte» sind im oberen Bereich sichtbar.*
+![Stapel-Detail nach Anpassung](Screenshots/stapel_detail.png)
+*Detailansicht eines Stapels nach der Anpassung: Kartenliste mit Filtern (Woche, Quelle, Suchfeld). Hauptaktionen «JETZT LERNEN» und «+ Neue Karte» sind im oberen Bereich sichtbar.*
+
+**Stapel-Detail: Stand während Usability-Test**
+
+![Stapel-Detail vor Anpassung](Screenshots/stapel_detail_vor_Anpassung_Usability.png)
+*Stand während des Usability-Tests: Die Stapel-Detailseite diente als Grundlage für Feedback zur Orientierung, Sichtbarkeit der Aktionen und Nutzbarkeit der Kartenliste.*
 
 **Lernmodus – Frage (`/stapel/[slug]/lernen`)**
 
-![Lernmodus Frage](doc/screenshots/lernmodus_frage.png)
+![Lernmodus Frage](Screenshots/lernmodus_frage.png)
 *Lernmodus: Nur die Frage und die Metadaten (Woche, Folie) sind sichtbar. Der User soll die Antwort zunächst selbst formulieren, bevor er sie aufdeckt.*
 
 **Lernmodus – Antwort**
 
-![Lernmodus Antwort](doc/screenshots/lernmodus_antwort.png)
+![Lernmodus Antwort](Screenshots/lernmodus_antwort.png)
 *Nach Klick auf «Antwort anzeigen» erscheint die Rückseite der Karte. Die farbigen Buttons «Gewusst» (grün) und «Repetieren» (rot) ermöglichen die Selbstbewertung.*
 
 **Karte erstellen (`/stapel/[slug]/karten/neu`)**
 
-![Karte erstellen](doc/screenshots/karte_erstellen.png)
+![Karte erstellen](Screenshots/karte_erstellen.png)
 *Formular mit 4 Pflichtfeldern: Frage, Antwort, Woche (Zahl) und Folie (Zahl). Das Formular ist bewusst schlank — nur das Notwendige, kein optionaler Overhead.*
 
 **Kartenvorschau nach Erstellung (`/stapel/[slug]/karten/[id]`)**
 
-![Kartenvorschau](doc/screenshots/karte_vorschau.png)
+![Kartenvorschau](Screenshots/karte_vorschau.png)
 *Bestätigungsansicht nach dem Erstellen einer Karte: sofortiges visuelles Feedback mit der Kartenvorschau. Optionen: «Bearbeiten» oder «Weitere Karte hinzufügen».*
 
 ##### Designentscheidungen
 
 Die Designentscheide orientieren sich an den Prinzipien der Benutzerfreundlichkeit (Usability) und der Zweckmässigkeit für eine Lernanwendung.
+
+Die Farbpalette wurde mit dem Figma [color palette generator](https://www.figma.com/color-palette-generator/?colors=000000-F2F2F2-FF670F-D90000-239C1A) festgelegt und im lokalen [Styleguide](doc/STYLEGUIDE.md) dokumentiert. Sie kombiniert Schwarz für den App-Hintergrund, Hellgrau für Inhaltsflächen, Orange als Akzentfarbe sowie Rot und Grün für Lern- und Statusfeedback.
 
 | Entscheid | Umsetzung | Begründung (Warum) |
 |---|---|---|
@@ -277,19 +294,18 @@ Die Designentscheide orientieren sich an den Prinzipien der Benutzerfreundlichke
 
 ##### Technologie-Stack
 
-| Technologie | Version | Warum gewählt |
-|---|---|---|
-| **SvelteKit** | 2.57 | Vorgeschrieben durch Lehrveranstaltung; gleichzeitig ideal: file-based Routing, integriertes Server-Rendering und schlankes Framework ohne unnötige Abstraktionen |
-| **Svelte** | 5.55 | Reaktives UI ohne Virtual DOM — einfacher und performanter als React/Vue für diesen Anwendungsfall |
-| **Vite** | 8 | Schnelle Entwicklungsumgebung mit HMR (Hot Module Replacement) — kein manuelles Reload während der Entwicklung |
-| **MongoDB** | ^7.2.0 (Node.js Treiber) | Flexibles Dokumentenmodell ohne starres Schema — ideal für Prototyping, da sich die Datenstruktur (Card-Felder) während der Entwicklung noch anpassen konnte; kein ORM-Overhead |
-| **Netlify Adapter** | ^6.0.4 | Einfachstes Deployment für SvelteKit; kostenloser Tier ausreichend; automatische CI/CD aus dem GitHub-Repository |
-| **Supabase Auth** | @supabase/ssr | Vollständig managed Auth (E-Mail + Passwort); Cookie-basierte Sessions via `@supabase/ssr`; kein eigener Auth-Server nötig |
-| **Supabase Storage** | @supabase/supabase-js | Bild-Upload pro Karteikarte (JPG, PNG, WebP); öffentlicher Bucket `card-images`; server-seitiger Upload via Service-Role-Key |
+| Bereich | Verwendet |
+|---|---|
+| **Frontend / Framework** | SvelteKit, Svelte, Vite |
+| **UI / Styling** | Bootstrap per CDN, ergänzende eigene CSS-Regeln |
+| **Datenbank** | MongoDB mit Node.js Treiber |
+| **Authentifizierung** | Supabase Auth |
+| **Bildspeicherung** | Supabase Storage |
+| **Deployment** | Netlify mit SvelteKit Netlify Adapter |
 
 ##### Tooling
 
-VS Code als Entwicklungsumgebung; KI-Einsatz (Claude Code, ChatGPT, Codex) für Implementierung — Details in Kapitel 6.
+VS Code als Entwicklungsumgebung; KI-Einsatz (Claude Code, ChatGPT, Codex) für Implementierung. Details zum KI-Einsatz folgen in Kapitel 6.
 
 ##### Struktur & Komponenten
 
@@ -299,37 +315,47 @@ Seitenstruktur (Routen):
 
 ```mermaid
 flowchart TD
-    Home["Home /"] --> Login["Login /login"]
-    Home --> Stapel["Meine Stapel /stapel"]
-    Home --> Dashboard["Dashboard /dashboard"]
-
-    Login --> Registrieren["Registrieren /registrieren"]
+    Home --> Login
+    Home --> Stapel
+    Home --> Dashboard
+    Login --> Registrieren
     Login --> Stapel
     Registrieren --> Stapel
-    Logout["Logout /logout"] --> Login
+    Logout --> Login
 
-    Stapel --> NeuerStapel["Neuer Stapel als Formularaktion in /stapel"]
-    Stapel --> StapelDetail["Stapel-Detail /stapel/[slug]"]
-
+    Stapel --> StapelDetail
     Dashboard --> StapelDetail
 
-    StapelDetail --> Lernen["Lernmodus /stapel/[slug]/lernen"]
-    StapelDetail --> NeueKarte["Neue Karte /stapel/[slug]/karten/neu"]
-    StapelDetail --> Karte["Kartenvorschau /stapel/[slug]/karten/[id]"]
-    StapelDetail --> StapelBearbeiten["Stapel bearbeiten /stapel/[slug]/bearbeiten"]
-    StapelDetail --> StapelLoeschen["Stapel löschen /stapel/[slug]/loeschen"]
-
-    NeueKarte --> Karte
-    Karte --> KarteBearbeiten["Karte bearbeiten /stapel/[slug]/karten/[id]/bearbeiten"]
-    Karte --> KarteLoeschen["Karte löschen /stapel/[slug]/karten/[id]/loeschen"]
-    Karte --> NeueKarte
-    Karte --> StapelDetail
-
-    KarteBearbeiten --> Karte
-    KarteLoeschen --> StapelDetail
+    StapelDetail --> Lernen
     Lernen --> StapelDetail
+    StapelDetail --> StapelBearbeiten
     StapelBearbeiten --> StapelDetail
+    StapelDetail --> StapelLoeschen
     StapelLoeschen --> Stapel
+
+    StapelDetail --> NeueKarte
+    NeueKarte --> Kartenvorschau
+    StapelDetail --> Kartenvorschau
+    Kartenvorschau --> KarteBearbeiten
+    KarteBearbeiten --> Kartenvorschau
+    Kartenvorschau --> KarteLoeschen
+    KarteLoeschen --> StapelDetail
+    Kartenvorschau --> StapelDetail
+
+    Home["/"]
+    Login["/login"]
+    Registrieren["/registrieren"]
+    Logout["/logout"]
+    Stapel["/stapel"]
+    Dashboard["/dashboard"]
+    StapelDetail["/stapel/[slug]"]
+    Lernen["/stapel/[slug]/lernen"]
+    StapelBearbeiten["/stapel/[slug]/bearbeiten"]
+    StapelLoeschen["/stapel/[slug]/loeschen"]
+    NeueKarte["/stapel/[slug]/karten/neu"]
+    Kartenvorschau["/stapel/[slug]/karten/[id]"]
+    KarteBearbeiten["/stapel/[slug]/karten/[id]/bearbeiten"]
+    KarteLoeschen["/stapel/[slug]/karten/[id]/loeschen"]
 ```
 
 Routenübersicht:
@@ -351,7 +377,7 @@ Routenübersicht:
 | `/stapel/[slug]/bearbeiten` | Formular zum Bearbeiten eines Stapels | Aktion `Bearbeiten` im Stapel |
 | `/stapel/[slug]/loeschen` | Bestätigung zum Löschen eines Stapels | Aktion `Löschen` im Stapel |
 
-Komponenten (warum als Komponenten ausgelagert):
+Komponenten (Begründung warum als Komponenten ausgelagert):
 
 | Komponente | Datei | Warum ausgelagert |
 |---|---|---|
@@ -361,25 +387,42 @@ Komponenten (warum als Komponenten ausgelagert):
 
 ##### Daten & Schnittstellen
 
-MongoDB-Collection `Karteikarten` mit zwei Dokument-Typen (statt zwei getrennten Collections, da die Daten in einem einzigen Kontext abgerufen werden und das flexible Dokumentenmodell von MongoDB dies erlaubt):
+Aktueller Stand: Die App verwendet die MongoDB-Datenbank `Karteikarten` und darin die Collection `Karteikarten`. In dieser Collection werden zwei Dokument-Typen gespeichert. Das hält den Prototyp schlank, weil Stapel und Karten im selben Lernkontext verarbeitet werden:
 
-- **Deck:** `{ type, deckSlug, deckTitle, semester, userId (opt.), createdAt, updatedAt }`
-- **Card:** `{ type, question, answer, deckSlug, deckTitle, semester, week, slide, status, sourceName (opt.), imageUrl (opt.), imagePosition (opt.), leitnerBox, repeatCount, knownCount, lastReviewedAt (opt.), nextReviewAt (opt.), userId (opt.), createdAt, updatedAt }`
+- **Deck:** `{ type: "deck", deckSlug, deckTitle, semester, userId (opt.), createdAt, updatedAt }`
+- **Card:** `{ type: "card", question, answer, deckSlug, deckTitle, semester, week, slide, sourceName (opt.), status, leitnerBox, repeatCount, knownCount, lastReviewedAt, nextReviewAt, imageUrl (opt.), imagePosition (opt.), userId (opt.), createdAt, updatedAt }`
 
-Datenzugriff zentral in `src/lib/db.js` — alle Datenbankoperationen an einem Ort, damit Routen-Dateien sauber bleiben und die DB-Logik unabhängig getestet bzw. ausgetauscht werden kann:
+Wichtige Feldbedeutungen:
+
+- `deckSlug` verbindet Karten mit dem Stapel und wird auch für lesbare URLs verwendet.
+- `week`, `slide` und `sourceName` speichern den Vorlesungskontext der Karte.
+- `status` verwendet `new`, `known` oder `repeat`.
+- `leitnerBox`, `repeatCount`, `knownCount`, `lastReviewedAt` und `nextReviewAt` bilden den Lernfortschritt ab.
+- `imageUrl` und `imagePosition` speichern optionale Kartenbilder aus Supabase Storage.
+- `userId` ist optional, damit ältere Seed-/Altdaten ohne User-Zuordnung weiterhin sichtbar bleiben.
+
+Datenzugriff zentral in `src/lib/db.js` — alle MongoDB-Operationen liegen an einem Ort, damit Routen-Dateien sauber bleiben und die Datenlogik unabhängig von der UI gepflegt werden kann:
 
 | Funktion | Typ | Beschreibung |
 |---|---|---|
-| `getDecks(userId)` | Lesen | Eigene Stapel mit Kartenanzahl (inkl. Altdaten ohne userId) |
-| `getDeckBySlug(slug, userId)` | Lesen | Einzelner Stapel nach URL-Slug |
-| `getCardsByDeckSlug(slug, filters, userId)` | Lesen | Gefilterte Kartenliste (Woche, Quelle, Suchbegriff, Status) |
-| `getSourceNamesByDeckSlug(slug)` | Lesen | Alle verwendeten Dateinamen eines Stapels (Autovervollständigung) |
-| `getLearningQueueByDeckSlug(slug, userId)` | Lesen | Priorisierte Lernwarteschlange (Leitner-Box-gewichtet, fällige Karten zuerst) |
-| `getDashboardStats(userId)` | Lesen | Aggregierte Lernstatistiken über alle Stapel (MongoDB-Pipeline) |
-| `createCard(card)` / `createDeck(deck)` | Erstellen | Neue Karte / neuer Stapel (mit userId aus Session) |
-| `updateCard(id, data)` / `updateDeck(id, data)` | Bearbeiten | Bestehende Karte / bestehenden Stapel aktualisieren |
+| `getDecks(userId = null)` | Lesen | Stapel mit Kartenanzahl, gefiltert nach User und rückwärtskompatibel mit Altdaten ohne `userId` |
+| `getDeckBySlug(deckSlug, userId = null)` | Lesen | Einzelner Stapel nach URL-Slug |
+| `getCardsByDeckSlug(deckSlug, filters, userId = null)` | Lesen | Kartenliste mit Filtern nach Suchbegriff, Woche, Quelle, Status und Sortierung |
+| `getSourceNamesByDeckSlug(deckSlug)` | Lesen | Alle verwendeten Quellnamen eines Stapels für Vorschläge im Formular |
+| `getLearningQueueByDeckSlug(deckSlug)` | Lesen | Fällige Lernkarten als Leitner-gewichtete Warteschlange |
+| `getAllCardsQueueByDeckSlug(deckSlug)` | Lesen | Alle Karten eines Stapels als Leitner-gewichtete Warteschlange |
+| `getDashboardStats(userId = null)` | Lesen | Aggregierte Lernstatistiken, fällige Karten und Wiederholungslisten per MongoDB-Pipeline |
+| `getCard(id)` | Lesen | Einzelne Karte nach MongoDB-ObjectId |
+| `createDeck(deck)` / `createCard(card)` | Erstellen | Neuer Stapel bzw. neue Karte; `userId` wird aus der Session ergänzt, wenn vorhanden |
+| `updateDeck(oldDeckSlug, deck)` / `updateCard(card)` | Bearbeiten | Stapel inklusive zugehöriger Karten bzw. einzelne Karte aktualisieren |
 | `updateCardStatus(id, status)` | Bearbeiten | Speichert `known` oder `repeat` und berechnet daraus Leitner-Box, Zähler und nächstes Review-Datum |
-| `deleteCard(id)` / `deleteDeck(slug)` | Löschen | Einzelne Karte / Stapel inkl. aller zugehörigen Karten |
+| `deleteDeck(deckSlug)` / `deleteCard(id)` | Löschen | Stapel inkl. aller zugehörigen Karten bzw. einzelne Karte löschen |
+
+Weitere serverseitige Schnittstellen:
+
+- Supabase Auth wird in `src/hooks.server.js`, `src/lib/supabase.js`, `/login`, `/registrieren` und `/logout` verwendet.
+- Supabase Storage wird über `uploadCardImage()` und `deleteCardImage()` in `src/lib/supabase.js` für optionale Kartenbilder angebunden.
+- CSV-Import läuft serverseitig in `/stapel` über `previewCsv` und `importCsv`; importierte Karten werden danach über `createDeck()` und `createCard()` in MongoDB gespeichert.
 
 ![ER-Modell](doc/ER_Model.drawio.svg)
 *ER-Modell: Stapel und Karte in Chen Notation mit MongoDB-Dokumenttypen.*
@@ -389,7 +432,7 @@ Datenzugriff zentral in `src/lib/db.js` — alle Datenbankoperationen an einem O
 
 ##### Deployment
 
-Netlify via `@sveltejs/adapter-netlify`; URL: _[wird nach Deployment ergänzt]_
+Netlify via `@sveltejs/adapter-netlify`; URL: https://pt-karteikarten.netlify.app/
 
 ##### Besondere Entscheidungen
 
@@ -406,15 +449,78 @@ Netlify via `@sveltejs/adapter-netlify`; URL: _[wird nach Deployment ergänzt]_
 ---
 
 ### 3.5 Validate
-<!-- NACH DEPLOYMENT ERGàNZEN -->
-- **URL der getesteten Version:** _[wird nach Deployment ergänzt]_
-- **Ziele der Prüfung:** _[ausstehend – geplante Leitfragen: Ist die Woche-Folie-Verknüpfung für Nutzer:innen intuitiv erkennbar und nutzbar? Kann eine neue Karte ohne Anleitung erstellt werden? Ist der Lernmodus selbsterklärend?]_
-- **Vorgehen:** _[ausstehend]_
-- **Stichprobe:** _[ausstehend]_
-- **Aufgaben/Szenarien:** _[ausstehend]_
-- **Kennzahlen & Beobachtungen:** _[ausstehend]_
-- **Zusammenfassung der Resultate:** _[ausstehend]_
-- **Abgeleitete Verbesserungen:** _[ausstehend]_
+
+- **URL der getesteten Version:** https://pt-karteikarten.netlify.app/
+- **Ziele der Prüfung:** Geprüft wurde, ob die Woche-Folie-Verknüpfung für Nutzer:innen intuitiv erkennbar ist, ob eine neue Karte ohne zusätzliche Erklärung erstellt werden kann und ob CSV-Import sowie Stapel-Detailseite verständlich genug sind.
+- **Vorgehen:** Usability-Test mit typischen Aufgaben entlang der Kernflows: anmelden, Stapel öffnen, Kartenliste prüfen, Karte erstellen, CSV-Import finden und Lernmodus starten.
+- **Stichprobe:** Usability-Test mit Testpersonen aus dem studentischen Nutzungskontext.
+- **Aufgaben/Szenarien:** Karte in einem bestehenden Stapel finden, neue Karte mit Vorlesungskontext erstellen, CSV-Import als Funktion erkennen und den Lernmodus über die Stapel-Detailseite starten.
+- **Kennzahlen & Beobachtungen:** Qualitative Beobachtungen standen im Vordergrund: Orientierung auf der Stapel-Detailseite, Sichtbarkeit der Hauptaktionen und Verständlichkeit des CSV-Imports.
+- **Dokumentation / Auswertung:** Die Testnotizen und Auswertung wurden in [Usability-Test-PT-Karteikarten.xlsx](Usability-Test-PT-Karteikarten.xlsx) festgehalten.
+- **Abgeleitete GitHub Issues:**
+  - [#19 Dashboard für Lernfortschritt besser auffindbar machen](https://github.com/russoren1/PT-Karteikarten/issues/19)
+  - [#20 Beim CSV-Import bestehenden Stapel auswählen oder neuen Stapel erstellen können](https://github.com/russoren1/PT-Karteikarten/issues/20)
+
+**Issue Map aus dem Usability-Test**
+
+Für die prototyprelevante Issue Map wurden bewusst nur Probleme aufgenommen, die zentrale Nutzerziele betreffen. Weitere Beobachtungen wie Animationen, Erinnerungen, Historie oder zusätzliche Lernmodi wurden als spätere Komfortfunktionen eingeordnet.
+
+| Arbeitsschritt / Szenario | Fragestellung | Testperson 1 | Testperson 2 | Konsolidiertes Issue |
+|---|---|---|---|---|
+| Lernfortschritt / Nachholbedarf finden | Finden Nutzende intuitiv, wo sie Lernfortschritt und offene Wiederholungen sehen können? | Unsicherheit beim Finden des Dashboards bzw. Lernfortschritts | Dashboard musste ebenfalls gesucht werden; Einstieg war nicht sofort klar | [#19 Dashboard / Lernfortschritt ist nicht intuitiv auffindbar](https://github.com/russoren1/PT-Karteikarten/issues/19) |
+| Karteikarten per CSV importieren | Verstehen Nutzende, wie importierte Karteikarten einem bestehenden Stapel zugeordnet werden? | Import grundsätzlich verständlich, aber Stapel-Zuordnung nicht klar genug | Unsicherheit, wo die importierten Karten abgelegt werden | [#20 CSV-Import braucht klare Stapel-Zuordnung](https://github.com/russoren1/PT-Karteikarten/issues/20) |
+
+**Issue Map Karte 1: Dashboard / Lernfortschritt**
+
+| Attribut | Beschreibung |
+|---|---|
+| Arbeitsschritt | Lernfortschritt / Nachholbedarf anzeigen |
+| Ort im Prototyp | Navigation / Einstieg zum Dashboard |
+| Beobachtung | Die Testpersonen konnten das Dashboard bzw. den Lernfortschritt nicht sofort intuitiv finden. |
+| Problem | Die Funktion ist vorhanden und wurde nach dem Öffnen als hilfreich verstanden, ist aber im Interface nicht sichtbar genug platziert. |
+| Ursache | Der Einstieg zum Dashboard ist zu wenig prominent oder der Begriff ist für Nutzende nicht eindeutig genug. |
+| Auswirkung | Nutzende könnten eine zentrale Funktion des Prototyps übersehen; dadurch wird der Mehrwert der App geschwächt. |
+| Empfehlung | Dashboard bzw. Lernfortschritt klarer in der Navigation platzieren und ggf. mit verständlicherem Label wie `Lernfortschritt` benennen. |
+| Schweregrad | 3 – Grosses Usability-Problem |
+| Priorität | Hoch |
+| Entscheidung | Für den Prototyp relevant und umzusetzen. |
+| GitHub Issue | [#19 Dashboard für Lernfortschritt besser auffindbar machen](https://github.com/russoren1/PT-Karteikarten/issues/19) |
+
+**Issue Map Karte 2: CSV-Import / Stapel-Zuordnung**
+
+| Attribut | Beschreibung |
+|---|---|
+| Arbeitsschritt | Karteikarten per CSV importieren |
+| Ort im Prototyp | CSV-Import-Workflow |
+| Beobachtung | Der CSV-Import wurde grundsätzlich positiv bewertet, aber die Zuordnung zu einem bestehenden Stapel war nicht eindeutig. |
+| Problem | Nutzende wissen nicht sicher, in welchem Stapel die importierten Karteikarten landen. |
+| Ursache | Im Importprozess fehlt eine explizite Auswahl oder Bestätigung des Zielstapels. |
+| Auswirkung | Nutzende können verunsichert sein, ob der Import korrekt funktioniert hat; im schlimmsten Fall werden Karten falsch abgelegt oder müssen gesucht werden. |
+| Empfehlung | Beim CSV-Import soll der Zielstapel explizit ausgewählt oder ein neuer Stapel erstellt werden können. Vor dem Import soll eine kurze Zusammenfassung angezeigt werden. |
+| Schweregrad | 3 – Grosses Usability-Problem |
+| Priorität | Hoch |
+| Entscheidung | Für den Prototyp relevant und umzusetzen. |
+| GitHub Issue | [#20 Beim CSV-Import bestehenden Stapel auswählen oder neuen Stapel erstellen können](https://github.com/russoren1/PT-Karteikarten/issues/20) |
+
+**Stapel-Detail: Vorher/Nachher nach Usability-Test**
+
+![Stapel-Detail vor Anpassung](Screenshots/stapel_detail_vor_Anpassung_Usability.png)
+*Vorher: Stand der Stapel-Detailseite während des Usability-Tests.*
+
+![Stapel-Detail nach Anpassung](Screenshots/stapel_detail.png)
+*Nachher: Überarbeiteter Stand der Stapel-Detailseite nach der Anpassung. Die Gegenüberstellung macht sichtbar, wie die Orientierung und die wichtigsten Aktionen nach dem Test geschärft wurden.*
+
+**CSV-Import: Stand während Usability-Test**
+
+![CSV-Import vor Anpassung](Screenshots/csv_import_vor_Anpassung_Usability.png)
+*Vorher: Stand des CSV-Imports während des Usability-Tests. Dieser Screenshot dient als Ausgangspunkt für die spätere Gegenüberstellung nach der Anpassung.*
+
+**CSV-Import: Nach Anpassung**
+
+_[Nach der geplanten Anpassung wird hier der neue Screenshot ergänzt, damit der Vorher/Nachher-Vergleich vollständig sichtbar ist.]_
+
+- **Zusammenfassung der Resultate:** Die Tests zeigten insbesondere Optimierungspotenzial bei der visuellen Führung in der Stapelansicht und bei der Verständlichkeit des CSV-Imports.
+- **Abgeleitete Verbesserungen:** Aus dem Usability-Test wurden zwei priorisierte Verbesserungen abgeleitet und als GitHub Issues dokumentiert: bessere Auffindbarkeit des Lernfortschritts sowie klarere Stapel-Zuordnung beim CSV-Import. Stapelansicht und CSV-Import werden anhand der Testbeobachtungen überarbeitet und anschliessend mit neuen Screenshots im direkten Vorher/Nachher-Vergleich dokumentiert.
 
 ---
 
@@ -439,10 +545,10 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
 
 - **Referenz:** Lernmodus-Route (`/stapel/[slug]/lernen`); Datenbankschicht `src/lib/db.js`
 
-  ![Lernmodus mit Leitner-Anzeige](doc/screenshots/erweiterung_leitner.png)
+  ![Lernmodus mit Leitner-Anzeige](Screenshots/erweiterung_leitner.png)
   *Lernmodus mit Leitner-Box-Anzeige: Die aktuelle Box der Karte ist sichtbar. Nach der Bewertung wird die Box entsprechend angepasst.*
 
-- **Aus Evaluation abgeleitet?:** Nein — eigene Erweiterungsidee, inspiriert durch die Marktrecherche zu Anki
+- **Aus Evaluation abgeleitet?:** Nein, eigene Erweiterungsidee, inspiriert durch die Marktrecherche zu Anki und Quizlet.
 
 ---
 
@@ -459,7 +565,7 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
 
 - **Referenz:** Route `/dashboard`; erreichbar über Navbar-Eintrag «Dashboard»
 
-  ![Dashboard Lernstatistik](doc/screenshots/erweiterung_dashboard.png)
+  ![Dashboard Lernstatistik](Screenshots/erweiterung_dashboard.png)
   *Dashboard: Stapelübergreifende Statistiken mit Fälligkeiten, Leitner-Box-Verteilung und Trainingsbedarf pro Stapel.*
 
 - **Aus Evaluation abgeleitet?:** Nein — eigene Erweiterungsidee, als sinnvolle Ergänzung zur Leitner-Box-Erweiterung konzipiert
@@ -506,11 +612,46 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
 
 ---
 
+### 4.5 Live-Filter in der Kartenübersicht
+
+- **Beschreibung & Nutzen:** Die Kartenliste eines Stapels kann nach Suchbegriff, Woche, Dateiname/Quelle, Status und Sortierung gefiltert werden. Bei Texteingaben wird automatisch nach kurzer Verzögerung gefiltert; bei Auswahlfeldern wird direkt aktualisiert. Die Nutzer:innen müssen also keinen separaten Button drücken und nicht mit Enter bestätigen.
+
+- **Warum diese Erweiterung?** Gerade bei vielen Karten soll die passende Frage schnell auffindbar sein. Der Live-Filter reduziert Reibung im Arbeitsfluss: Während man einen Suchbegriff oder eine Woche eingibt, wird die Liste automatisch eingegrenzt. Das unterstützt den Kernnutzen der App, weil Karten schneller mit ihrem Vorlesungskontext gefunden werden können.
+
+- **Wo umgesetzt:**
+  - **Frontend:** `src/routes/stapel/[slug]/+page.svelte` — Filterformular mit Bootstrap-Formularfeldern; Texteingaben nutzen `oninput` mit 450-ms-Debounce, Selects nutzen `onchange`
+  - **Routing:** Filterwerte werden als Query-Parameter in der URL gespeichert, z.B. `?q=...&week=...&sourceName=...&status=...&sort=...`
+  - **Backend:** `src/routes/stapel/[slug]/+page.server.js` liest die Query-Parameter und lädt die passende Kartenliste
+  - **Datenbank:** `src/lib/db.js` — `getCardsByDeckSlug()` filtert serverseitig nach Suchbegriff, Woche, Quelle und Status
+
+- **Referenz:** Stapel-Detailseite `/stapel/[slug]`, Bereich «Karten filtern»
+
+- **Aus Evaluation abgeleitet?:** Nein, eigene Erweiterung zur besseren Bedienbarkeit und schnelleren Navigation in grossen Stapeln.
+
+---
+
+### 4.6 Breadcrumb-Navigation zur besseren Orientierung
+
+- **Beschreibung & Nutzen:** Auf Unterseiten zeigen Breadcrumbs den aktuellen Navigationspfad, z.B. von `Home` über `Stapel` bis zur aktuell geöffneten Karte oder zum Lernmodus. Die vorherigen Ebenen sind als Links klickbar; die aktuelle Seite wird als Bootstrap-Badge hervorgehoben.
+
+- **Warum diese Erweiterung?** Die App hat mehrere verschachtelte Bereiche wie Stapel-Detailseite, Karte erstellen, Karte bearbeiten, Karte löschen und Lernmodus. Ohne sichtbaren Pfad kann schnell unklar werden, wo man sich gerade befindet. Die Breadcrumbs erleichtern die Orientierung und ermöglichen einen schnellen Rücksprung zum passenden Stapel oder zur Übersicht.
+
+- **Wo umgesetzt:**
+  - **Komponente:** `src/lib/components/Breadcrumbs.svelte` — wiederverwendbare Breadcrumb-Komponente mit Bootstrap-`breadcrumb` und aktiver Seite als Badge
+  - **Einsatzorte:** Dashboard, Stapel-Detailseite, Lernmodus, Kartenvorschau sowie Erstellen-, Bearbeiten- und Löschen-Seiten
+  - **Styling:** Bootstrap-Klassen für Breadcrumb, Links und Badge; keine zusätzliche UI-Library
+
+- **Referenz:** Unterseiten wie `/stapel/[slug]/lernen`, `/stapel/[slug]/karten/[id]` und `/stapel/[slug]/karten/[id]/bearbeiten`
+
+- **Aus Evaluation abgeleitet?:** Nein, kleine UX-Erweiterung zur besseren Orientierung in verschachtelten App-Bereichen.
+
+---
+
 ## 5. Projektorganisation [Optional]
 
 - **Repository & GitHub:**
   - **GitHub-Repository:** [https://github.com/russoren1/PT-Karteikarten](https://github.com/russoren1/PT-Karteikarten)
-  - Struktur folgt SvelteKit-Konventionen: `src/routes/` (Seiten), `src/lib/` (Komponenten, DB-Zugriff), `static/` (Assets), `doc/` (Artefakte: ER-Modell, Skizzen, Screenshots)
+  - Struktur folgt SvelteKit-Konventionen: `src/routes/` (Seiten), `src/lib/` (Komponenten, DB-Zugriff), `static/` (Assets), `doc/` (Artefakte: ER-Modell, Skizzen) und `Screenshots/` (App-Screenshots)
 
 - **Commit-Praxis:**
   - Sprechende Commit-Messages auf Deutsch; jede Message beschreibt das «Was» und impliziert das «Warum»
@@ -527,10 +668,16 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
   ```
 
 - **Artefakt-Ablage:**
-  - `doc/ER_Model.drawio.svg` — ER-Modell nach Chen-ähnlicher Notation für Stapel und Karten (inkl. Supabase-Felder)
+  - `doc/ER_Model.drawio.svg` — ER-Modell nach Chen-Notation für Stapel und Karten (inkl. Supabase-Felder)
   - `doc/System_Architektur.drawio.svg` — Systemarchitektur des SvelteKit-Prototyps (inkl. Supabase Auth + Storage)
   - `doc/sketches/` — Handschriftliche Skizzen aus der Sketch-Phase und Mockup-Screenshots
-  - `doc/screenshots/` — App-Screenshots der implementierten Screens
+  - `Screenshots/` — App-Screenshots der implementierten Screens und Usability-Test-Vergleiche
+
+- **Issue-Management mit GitHub:**
+  - Anforderungen, Erweiterungen, Bugs und Dokumentationsaufgaben wurden als GitHub Issues erfasst und schrittweise abgearbeitet.
+  - Labels wie `enhancement`, `bug` und `documentation` trennten neue Funktionen, Fehlerbehebungen und Dokumentationsaufgaben voneinander.
+  - Beispiele: CSV-Import (`#3`, `#6`, `#10`), Dashboard-Überarbeitung (`#5`, `#8`, `#13`), User Management und Bild-Upload (`#11`), Redesign nach Styleguide (`#12`) sowie README-Dokumentation (`#7`, `#16`).
+  - Geschlossene Issues dokumentieren erledigte Projektschritte; offene Issues wie Favoritenfunktion oder weitere Dokumentation zeigen mögliche nächste Ausbaustufen.
 
 ---
 
@@ -543,7 +690,7 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
    - **ChatGPT** (OpenAI, GPT-5.5) — Für die Erstellung der Prozess-Diagramme und das optimieren der Datei "Codex_Instructions.md", so dass diese bestmöglich vom Tool Codex verstanden werden kann.
    - **Codex** (OpenAI) — Für sämtliche Code-Generierung, die nicht explizit als *Eigenleistung* deklariert sind. Damit das Tool den Projektkontext hat und interpretieren konnte, wurden sämtliche allgemein relevanten Anforderungen in der Datei "Codex_Instructions.md" festgehalten. 
 
-   - **Claude Code** (Anthropic, Opus 4.7) — Wurde als Senior Dev verwendet um bei komplexeren Funktionen wie z.B. der Erstellung des "CSV Import" ein Review bzw. eine zweite Ansichtsweise/Vorgehensweise bei der Code-Erstellung einzuholen. 
+   - **Claude Code** (Anthropic, Opus 4.7 und Sonnet 4.6) — Wurde als Senior Dev verwendet um bei komplexeren Funktionen wie z.B. der Erstellung des "CSV Import" ein Review bzw. eine zweite Ansichtsweise/Vorgehensweise bei der Code-Erstellung einzuholen. 
    
 
 
@@ -563,6 +710,9 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
   - Auswahl und Entscheid für die Leitner-Box-Erweiterung
   - Qualitätssicherung und Review aller KI-Vorschläge
   - Prompting-Strategie, Prompts und Aufgabenformulierungen bzw. dessen Überprüfung
+
+- **KI-gestütztes Issue-Management:** GitHub Issues wurden nicht nur manuell im Browser gepflegt, sondern teilweise direkt über MCP-Anbindungen in *Codex* und *Claude Code* bearbeitet. Dadurch konnten Issues im Entwicklungsprozess gelesen, eingeordnet und mit konkreten Code- oder Dokumentationsaufgaben verknüpft werden. Die inhaltliche Priorisierung, Entscheidung über Umsetzung und finale Kontrolle blieben dabei Eigenleistung; die KI-Tools unterstützten vor allem beim strukturierten Abarbeiten, Formulieren und Überprüfen der Aufgaben.
+
 
 ### 6.2 Prompt-Vorgehen
 
@@ -589,15 +739,22 @@ Beim Löschen eines Stapels werden alle enthaltenen Karten ebenfalls gelöscht.
 Es bleibt bei einer Collection Karteikarten mit type: "deck" und type: "card".
 Es werden keine neuen lokalen Styles oder Inline-Styles ergänzt."
 
-- **Claude Code (Opus 4.7)** Wurde verwendet, um den generierten Code von *Codex* zu reviewen. 
+- **Claude Code (Opus 4.7 und Sonnet 4.6)** Wurde verwendet, um den generierten Code von *Codex* zu reviewen und um eine Zweitmeinung einzuholen. 
 **Prompt Beispiele (Claude Code):**
-"Schau dir mal den Code an in der Datei "DB.js", ist dieser sinvoll aufgebaut worden? Was könnte noch optimiert werden? Gibt es leere Funktionen, leeren Code oder Variablen die nicht verwendet werden. Was liegt auf dem Friedhof und könnte bereinigt werden? Erstelle mir eine Auflistung wo der Code wie bereinigt und optimiert werden kann."
+"Schau dir mal den von Codex erstellen Code an in der Datei "DB.js". Ist dieser sinvoll aufgebaut worden? Was könnte noch optimiert werden? Gibt es leere Funktionen, leeren Code oder Variablen die nicht verwendet werden. Was liegt auf dem Friedhof des "toten Codes" und könnte bereinigt werden? Erstelle mir eine Auflistung wo der Code wie bereinigt und optimiert werden kann."
 
 
 
 ### 6.3 Reflexion
 
 - **Nutzen:** KI-Assistenten beschleunigten den Prozess der Code Erstellung erheblich. Schätzungsweise hätte die Implementierung ohne KI Tools 3–4× länger gedauert und wäre qualitativ nicht auf der Stufe, die jetzt erreicht wurde. Allerdings benötigten die Sprachmodelle eine saubere und klare Formulierung als Prompt. Dies dauerte teilweise sehr lange und war ebenso aufwendig, damit die Anforderungen des Projekts klar und verständlich für das Tool waren.
+
+- **Konkrete Learnings aus der Arbeit mit KI:**
+  - Gute Ergebnisse entstanden vor allem dann, wenn der Prompt den fachlichen Kontext der App, die betroffenen Dateien und die technischen Vorgaben klar enthielt. Allgemeine Prompts führten häufiger zu Lösungen, die zwar plausibel wirkten, aber nicht sauber zur bestehenden SvelteKit-Struktur passten.
+  - Kleine, abgegrenzte Aufgaben funktionierten deutlich besser als grosse Sammelaufträge. Features wie Breadcrumbs, Live-Filter, Leitner-Logik oder CSV-Import mussten in einzelne Schritte zerlegt werden, damit die Änderungen nachvollziehbar und prüfbar blieben.
+  - KI-generierter Code musste immer gegen die reale App getestet werden. Besonders beim Live-Filter und bei der Wochenlogik zeigte sich, dass syntaktisch korrekter Code fachlich trotzdem falsch sein kann.
+  - Die Trennung zwischen serverseitiger Logik (`+page.server.js`, `db.js`) und UI-Komponenten war ein wichtiger Kontrollpunkt. KI-Vorschläge mussten regelmässig darauf geprüft werden, dass MongoDB-Zugriffe nicht in die Svelte-Komponenten wandern.
+  - Der Review mit Claude Code nach der Umsetzung mit Codex war hilfreich, um alternative Sichtweisen auf komplexere Funktionen wie CSV-Import, Dashboard und Leitner-Logik zu erhalten. Trotzdem blieb die finale Entscheidung immer eine manuelle Abwägung.
 
 - **Grenzen:** Die kritischsten Stellen erforderten sorgfältige manuelle Prüfung und Behebungen. Der Code für die erste Fassung der Navbar wurde durch "toten Code" welcher unverständlic war schnell unübersichtlich. Die Live-Filter Funktion benötigte mehrere Anläufe, damit die gewünschte  Filterung (ohne drücken eines Enter- oder Filter-Buttons)direkt erfolgte. Die Leitner-Box-Logik hatte zuerst einen  Fehler in der Datumsberechnung. Die Wochenfilterlogik war zuerst falsch implementiert (Woche 10 filterte auch Woche 1). Die KI-Vorschläge waren zwar stets plausibel klingend, aber nicht immer korrekt, weshalb jede Implementierung einer manuellen Prüfung und gg.f einer Behebung folgte.
 
