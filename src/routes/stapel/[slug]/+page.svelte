@@ -78,6 +78,9 @@
 				<a class="btn btn-success btn-lg fw-semibold" href={`/stapel/${data.deck.slug}/karten/neu`}>
 					+ Neue Karte
 				</a>
+				<a class="btn btn-light btn-lg fw-semibold" href="/dashboard">
+					Lernfortschritt/Dashboard
+				</a>
 				<a class="btn btn-light btn-lg fw-semibold" href={`/stapel/${data.deck.slug}/bearbeiten`}>
 					Bearbeiten
 				</a>

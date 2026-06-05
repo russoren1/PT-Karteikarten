@@ -510,6 +510,12 @@ Für die prototyprelevante Issue Map wurden bewusst nur Probleme aufgenommen, di
 ![Stapel-Detail nach Anpassung](Screenshots/stapel_detail.png)
 *Nachher: Überarbeiteter Stand der Stapel-Detailseite nach der Anpassung. Die Gegenüberstellung macht sichtbar, wie die Orientierung und die wichtigsten Aktionen nach dem Test geschärft wurden.*
 
+![Dashboard-Hinweis in der Stapel-Detailansicht](Screenshots/dashboard_hinweis_stapel_detail_nach_usability.png)
+*Nachher: In der Stapel-Detailansicht wurde der direkte Einstieg `Lernfortschritt/Dashboard` ergänzt, damit der Lernfortschritt nicht nur über die Navbar gefunden werden kann.*
+
+![Dashboard-Hinweis in der Stapelübersicht](Screenshots/dashboard_hinweis_stapel_uebersicht_nach_usability.png)
+*Nachher: Auch die Stapelübersicht zeigt den Einstieg `Lernfortschritt/Dashboard` im Aktionsbereich neben `Neuer Stapel` und `CSV Import`.*
+
 **CSV-Import: Stand während Usability-Test**
 
 ![CSV-Import vor Anpassung](Screenshots/csv_import_vor_Anpassung_Usability.png)

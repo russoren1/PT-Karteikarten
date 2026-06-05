@@ -90,6 +90,9 @@ Regeln:
 		</div>
 
 		<div class="d-flex flex-wrap align-items-start gap-3">
+			<a class="btn btn-accent fw-semibold" href="/dashboard">
+				Lernfortschritt/Dashboard
+			</a>
 			<button
 				class="btn btn-success fw-semibold"
 				type="button"
