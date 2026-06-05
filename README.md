@@ -11,11 +11,20 @@
     4. [Prototype](#34-prototype)
     5. [Validate](#35-validate)
 4. [Erweiterungen](#4-erweiterungen)
-5. [Projektorganisation [Optional]](#5-projektorganisation-optional)
+5. [Projektorganisation](#5-projektorganisation)
 6. [KI-Deklaration](#6-ki-deklaration)
 7. [Anhang [Optional]](#7-anhang-optional)
 
-> **Hinweis:** Massgeblich sind die im **Unterricht** und auf **Moodle** kommunizierten Anforderungen.
+> **Hinweis: Testzugang**
+>
+> Die veröffentlichte Version des Prototyps ist unter https://pt-karteikarten.netlify.app/ erreichbar.
+>
+> Für den Test kann folgender Demo-Zugang verwendet werden:
+>
+> | Feld | Wert |
+> |---|---|
+> | E-Mail | `demo@demo.ch` |
+> | Passwort | `demo1234` |
 
 <!-- WICHTIG: DIE KAPITELSTRUKTUR DARF NICHT VERÄNDERT WERDEN! -->
 
@@ -203,7 +212,19 @@ Das Mockup wurde in Figma erstellt, um die zentralen Screens und den Navigations
 
 **[Link: Figma Mockup (Karteikarten-prototyping)](https://www.figma.com/design/8ymntmvM2jhG9jjeIZGU9G/Karteikarten-prototyping-Uebung--Kopie-?node-id=0-1&t=GtREeDtehk9bC7LL-1)** 
 
-*Figma-Mockup: Übersicht über die zentralen Screens (Stapelübersicht, Lernmodus, Karte erstellen).*
+**Auszug aus dem Figma-Mockup:**
+
+![Figma-Mockup Stapelübersicht](Screenshots/figma_mockup_stapel_uebersicht.png)
+*Figma-Auszug: Stapelübersicht mit Card-Raster, Navigation sowie Aktionen für neuen Stapel und CSV-Import.*
+
+![Figma-Mockup Stapel-Detailansicht](Screenshots/figma_mockup_stapel_detail.png)
+*Figma-Auszug: Stapel-Detailansicht mit Lernstart, Kartenliste und Kontextangaben zu Woche und Folie/Seite.*
+
+![Figma-Mockup Lernmodus Frageansicht](Screenshots/figma_mockup_lernmodus_frage.png)
+*Figma-Auszug: Lernmodus in der Frageansicht mit Kontext-Badge und Aktion zum Anzeigen der Antwort.*
+
+![Figma-Mockup Lernmodus Antwortansicht](Screenshots/figma_mockup_lernmodus_antwort.png)
+*Figma-Auszug: Lernmodus in der Antwortansicht mit Bewertung über `Gewusst` und `Repetieren`.*
 
 ---
 
@@ -453,13 +474,41 @@ Netlify via `@sveltejs/adapter-netlify`; URL: https://pt-karteikarten.netlify.ap
 - **URL der getesteten Version:** https://pt-karteikarten.netlify.app/
 - **Ziele der Prüfung:** Geprüft wurde, ob die Woche-Folie-Verknüpfung für Nutzer:innen intuitiv erkennbar ist, ob eine neue Karte ohne zusätzliche Erklärung erstellt werden kann und ob CSV-Import sowie Stapel-Detailseite verständlich genug sind.
 - **Vorgehen:** Usability-Test mit typischen Aufgaben entlang der Kernflows: anmelden, Stapel öffnen, Kartenliste prüfen, Karte erstellen, CSV-Import finden und Lernmodus starten.
-- **Stichprobe:** Usability-Test mit Testpersonen aus dem studentischen Nutzungskontext.
-- **Aufgaben/Szenarien:** Karte in einem bestehenden Stapel finden, neue Karte mit Vorlesungskontext erstellen, CSV-Import als Funktion erkennen und den Lernmodus über die Stapel-Detailseite starten.
+- **Stichprobe:** Usability-Test mit 2 Testpersonen (Studierende, 4. Semester, ZHAW Winterthur; vertraut mit digitalen Lernmitteln).
+- **Aufgaben/Szenarien:** Karte in einem bestehenden Stapel finden, neue Karte mit Vorlesungskontext erstellen, CSV-Import als Funktion verwenden und den Lernmodus über die Stapel-Detailseite starten.
 - **Kennzahlen & Beobachtungen:** Qualitative Beobachtungen standen im Vordergrund: Orientierung auf der Stapel-Detailseite, Sichtbarkeit der Hauptaktionen und Verständlichkeit des CSV-Imports.
 - **Dokumentation / Auswertung:** Die Testnotizen und Auswertung wurden in [Usability-Test-PT-Karteikarten.xlsx](Usability-Test-PT-Karteikarten.xlsx) festgehalten.
 - **Abgeleitete GitHub Issues:**
   - [#19 Dashboard für Lernfortschritt besser auffindbar machen](https://github.com/russoren1/PT-Karteikarten/issues/19)
   - [#20 Beim CSV-Import bestehenden Stapel auswählen oder neuen Stapel erstellen können](https://github.com/russoren1/PT-Karteikarten/issues/20)
+
+**Stand des Prototyps während des Usability-Tests**
+
+Die folgenden Screenshots dokumentieren, wie die App zum Zeitpunkt des Usability-Tests aussah. Dieser Stand bildet die Grundlage für die anschliessende Issue Map und die dokumentierten Anpassungen nach dem Test.
+
+![Login während des Usability-Tests](Screenshots/Login.png)
+*Stand während des Usability-Tests: Login-Seite mit Demo-Zugang für die Testpersonen.*
+
+![Registrierung während des Usability-Tests](Screenshots/Registrieren.png)
+*Stand während des Usability-Tests: Registrierungsseite als ergänzender Authentifizierungsflow.*
+
+![Stapelübersicht während des Usability-Tests](Screenshots/stapel_uebersicht.png)
+*Stand während des Usability-Tests: Stapelübersicht mit vorhandenen Lernstapeln sowie Aktionen für neuen Stapel und CSV-Import.*
+
+![Stapel-Detail während des Usability-Tests](Screenshots/stapel_detail_vor_Anpassung_Usability.png)
+*Stand während des Usability-Tests: Stapel-Detailseite mit Lernstart, Filterbereich und Kartenliste.*
+
+![Karte erstellen während des Usability-Tests](Screenshots/karte_erstellen.png)
+*Stand während des Usability-Tests: Formular zum Erstellen einer neuen Karte mit Frage, Antwort, Bild-Upload und Vorlesungskontext.*
+
+![Karten-Vorschau während des Usability-Tests](Screenshots/karte_vorschau.png)
+*Stand während des Usability-Tests: Vorschau einer neu erstellten Karte mit Antwortbild und Kontextangaben zu Woche, Datei und Folie/Seite.*
+
+![Lernmodus während des Usability-Tests](Screenshots/lernmodus_frage.png)
+*Stand während des Usability-Tests: Lernmodus in der Frageansicht mit Fortschrittsanzeige und Aktion zum Anzeigen der Antwort.*
+
+![CSV-Import während des Usability-Tests](Screenshots/csv_import_vor_Anpassung_Usability.png)
+*Stand während des Usability-Tests: CSV-Import vor der späteren Anpassung zur klaren Stapel-Zuordnung.*
 
 **Issue Map aus dem Usability-Test**
 
@@ -653,11 +702,14 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
 
 - **Referenz:** Unterseiten wie `/stapel/[slug]/lernen`, `/stapel/[slug]/karten/[id]` und `/stapel/[slug]/karten/[id]/bearbeiten`
 
+  ![Breadcrumb-Navigation auf der Bearbeiten-Seite](Screenshots/breadcrumb_navigation_karte_bearbeiten.png)
+  *Breadcrumb-Navigation auf der Seite `Karte bearbeiten`: Die vorherigen Ebenen bleiben als Links sichtbar, die aktuelle Seite wird als Badge hervorgehoben.*
+
 - **Aus Evaluation abgeleitet?:** Nein, kleine UX-Erweiterung zur besseren Orientierung in verschachtelten App-Bereichen.
 
 ---
 
-## 5. Projektorganisation [Optional]
+## 5. Projektorganisation 
 
 - **Repository & GitHub:**
   - **GitHub-Repository:** [https://github.com/russoren1/PT-Karteikarten](https://github.com/russoren1/PT-Karteikarten)
@@ -688,6 +740,9 @@ Folgende Erweiterungen wurden über den im Mockup definierten Mindestumfang hina
   - Labels wie `enhancement`, `bug` und `documentation` trennten neue Funktionen, Fehlerbehebungen und Dokumentationsaufgaben voneinander.
   - Beispiele: CSV-Import (`#3`, `#6`, `#10`), Dashboard-Überarbeitung (`#5`, `#8`, `#13`), User Management und Bild-Upload (`#11`), Redesign nach Styleguide (`#12`) sowie README-Dokumentation (`#7`, `#16`).
   - Geschlossene Issues dokumentieren erledigte Projektschritte; offene Issues wie Favoritenfunktion oder weitere Dokumentation zeigen mögliche nächste Ausbaustufen.
+
+![GitHub Issues Übersicht](Screenshots/github_issues_issue_management.png)
+*GitHub-Issue-Übersicht mit geschlossenen Dokumentations-, Bugfix- und Enhancement-Issues. Die nach dem Usability-Test geschlossenen Issues `#19` und `#20` sind sichtbar.*
 
 ---
 
@@ -757,18 +812,23 @@ Es werden keine neuen lokalen Styles oder Inline-Styles ergänzt."
 
 ### 6.3 Reflexion
 
-- **Nutzen:** KI-Assistenten beschleunigten den Prozess der Code Erstellung erheblich. Schätzungsweise hätte die Implementierung ohne KI Tools 3–4× länger gedauert und wäre qualitativ nicht auf der Stufe, die jetzt erreicht wurde. Allerdings benötigten die Sprachmodelle eine saubere und klare Formulierung als Prompt. Dies dauerte teilweise sehr lange und war ebenso aufwendig, damit die Anforderungen des Projekts klar und verständlich für das Tool waren.
+- **Nutzen:** Der grösste Nutzen lag nicht primär in der reinen Schreibgeschwindigkeit, sondern darin, dass komplexere Probleme überhaupt in diesem Zeitrahmen umsetzbar waren. Dies betrifft zum Beispiel die gewichtete Leitner-Box-Warteschlange, die stapelübergreifende Dashboard-Aggregation oder den CSV-Import mit Validierungslogik. Diese Teile hätten ohne KI-Unterstützung den realistisch verfügbaren Zeitrahmen gesprengt. Die MongoDB-Aggregationspipeline in `getDashboardStats()` ist dafür ein konkretes Beispiel: Ein funktionierender Entwurf war mit gezieltem Prompt in unter 5 Minuten erstellt. Ohne KI-Unterstützung hätte dies jedoch knapp eine Stunde in Anspruch genommen. KI fungierte dabei weniger als reine Schreibmaschine und mehr als technischer Sparring-Partner. D.h. Lösungsansätze wurden geliefert, dann kritisch geprüft und angepasst. Allerdings benötigten die Sprachmodelle eine saubere und klare Formulierung als Prompt. Dies dauerte teilweise sehr lange und war ebenso aufwendig, damit die Anforderungen des Projekts klar und verständlich für das Tool waren.
 
 - **Konkrete Learnings aus der Arbeit mit KI:**
   - Gute Ergebnisse entstanden vor allem dann, wenn der Prompt den fachlichen Kontext der App, die betroffenen Dateien und die technischen Vorgaben klar enthielt. Allgemeine Prompts führten häufiger zu Lösungen, die zwar plausibel wirkten, aber nicht sauber zur bestehenden SvelteKit-Struktur passten.
   - Kleine, abgegrenzte Aufgaben funktionierten deutlich besser als grosse Sammelaufträge. Features wie Breadcrumbs, Live-Filter, Leitner-Logik oder CSV-Import mussten in einzelne Schritte zerlegt werden, damit die Änderungen nachvollziehbar und prüfbar blieben.
   - KI-generierter Code musste immer gegen die reale App getestet werden. Besonders beim Live-Filter und bei der Wochenlogik zeigte sich, dass syntaktisch korrekter Code fachlich trotzdem falsch sein kann.
   - Die Trennung zwischen serverseitiger Logik (`+page.server.js`, `db.js`) und UI-Komponenten war ein wichtiger Kontrollpunkt. KI-Vorschläge mussten regelmässig darauf geprüft werden, dass MongoDB-Zugriffe nicht in die Svelte-Komponenten wandern.
-  - Der Review mit Claude Code nach der Umsetzung mit Codex war hilfreich, um alternative Sichtweisen auf komplexere Funktionen wie CSV-Import, Dashboard und Leitner-Logik zu erhalten. Trotzdem blieb die finale Entscheidung immer eine manuelle Abwägung.
+  - Der Review mit Claude Code mit der Rolle des "Senior Dev" welcher Codex bewertet, nach der Umsetzung mit Codex war hilfreich, um alternative Sichtweisen auf komplexere Funktionen wie CSV-Import, Dashboard und Leitner-Logik zu erhalten. Trotzdem blieb die finale Entscheidung immer eine manuelle Abwägung.
 
-- **Grenzen:** Die kritischsten Stellen erforderten sorgfältige manuelle Prüfung und Behebungen. Der Code für die erste Fassung der Navbar wurde durch "toten Code" welcher unverständlic war schnell unübersichtlich. Die Live-Filter Funktion benötigte mehrere Anläufe, damit die gewünschte  Filterung (ohne drücken eines Enter- oder Filter-Buttons)direkt erfolgte. Die Leitner-Box-Logik hatte zuerst einen  Fehler in der Datumsberechnung. Die Wochenfilterlogik war zuerst falsch implementiert (Woche 10 filterte auch Woche 1). Die KI-Vorschläge waren zwar stets plausibel klingend, aber nicht immer korrekt, weshalb jede Implementierung einer manuellen Prüfung und gg.f einer Behebung folgte.
+- **Grenzen:** Die kritischsten Stellen erforderten sorgfältige manuelle Prüfung und Behebungen. Der Code für die erste Fassung der Navbar wurde durch «toten Code» schnell unübersichtlich. Die Live-Filter-Funktion benötigte mehrere Anläufe, damit die gewünschte Filterung ohne Drücken eines Buttons direkt erfolgte. Die Leitner-Box-Logik hatte zuerst einen Fehler in der Datumsberechnung. Die Wochenfilterlogik war zunächst falsch implementiert (Woche 10 filterte auch Woche 1, weil String- statt Integer-Vergleich verwendet wurde). Die KI-Vorschläge wirkten stets plausibel, waren aber nicht immer korrekt, weshalb jede Implementierung einer manuellen Prüfung und gegebenenfalls einer Behebung folgte.
 
-- **Risiken & Qualitätssicherung:** Sämtlicher generierte Code wurde manuell getestet, bevor er für die finale Abgabe übernommen wurde. 
+- **Risiken & Qualitätssicherung:** Drei konkrete Risiken traten auf und wurden aktiv adressiert:
+  - **Logisch korrekt, fachlich falsch:** Syntaktisch einwandfreier Code war inhaltlich fehlerhaft, erkannt erst durch manuelles Testen auf dem Dev-Server (z.B. Wochenfilter, Leitner-Datumsberechnung).
+  - **Halluzinierte MongoDB-Aufrufe:** Die Ki schlug vereinzelt MongoDB-Methoden vor, die in der verwendeten Treiberversion nicht existieren. Gegenprüfung mit der offiziellen Dokumentation war nötig.
+  - **Architektur-Drift:** Frühe KI-Vorschläge platzierten DB-Logik direkt in `+page.svelte`-Komponenten statt in `db.js`. Das spätere Review deckte solche Fehler in der Projektstruktur auf.
+
+  Qualitätssicherung erfolgte durch manuelles Testen auf dem Dev-Server nach jedem Feature, gezieltes Review durch weitere KI-Modelle für komplexere Logik (Leitner-Box, Dashboard-Aggregation, CSV-Import) sowie die bewusste Ablehnung oder signifikante Überarbeitung von KI-Vorschlägen, wenn diese nicht zur bestehenden Architektur passten.
 
 ---
 
