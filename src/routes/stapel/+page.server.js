@@ -1,7 +1,7 @@
 import db from '$lib/db.js';
 import { fail, redirect } from '@sveltejs/kit';
 
-const requiredCsvHeaders = ['deckTitle', 'semester', 'question', 'answer', 'week', 'slide'];
+const requiredCsvHeaders = ['question', 'answer', 'week', 'slide'];
 
 function detectCsvDelimiter(headerLine) {
 	const commaCount = headerLine.split(',').length;
@@ -127,8 +127,8 @@ function parseCsvContent(csvContent) {
 
 		if (errors.length === 0 || !errors.at(-1)?.startsWith(`Zeile ${line.lineNumber}:`)) {
 			cards.push({
-				deckTitle: row.deckTitle,
-				semester: row.semester,
+				deckTitle: row.deckTitle ?? '',
+				semester: row.semester ?? '',
 				question: row.question,
 				answer: row.answer,
 				week,
@@ -139,13 +139,61 @@ function parseCsvContent(csvContent) {
 		}
 	});
 
-	const deckCount = new Set(cards.map((card) => `${card.deckTitle}__${card.semester}`)).size;
-
 	return {
 		errors,
 		cards,
 		delimiter,
-		deckCount
+		deckCount: 1
+	};
+}
+
+function getCsvTargetFields(formData) {
+	return {
+		csvTargetMode: formData.get('csvTargetMode')?.toString() === 'new' ? 'new' : 'existing',
+		targetDeckSlug: formData.get('targetDeckSlug')?.toString().trim() ?? '',
+		targetDeckTitle: formData.get('targetDeckTitle')?.toString().trim() ?? '',
+		targetSemester: formData.get('targetSemester')?.toString().trim() ?? ''
+	};
+}
+
+function resolveCsvTarget(formData, decks) {
+	const target = getCsvTargetFields(formData);
+
+	if (target.csvTargetMode === 'existing') {
+		const deck = decks.find((item) => item.slug === target.targetDeckSlug);
+
+		if (!deck) {
+			return {
+				error: 'Bitte wähle einen bestehenden Zielstapel für den CSV-Import aus.',
+				target
+			};
+		}
+
+		return {
+			target: {
+				...target,
+				deckSlug: deck.slug,
+				deckTitle: deck.title,
+				semester: deck.semester,
+				isNewDeck: false
+			}
+		};
+	}
+
+	if (!target.targetDeckTitle || !target.targetSemester) {
+		return {
+			error: 'Bitte gib Titel und Semester für den neuen Zielstapel ein.',
+			target
+		};
+	}
+
+	return {
+		target: {
+			...target,
+			deckTitle: target.targetDeckTitle,
+			semester: target.targetSemester,
+			isNewDeck: true
+		}
 	};
 }
 
@@ -170,8 +218,6 @@ function readCsvPayload(payload) {
 
 	for (const card of cards) {
 		if (
-			!card.deckTitle ||
-			!card.semester ||
 			!card.question ||
 			!card.answer ||
 			!Number.isInteger(card.week) ||
@@ -215,19 +261,32 @@ export async function load({ url, locals }) {
 		decks,
 		deckDeleted: url.searchParams.get('deckDeleted') === '1',
 		importedCards: Number(url.searchParams.get('importedCards') ?? 0),
-		importedDecks: Number(url.searchParams.get('importedDecks') ?? 0)
+		importedDecks: Number(url.searchParams.get('importedDecks') ?? 0),
+		importedDeckTitle: url.searchParams.get('importedDeck') ?? ''
 	};
 }
 
 export const actions = {
-	previewCsv: async ({ request }) => {
+	previewCsv: async ({ request, locals }) => {
 		const formData = await request.formData();
+		const userId = locals.user?.id ?? null;
+		const decks = await db.getDecks(userId);
+		const csvTarget = resolveCsvTarget(formData, decks);
 		const csvInput = await readCsvInput(formData);
+
+		if (csvTarget.error) {
+			return fail(400, {
+				csvError: csvTarget.error,
+				csvText: formData.get('csvText')?.toString() ?? '',
+				...csvTarget.target
+			});
+		}
 
 		if (!csvInput.content) {
 			return fail(400, {
 				csvError: 'Bitte lade eine CSV-Datei hoch oder füge CSV-Text ein.',
-				csvText: formData.get('csvText')?.toString() ?? ''
+				csvText: formData.get('csvText')?.toString() ?? '',
+				...csvTarget.target
 			});
 		}
 
@@ -237,7 +296,8 @@ export const actions = {
 			return fail(400, {
 				csvError: 'Die CSV-Datei konnte nicht importiert werden.',
 				csvErrors: csvPreview.errors,
-				csvText: csvInput.content
+				csvText: csvInput.content,
+				...csvTarget.target
 			});
 		}
 
@@ -248,14 +308,22 @@ export const actions = {
 				delimiter: csvPreview.delimiter,
 				sourceLabel: csvInput.sourceLabel,
 				previewRows: csvPreview.cards.slice(0, 5),
+				targetDeckTitle: csvTarget.target.deckTitle,
+				targetSemester: csvTarget.target.semester,
+				targetDeckLabel: `${csvTarget.target.deckTitle} (${csvTarget.target.semester})`,
+				targetMode: csvTarget.target.csvTargetMode,
 				csvPayload: JSON.stringify(csvPreview.cards)
-			}
+			},
+			...csvTarget.target
 		};
 	},
 	importCsv: async ({ request, locals }) => {
 		const formData = await request.formData();
 		const csvPayload = formData.get('csvPayload')?.toString() ?? '';
 		const csvImport = readCsvPayload(csvPayload);
+		const userId = locals.user?.id ?? null;
+		const decks = await db.getDecks(userId);
+		const csvTarget = resolveCsvTarget(formData, decks);
 
 		if (csvImport.error) {
 			return fail(400, {
@@ -263,23 +331,30 @@ export const actions = {
 			});
 		}
 
-		const userId = locals.user?.id ?? null;
-		const importedDeckSlugs = new Set();
+		if (csvTarget.error) {
+			return fail(400, {
+				csvError: csvTarget.error,
+				...csvTarget.target
+			});
+		}
+
+		const deckSlug = csvTarget.target.isNewDeck
+			? await db.createDeck({
+					deckTitle: csvTarget.target.deckTitle,
+					semester: csvTarget.target.semester,
+					...(userId ? { userId } : {})
+				})
+			: csvTarget.target.deckSlug;
+
+		if (!deckSlug) {
+			return fail(500, {
+				csvError: `Der Stapel "${csvTarget.target.deckTitle}" konnte nicht gespeichert werden.`
+			});
+		}
+
 		let importedCards = 0;
 
 		for (const card of csvImport.cards) {
-			const deckSlug = await db.createDeck({
-				deckTitle: card.deckTitle,
-				semester: card.semester,
-				...(userId ? { userId } : {})
-			});
-
-			if (!deckSlug) {
-				return fail(500, {
-					csvError: `Der Stapel "${card.deckTitle}" konnte nicht gespeichert werden.`
-				});
-			}
-
 			const cardId = await db.createCard({
 				question: card.question,
 				answer: card.answer,
@@ -287,8 +362,8 @@ export const actions = {
 				sourceName: card.sourceName ?? '',
 				slide: card.slide,
 				deckSlug,
-				deckTitle: card.deckTitle,
-				semester: card.semester,
+				deckTitle: csvTarget.target.deckTitle,
+				semester: csvTarget.target.semester,
 				status: 'new',
 				...(userId ? { userId } : {})
 			});
@@ -299,13 +374,12 @@ export const actions = {
 				});
 			}
 
-			importedDeckSlugs.add(deckSlug);
 			importedCards += 1;
 		}
 
 		redirect(
 			303,
-			`/stapel?importedCards=${importedCards}&importedDecks=${importedDeckSlugs.size}`
+			`/stapel?importedCards=${importedCards}&importedDecks=1&importedDeck=${encodeURIComponent(csvTarget.target.deckTitle)}`
 		);
 	},
 	createDeck: async ({ request, locals }) => {

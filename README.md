@@ -523,7 +523,11 @@ Für die prototyprelevante Issue Map wurden bewusst nur Probleme aufgenommen, di
 
 **CSV-Import: Nach Anpassung**
 
-_[Nach der geplanten Anpassung wird hier der neue Screenshot ergänzt, damit der Vorher/Nachher-Vergleich vollständig sichtbar ist.]_
+![CSV-Import mit Zielstapel-Auswahl](Screenshots/csv_import_zielstapel_dropdown_nach_usability.png)
+*Nachher: Beim CSV-Import kann vor der Vorschau ein bestehender Zielstapel ausgewählt werden. Dadurch ist klar, wo die importierten Karten gespeichert werden.*
+
+![CSV-Import mit sichtbarem Zielstapel-Formular](Screenshots/csv_import_zielstapel_formular_nach_usability.png)
+*Nachher: Die Zielstapel-Zuordnung ist dauerhaft im Formular sichtbar. Alternativ kann direkt ein neuer Stapel für den Import erstellt werden.*
 
 - **Zusammenfassung der Resultate:** Die Tests zeigten insbesondere Optimierungspotenzial bei der visuellen Führung in der Stapelansicht und bei der Verständlichkeit des CSV-Imports.
 - **Abgeleitete Verbesserungen:** Aus dem Usability-Test wurden zwei priorisierte Verbesserungen abgeleitet und als GitHub Issues dokumentiert: bessere Auffindbarkeit des Lernfortschritts sowie klarere Stapel-Zuordnung beim CSV-Import. Stapelansicht und CSV-Import werden anhand der Testbeobachtungen überarbeitet und anschliessend mit neuen Screenshots im direkten Vorher/Nachher-Vergleich dokumentiert.

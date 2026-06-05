@@ -9,6 +9,8 @@
 	let selectedCsvFileName = $state('');
 	let isCsvDragging = $state(false);
 	let promptCopied = $state(false);
+	let selectedCsvTargetMode = $derived(form?.csvTargetMode ?? (data.decks.length > 0 ? 'existing' : 'new'));
+	let selectedTargetDeckSlug = $derived(form?.targetDeckSlug ?? data.decks[0]?.slug ?? '');
 	let showCsvImportPanel = $derived(
 		showCsvImportForm || ((form?.csvPreview || form?.csvError) && !csvImportDismissed)
 	);
@@ -17,11 +19,9 @@
 Gib ausschließlich CSV aus, keine Erklärung und keine Markdown-Tabelle.
 
 Verwende exakt diese Header-Zeile:
-deckTitle,semester,question,answer,week,slide,sourceName
+question,answer,week,slide,sourceName
 
 Regeln:
-- deckTitle: Name des Moduls oder Stapels
-- semester: Semesterangabe, z.B. FS 26 oder HS 25
 - question: kurze, prüfungsnahe Frage
 - answer: präzise Antwort
 - week: Semesterwoche als Zahl
@@ -167,8 +167,11 @@ Regeln:
 
 	{#if data.importedCards > 0}
 		<div class="alert alert-success" role="alert">
-			CSV Import abgeschlossen: {data.importedCards} Karten wurden gespeichert,
-			{data.importedDecks} Stapel betroffen.
+			CSV Import abgeschlossen: {data.importedCards} Karten wurden
+			{#if data.importedDeckTitle}
+				im Stapel <strong>{data.importedDeckTitle}</strong>
+			{/if}
+			gespeichert.
 		</div>
 	{/if}
 
@@ -204,7 +207,7 @@ Regeln:
 						<hr />
 						<p class="mb-0">
 							Die erste Zeile muss die Header
-							<code>deckTitle,semester,question,answer,week,slide,sourceName</code>
+							<code>question,answer,week,slide,sourceName</code>
 							enthalten. Pflichtfelder dürfen nicht leer sein; <code>week</code> und
 							<code>slide</code> müssen positive ganze Zahlen sein.
 						</p>
@@ -212,6 +215,79 @@ Regeln:
 				{/if}
 
 				<form method="POST" action="?/previewCsv" enctype="multipart/form-data">
+					<div class="card border-0 bg-white mb-3">
+						<div class="card-body p-3">
+							<p class="fw-semibold mb-2">Zielstapel für den Import</p>
+							<p class="text-secondary small mb-3">
+								Wähle zuerst aus, wohin die importierten Karten gespeichert werden. Die CSV-Zeilen werden beim Import diesem Stapel zugeordnet.
+							</p>
+
+							<div class="row g-3">
+								<div class="col-lg-6">
+									<div class="form-check mb-2">
+										<input
+											class="form-check-input"
+											id="csvTargetExisting"
+											name="csvTargetMode"
+											type="radio"
+											value="existing"
+											checked={selectedCsvTargetMode === 'existing'}
+											disabled={data.decks.length === 0}
+										/>
+										<label class="form-check-label fw-semibold" for="csvTargetExisting">
+											Bestehenden Stapel verwenden
+										</label>
+									</div>
+									<select
+										class="form-select"
+										name="targetDeckSlug"
+									>
+										<option value="">Stapel auswählen</option>
+										{#each data.decks as deck}
+											<option value={deck.slug} selected={selectedTargetDeckSlug === deck.slug}>
+												{deck.title} ({deck.semester})
+											</option>
+										{/each}
+									</select>
+								</div>
+
+								<div class="col-lg-6">
+									<div class="form-check mb-2">
+										<input
+											class="form-check-input"
+											id="csvTargetNew"
+											name="csvTargetMode"
+											type="radio"
+											value="new"
+											checked={selectedCsvTargetMode === 'new'}
+										/>
+										<label class="form-check-label fw-semibold" for="csvTargetNew">
+											Neuen Stapel erstellen
+										</label>
+									</div>
+									<div class="row g-2">
+										<div class="col-sm-7">
+											<input
+												class="form-control"
+												name="targetDeckTitle"
+												placeholder="Titel des Stapels"
+												value={form?.targetDeckTitle ?? ''}
+											/>
+										</div>
+										<div class="col-sm-5">
+											<input
+												class="form-control"
+												name="targetSemester"
+												placeholder="Semester"
+												value={form?.targetSemester ?? ''}
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<div class="accordion mb-3" id="csvImportHelpAccordion">
 						<div class="accordion-item">
 							<h3 class="accordion-header">
@@ -267,17 +343,15 @@ Regeln:
 							>
 								<div class="accordion-body">
 									<p class="fw-semibold mb-2">Erwartete Spalten</p>
-									<code>deckTitle,semester,question,answer,week,slide,sourceName</code>
+									<code>question,answer,week,slide,sourceName</code>
 									<p class="small text-secondary mb-3 mt-2">
-										Pflichtfelder: deckTitle, semester, question, answer, week und slide.
-										sourceName ist optional.
+										Pflichtfelder: question, answer, week und slide. sourceName ist optional.
+										Der Zielstapel wird oben im Formular ausgewählt.
 									</p>
 									<div class="table-responsive">
 										<table class="table table-sm table-bordered align-middle mb-0">
 											<thead>
 												<tr>
-													<th scope="col">deckTitle</th>
-													<th scope="col">semester</th>
 													<th scope="col">question</th>
 													<th scope="col">answer</th>
 													<th scope="col">week</th>
@@ -287,8 +361,6 @@ Regeln:
 											</thead>
 											<tbody>
 												<tr>
-													<td>Strategisches Management</td>
-													<td>FS 26</td>
 													<td>Was ist VRINO?</td>
 													<td>Ein Framework zur Ressourcenanalyse.</td>
 													<td>10</td>
@@ -346,7 +418,7 @@ Regeln:
 								id="csvText"
 								name="csvText"
 								rows="5"
-								placeholder="deckTitle,semester,question,answer,week,slide,sourceName"
+								placeholder="question,answer,week,slide,sourceName"
 							>{form?.csvText ?? ''}</textarea>
 							<p class="form-text mb-0">
 								Wenn Datei und Text vorhanden sind, wird die Datei verwendet.
@@ -368,21 +440,19 @@ Regeln:
 					<div class="alert alert-success" role="status">
 						<p class="fw-semibold mb-1">CSV wurde erfolgreich geprüft.</p>
 						<p class="mb-0">
-							{form.csvPreview.cardCount} Karten erkannt,
-							{form.csvPreview.deckCount} Stapel betroffen.
+							{form.csvPreview.cardCount} Karten erkannt. Zielstapel:
+							<strong>{form.csvPreview.targetDeckLabel}</strong>.
 						</p>
 					</div>
 
 					<div class="alert alert-info" role="note">
-						Die Vorschau zeigt nur die ersten 5 Karten. Beim Import werden alle gültigen CSV-Zeilen gespeichert.
+						Die Vorschau zeigt nur die ersten 5 Karten. Beim Import werden alle gültigen CSV-Zeilen im Zielstapel gespeichert.
 					</div>
 
 					<div class="table-responsive mb-4">
 						<table class="table table-hover align-middle mb-0">
 							<thead>
 								<tr>
-									<th scope="col">Stapel</th>
-									<th scope="col">Semester</th>
 									<th scope="col">Frage</th>
 									<th scope="col">Woche</th>
 									<th scope="col">Folie/Seite</th>
@@ -392,8 +462,6 @@ Regeln:
 							<tbody>
 								{#each form.csvPreview.previewRows as card}
 									<tr>
-										<td>{card.deckTitle}</td>
-										<td>{card.semester}</td>
 										<td>{card.question}</td>
 										<td>{card.week}</td>
 										<td>{card.slide}</td>
@@ -406,6 +474,10 @@ Regeln:
 
 					<form method="POST" action="?/importCsv">
 						<input type="hidden" name="csvPayload" value={form.csvPreview.csvPayload} />
+						<input type="hidden" name="csvTargetMode" value={form.csvTargetMode} />
+						<input type="hidden" name="targetDeckSlug" value={form.targetDeckSlug} />
+						<input type="hidden" name="targetDeckTitle" value={form.targetDeckTitle} />
+						<input type="hidden" name="targetSemester" value={form.targetSemester} />
 						<button class="btn btn-success fw-semibold" type="submit">CSV importieren</button>
 					</form>
 				{/if}
