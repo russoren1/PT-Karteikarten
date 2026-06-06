@@ -13,18 +13,16 @@
 4. [Erweiterungen](#4-erweiterungen)
 5. [Projektorganisation](#5-projektorganisation)
 6. [KI-Deklaration](#6-ki-deklaration)
-7. [Anhang [Optional]](#7-anhang-optional)
+7. [Anhang](#7-anhang)
 
-> **Hinweis: Testzugang**
->
-> Die veröffentlichte Version des Prototyps ist unter https://pt-karteikarten.netlify.app/ erreichbar.
->
-> Für den Test kann folgender Demo-Zugang verwendet werden:
->
+> **Hinweis: Für den Test kann folgender Demo-Zugang verwendet werden:**
 > | Feld | Wert |
 > |---|---|
 > | E-Mail | `demo@demo.ch` |
 > | Passwort | `demo1234` |
+>
+> Die veröffentlichte Version des Prototyps ist unter https://pt-karteikarten.netlify.app/ erreichbar.
+
 
 <!-- WICHTIG: DIE KAPITELSTRUKTUR DARF NICHT VERÄNDERT WERDEN! -->
 
@@ -90,6 +88,41 @@ Die Proto-Persona wurde auf Basis der Zielgruppenanalyse und eigener Beobachtung
 
 ---
 
+**Noah Keller** — *Der prüfungsorientierte Wiederholer*
+
+| Attribut | Beschreibung |
+|---|---|
+| **Alter / Studium** | 24 Jahre, Wirtschaftsinformatik im 4. Semester |
+| **Lernstil** | Lernt kurz vor Prüfungen fokussiert mit Wiederholungen und offenen Lücken |
+| **Frustration** | Weiss oft nicht, welche Karten er noch nicht sicher beherrscht und wo Nachholbedarf besteht |
+| **Ziel** | Schnell erkennen, welche Inhalte wiederholt werden müssen und den Lernfortschritt im Blick behalten |
+| **Erwartungen an die App** | Übersichtlicher Lernmodus, klare Wiederholungslogik und verständliche Rückmeldung zum eigenen Fortschritt |
+
+---
+
+**Mara Schneider** — *Die pragmatische Import-Nutzerin*
+
+| Attribut | Beschreibung |
+|---|---|
+| **Alter / Studium** | 22 Jahre, Wirtschaftsinformatik im 4. Semester |
+| **Lernstil** | Erstellt viele Karten aus Vorlesungsunterlagen und KI-generierten Zusammenfassungen |
+| **Frustration** | Manuelles Erfassen vieler Karten ist zeitaufwendig und fehleranfällig |
+| **Ziel** | Viele Karteikarten schnell per CSV importieren und danach direkt weiterbearbeiten oder lernen |
+| **Erwartungen an die App** | Verständlicher CSV-Import, einfache Kontrolle der importierten Inhalte und sichtbare Bestätigung nach dem Import |
+
+---
+
+#### User Stories
+
+- Als **Student** möchte ich **beim Erstellen einer Karte Woche und Folie/Seite erfassen**, damit **der Vorlesungskontext später erhalten bleibt**.
+- Als **Student** möchte ich **beim Lernen sofort sehen, aus welcher Woche und Folie eine Karte stammt**, damit **ich bei Unsicherheit schnell zur Quelle zurückfinde**.
+- Als **Student** möchte ich **Karten nach Modul bzw. Stapel verwalten**, damit **meine Lerninhalte übersichtlich getrennt bleiben**.
+- Als **Student** möchte ich **viele Karten per CSV importieren**, damit **ich nicht jede Karte einzeln manuell erfassen muss**.
+- Als **Student** möchte ich **fällige Karten gezielt wiederholen**, damit **ich schwierige Inhalte häufiger übe**.
+- Als **Student** möchte ich **meinen Lernfortschritt sehen**, damit **ich weiss, welche Inhalte ich bereits beherrsche und wo ich weiterlernen muss**.
+
+---
+
 #### Marktrecherche bestehender Tools
 
 Die Recherche diente nicht dazu, bestehende Tools nachzubauen, sondern um den eigenen Fokus klar abzugrenzen und die Lücke im Markt zu identifizieren, die dieses Projekt adressiert.
@@ -118,7 +151,7 @@ Die Recherche diente nicht dazu, bestehende Tools nachzubauen, sondern um den ei
 
 In der Sketch-Phase wurden bewusst mehrere unterschiedliche Varianten entworfen, bevor eine Entscheidung getroffen wurde. Ziel war es, nicht die erste Idee umzusetzen, sondern den Lösungsraum zu erkunden und verschiedene Ansätze zu vergleichen.
 
-- **Variantenüberblick:**
+- **Variantenüberblick (Screens aus Crazy 8):**
 
   | Variante | Beschreibung | Entscheid |
   |---|---|---|
@@ -212,7 +245,7 @@ Das Mockup wurde in Figma erstellt, um die zentralen Screens und den Navigations
 
 **[Link: Figma Mockup (Karteikarten-prototyping)](https://www.figma.com/design/8ymntmvM2jhG9jjeIZGU9G/Karteikarten-prototyping-Uebung--Kopie-?node-id=0-1&t=GtREeDtehk9bC7LL-1)** 
 
-**Auszug aus dem Figma-Mockup:**
+**Auszug von Screenshots aus dem Figma-Mockup:**
 
 ![Figma-Mockup Stapelübersicht](Screenshots/figma_mockup_stapel_uebersicht.png)
 *Figma-Auszug: Stapelübersicht mit Card-Raster, Navigation sowie Aktionen für neuen Stapel und CSV-Import.*
@@ -276,12 +309,12 @@ Die folgenden Screenshots zeigen die implementierten Hauptansichten des Prototyp
 **Lernmodus – Frage (`/stapel/[slug]/lernen`)**
 
 ![Lernmodus Frage](Screenshots/lernmodus_frage.png)
-*Lernmodus: Nur die Frage und die Metadaten (Woche, Folie) sind sichtbar. Der User soll die Antwort zunächst selbst formulieren, bevor er sie aufdeckt.*
+*Lernmodus: Zu Beginn ist nur die Frage sichtbar. Der User soll die Antwort zunächst selbst formulieren, bevor er sie aufdeckt.*
 
 **Lernmodus – Antwort**
 
 ![Lernmodus Antwort](Screenshots/lernmodus_antwort.png)
-*Nach Klick auf «Antwort anzeigen» erscheint die Rückseite der Karte. Die farbigen Buttons «Gewusst» (grün) und «Repetieren» (rot) ermöglichen die Selbstbewertung.*
+*Nach Klick auf «Antwort anzeigen» erscheint die Rückseite der Karte und die Metadaten (Woche, Folie). Die farbigen Buttons «Gewusst» (grün) und «Repetieren» (rot) ermöglichen die Selbstbewertung.*
 
 **Karte erstellen (`/stapel/[slug]/karten/neu`)**
 
@@ -477,7 +510,7 @@ Netlify via `@sveltejs/adapter-netlify`; URL: https://pt-karteikarten.netlify.ap
 - **Stichprobe:** Usability-Test mit 2 Testpersonen (Studierende, 4. Semester, ZHAW Winterthur; vertraut mit digitalen Lernmitteln).
 - **Aufgaben/Szenarien:** Karte in einem bestehenden Stapel finden, neue Karte mit Vorlesungskontext erstellen, CSV-Import als Funktion verwenden und den Lernmodus über die Stapel-Detailseite starten.
 - **Kennzahlen & Beobachtungen:** Qualitative Beobachtungen standen im Vordergrund: Orientierung auf der Stapel-Detailseite, Sichtbarkeit der Hauptaktionen und Verständlichkeit des CSV-Imports.
-- **Dokumentation / Auswertung:** Die Testnotizen und Auswertung wurden in [Usability-Test-PT-Karteikarten.xlsx](Usability-Test-PT-Karteikarten.xlsx) festgehalten.
+- **Dokumentation / Auswertung:** Die vollständigen Testnotizen, Beobachtungen und die Auswertung des Usability-Tests wurden in der Excel-Datei [Usability-Test-PT-Karteikarten.xlsx](Usability-Test-PT-Karteikarten.xlsx) festgehalten.
 - **Abgeleitete GitHub Issues:**
   - [#19 Dashboard für Lernfortschritt besser auffindbar machen](https://github.com/russoren1/PT-Karteikarten/issues/19)
   - [#20 Beim CSV-Import bestehenden Stapel auswählen oder neuen Stapel erstellen können](https://github.com/russoren1/PT-Karteikarten/issues/20)
@@ -556,8 +589,8 @@ Für die prototyprelevante Issue Map wurden bewusst nur Probleme aufgenommen, di
 ![Stapel-Detail vor Anpassung](Screenshots/stapel_detail_vor_Anpassung_Usability.png)
 *Vorher: Stand der Stapel-Detailseite während des Usability-Tests.*
 
-![Stapel-Detail nach Anpassung](Screenshots/stapel_detail.png)
-*Nachher: Überarbeiteter Stand der Stapel-Detailseite nach der Anpassung. Die Gegenüberstellung macht sichtbar, wie die Orientierung und die wichtigsten Aktionen nach dem Test geschärft wurden.*
+![Stapelübersicht vor Dashboard-Hinweis](Screenshots/stapel_uebersicht_vor_dashboard_hinweis_usability.png)
+*Vorher: Stand der Stapelübersicht vor der Ergänzung des Buttons `Lernfortschritt/Dashboard`. Der Einstieg zum Lernfortschritt war zu diesem Zeitpunkt nur über die Navigation sichtbar.*
 
 ![Dashboard-Hinweis in der Stapel-Detailansicht](Screenshots/dashboard_hinweis_stapel_detail_nach_usability.png)
 *Nachher: In der Stapel-Detailansicht wurde der direkte Einstieg `Lernfortschritt/Dashboard` ergänzt, damit der Lernfortschritt nicht nur über die Navbar gefunden werden kann.*
