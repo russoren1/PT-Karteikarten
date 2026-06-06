@@ -152,6 +152,7 @@
 								<input type="hidden" name="status" value="known" />
 								<input type="hidden" name="queue" value={data.queue.join(',')} />
 								<input type="hidden" name="total" value={data.progressTotal} />
+								<input type="hidden" name="current" value={data.progressCurrent} />
 								<button class="btn btn-success fw-semibold w-100" type="submit">Gewusst</button>
 							</form>
 						</div>
@@ -161,6 +162,7 @@
 								<input type="hidden" name="status" value="repeat" />
 								<input type="hidden" name="queue" value={data.queue.join(',')} />
 								<input type="hidden" name="total" value={data.progressTotal} />
+								<input type="hidden" name="current" value={data.progressCurrent} />
 								<button class="btn btn-danger fw-semibold w-100" type="submit">Repetieren</button>
 							</form>
 						</div>
@@ -196,7 +198,7 @@
 				{/if}
 
 				<p class="fw-semibold text-center mb-4">
-					Frage {data.progressCurrent} / {data.progressTotal}
+					Frage {data.progressCurrent} / {data.progressDisplayTotal}
 				</p>
 
 				<div class="text-center">

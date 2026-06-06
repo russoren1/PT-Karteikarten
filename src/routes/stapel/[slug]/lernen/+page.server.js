@@ -22,6 +22,25 @@ function getLearningTotal(url, queue) {
 	return total;
 }
 
+function getProgressCurrent(total, queue) {
+	const uniqueCurrentSize = new Set(queue).size;
+
+	return total > 0 && uniqueCurrentSize > 0 ? total - uniqueCurrentSize + 1 : 0;
+}
+
+function getDisplayProgressCurrent(url, total, queue, displayTotal) {
+	const current = Number(url.searchParams.get('current'));
+	const fallbackCurrent = getProgressCurrent(total, queue);
+
+	if (displayTotal <= 0) return 0;
+
+	if (!Number.isInteger(current) || current < 1) {
+		return Math.min(fallbackCurrent, displayTotal);
+	}
+
+	return Math.min(current, displayTotal);
+}
+
 function removeCurrentCardFromQueue(queue, cardId, status) {
 	const remainingQueue = queue.slice(1);
 
@@ -58,7 +77,6 @@ export async function load({ params, url, locals }) {
 	const total = rawQueueFromUrl
 		? getLearningTotal(url, queue)
 		: new Set(queue).size;
-	const uniqueCurrentSize = new Set(queue).size;
 	const card = queue[0] ? await db.getCard(queue[0]) : null;
 	const activeCard = card && card.deckSlug === params.slug ? card : null;
 
@@ -67,8 +85,9 @@ export async function load({ params, url, locals }) {
 		card: activeCard,
 		hasCards: deck.cardCount > 0,
 		queue,
-		progressCurrent: total > 0 && uniqueCurrentSize > 0 ? total - uniqueCurrentSize + 1 : 0,
+		progressCurrent: getDisplayProgressCurrent(url, total, queue, deck.cardCount),
 		progressTotal: total,
+		progressDisplayTotal: deck.cardCount,
 		done: done || queue.length === 0 || !activeCard,
 		slug: params.slug
 	};
@@ -86,6 +105,7 @@ export const actions = {
 			.map((id) => id.trim())
 			.filter(Boolean);
 		const total = Number(formData.get('total')?.toString());
+		const current = Number(formData.get('current')?.toString());
 		const card = cardId ? await db.getCard(cardId) : null;
 
 		if (!card || card.deckSlug !== params.slug) {
@@ -110,10 +130,11 @@ export const actions = {
 
 		const uniqueRemainingSize = new Set(remainingQueue).size;
 		const learningTotal = Number.isInteger(total) && total >= uniqueRemainingSize ? total : uniqueRemainingSize;
+		const nextCurrent = Number.isInteger(current) && current > 0 ? current + 1 : 1;
 
 		redirect(
 			303,
-			`/stapel/${params.slug}/lernen?queue=${remainingQueue.join(',')}&total=${learningTotal}`
+			`/stapel/${params.slug}/lernen?queue=${remainingQueue.join(',')}&total=${learningTotal}&current=${nextCurrent}`
 		);
 	}
 };
